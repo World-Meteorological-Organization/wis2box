@@ -144,15 +144,18 @@ class DiscoveryMetadata(BaseMetadata):
             }
             links.append(oafeat_link)
 
-        mqp_link = {
-            'href': get_broker_public_endpoint(),
-            'type': 'application/json',
-            'name': topic,
-            'description': 'Notifications',
-            'rel': 'items',
-            'channel': topic
-        }
-        links.append(mqp_link)
+        if topic is None:
+            LOGGER.info('Do not add broker link, no topic defined')
+        else: 
+            mqp_link = {
+                'href': get_broker_public_endpoint(),
+                'type': 'application/json',
+                'name': topic,
+                'description': 'Notifications',
+                'rel': 'items',
+                'channel': topic
+            }
+            links.append(mqp_link)
 
         canonical_link = {
             'href': f"{API_URL}/collections/discovery-metadata/items/{identifier}",  # noqa
