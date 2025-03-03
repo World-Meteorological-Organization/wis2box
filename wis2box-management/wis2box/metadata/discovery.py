@@ -146,7 +146,7 @@ class DiscoveryMetadata(BaseMetadata):
 
         if topic is None:
             LOGGER.info('Do not add broker link, no topic defined')
-        else: 
+        else:
             mqp_link = {
                 'href': get_broker_public_endpoint(),
                 'type': 'application/json',
