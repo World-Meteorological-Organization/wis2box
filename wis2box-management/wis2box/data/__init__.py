@@ -99,7 +99,6 @@ def gcm(mcf: Union[dict, str]) -> dict:
     return {
         'id': generated['id'],
         'type': 'feature',
-        'topic_hierarchy': generated['properties']['wmo:topicHierarchy'].replace('origin/a/wis2/', '').replace('/', '.'),  # noqa: E501
         'title': f'Observations in json format for {generated["id"]}',
         'description': f'Observations in json format for {generated["id"]}', # noqa
         'keywords': generated['properties']['keywords'],
