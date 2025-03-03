@@ -34,7 +34,7 @@ import wis2box.data as data_
 from wis2box.api import (setup_collection, upsert_collection_item,
                          delete_collection_item, remove_collection)
 
-from wis2box.data_mappings import get_data_mappings
+from wis2box.data_mappings import get_data_mappings, get_plugins
 from wis2box.data.message import MessageData
 
 from wis2box.env import (DATADIR, DOCKER_BROKER,
@@ -190,7 +190,12 @@ class WIS2BoxSubscriber:
             LOGGER.debug('Publishing dataset')
             metadata = message
             discovery_metadata.publish_discovery_metadata(metadata)
-            data_.add_collection_data(metadata)
+            has_2geojson = any('2geojson' in plugin for plugin in get_plugins(metadata)) # noqa
+            if has_2geojson:
+                try:
+                    data_.add_collection_data(metadata)
+                except Exception as err:
+                    click.echo(f'ERROR adding data-collection for: {metadata["id"]}: {err}') # noqa
             self.data_mappings = get_data_mappings()
         elif topic.startswith('wis2box/dataset/unpublication'):
             LOGGER.debug('Unpublishing dataset')
