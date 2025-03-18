@@ -121,19 +121,23 @@ class MetricsCollector:
 
         station_list = []
         url = 'http://wis2box-api:80/oapi/collections/stations/items?f=json'
-        try:
-            res = requests.get(url)
-            json_data = json.loads(res.content)
-            if 'description' in json_data:
-                if json_data['description'] == 'Collection not found':
-                    logger.error("No stations configured yet")
-                    station_list.append('none')
+        description = 'Collection not found'
+        while description == 'Collection not found':
+            try:
+                res = requests.get(url)
+                json_data = json.loads(res.content)
+                if 'description' in json_data:
+                    if json_data['description'] == 'Collection not found':
+                        logger.warning("Station collection not found in wis2box-api, sleep and try again") # noqa
+                        time.sleep(1)
+                    else:
+                        msg = f' {json_data['description']}'
+                        raise Exception(msg)
                 else:
-                    logger.error(json_data['description'])
-            else:
-                station_list = [item['id'] for item in json_data["features"]]
-        except Exception as err:
-            logger.error(f'Failed to update stations-gauge: {err}')
+                    station_list = [item['id'] for item in json_data["features"]]
+            except Exception as err:
+                msg = f'Failed to get station-list from wis2box-api, with error: {err}'
+                raise Exception(msg)
         self.update_stations_gauge(station_list)
 
     def sub_connect(self, client, userdata, flags, rc, properties=None):
