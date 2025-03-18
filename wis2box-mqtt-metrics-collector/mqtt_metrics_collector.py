@@ -106,6 +106,8 @@ class MetricsCollector:
         :returns: `None`
         """
 
+        print(f"update stations-gauge with: {station_list}")
+
         station_wsi._metrics.clear()
         for station in station_list:
             station_wsi.labels(station).set(1)
@@ -255,6 +257,7 @@ class MetricsCollector:
             client.on_message = self.sub_mqtt_metrics
             client.username_pw_set(broker_username, broker_password)
             client.connect(broker_host, broker_port)
+            print("Connected to broker, start MQTT-loop")
             client.loop_forever()
         except Exception as err:
             logger.error(f"Failed to setup MQTT-client with error: {err}")
@@ -264,7 +267,6 @@ def main():
     start_http_server(8001)
     collector = MetricsCollector()
     collector.init_stations_gauge()
-
     Thread(target=collector.periodic_buffer_processing, daemon=True).start()
     collector.gather_mqtt_metrics()
 
