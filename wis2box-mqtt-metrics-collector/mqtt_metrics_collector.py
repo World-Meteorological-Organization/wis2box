@@ -131,12 +131,12 @@ class MetricsCollector:
                         logger.warning("Station collection not found in wis2box-api, sleep and try again") # noqa
                         time.sleep(1)
                     else:
-                        msg = f' {json_data['description']}'
+                        msg = f' wis2box-api returned unexpected response: {json_data}' # noqa
                         raise Exception(msg)
                 else:
-                    station_list = [item['id'] for item in json_data["features"]]
+                    station_list = [item['id'] for item in json_data["features"]] # noqa
             except Exception as err:
-                msg = f'Failed to get station-list from wis2box-api, with error: {err}'
+                msg = f'Failed to get stations from wis2box-api, with error: {err}' # noqa
                 raise Exception(msg)
         self.update_stations_gauge(station_list)
 
@@ -204,6 +204,7 @@ class MetricsCollector:
             elif topic.startswith('wis2box/notifications'):
                 wsi = m['properties'].get('wigos_station_identifier', 'none')
                 if (wsi,) not in notify_wsi_total._metrics:
+                    logger.warning(f'new WSI: {wsi}, initializing counters')
                     notify_wsi_total.labels(wsi).inc(0)
                     failure_wsi_total.labels(wsi).inc(0)
                     station_wsi.labels(wsi).set(1)
