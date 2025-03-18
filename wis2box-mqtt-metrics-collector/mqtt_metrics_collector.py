@@ -123,19 +123,20 @@ class MetricsCollector:
 
         station_list = []
         url = 'http://wis2box-api:80/oapi/collections/stations/items?f=json'
-        description = 'Collection not found'
-        while description == 'Collection not found':
+        station_list_found = False
+        while station_list_found is False:
             try:
                 res = requests.get(url)
                 json_data = json.loads(res.content)
                 if 'description' in json_data:
                     if json_data['description'] == 'Collection not found':
-                        logger.warning("Station collection not found in wis2box-api, sleep and try again") # noqa
+                        logger.warning("Station collection not (yet) found in wis2box-api, sleep and try again") # noqa
                         time.sleep(1)
                     else:
                         msg = f' wis2box-api returned unexpected response: {json_data}' # noqa
                         raise Exception(msg)
                 else:
+                    station_list_found = True
                     station_list = [item['id'] for item in json_data["features"]] # noqa
             except Exception as err:
                 msg = f'Failed to get stations from wis2box-api, with error: {err}' # noqa
@@ -259,6 +260,7 @@ class MetricsCollector:
             client.connect(broker_host, broker_port)
             print("Connected to broker, start MQTT-loop")
             client.loop_forever()
+            print("MQTT-loop ended")
         except Exception as err:
             logger.error(f"Failed to setup MQTT-client with error: {err}")
 
