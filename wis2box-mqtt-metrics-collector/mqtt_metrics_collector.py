@@ -206,12 +206,7 @@ class MetricsCollector:
                 self.update_stations_gauge(m['station_list'])
             elif topic.startswith('wis2box/notifications'):
                 wsi = m['properties'].get('wigos_station_identifier', 'none')
-                if (wsi,) not in notify_wsi_total._metrics:
-                    logger.warning(f'new WSI: {wsi}, initializing counters')
-                    notify_wsi_total.labels(wsi).inc(0)
-                    failure_wsi_total.labels(wsi).inc(0)
-                    station_wsi.labels(wsi).set(1)
-                    time.sleep(5)
+                station_wsi.labels(wsi).set(1)
                 notify_wsi_total.labels(wsi).inc(1)
                 failure_wsi_total.labels(wsi).inc(0)
                 notify_total.inc(1)
