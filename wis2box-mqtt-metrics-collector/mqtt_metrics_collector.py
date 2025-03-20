@@ -31,7 +31,7 @@ import sys
 import json
 import time
 
-from threading import Lock
+from queue import Queue
 from threading import Thread
 
 from prometheus_client import start_http_server, Counter, Gauge
@@ -40,7 +40,6 @@ from prometheus_client import start_http_server, Counter, Gauge
 from prometheus_client import REGISTRY, PROCESS_COLLECTOR, PLATFORM_COLLECTOR
 
 message_buffer = []
-buffer_lock = Lock()
 
 REGISTRY.unregister(PROCESS_COLLECTOR)
 REGISTRY.unregister(PLATFORM_COLLECTOR)
@@ -94,8 +93,11 @@ station_wsi = Gauge('wis2box_stations_wsi',
 
 class MetricsCollector:
     def __init__(self):
-        self.message_buffer = []
-        self.buffer_lock = Lock()
+        """
+        Initializes a message queue for thread-safe message handling.
+        """
+        self.message_queue = Queue()
+        self.running = True
 
     def update_stations_gauge(self, station_list):
         """
@@ -184,53 +186,36 @@ class MetricsCollector:
             elif msg.topic.endswith('/dropped'):
                 broker_msg_dropped.set(float(msg.payload))
         else:
-            with self.buffer_lock:
-                self.message_buffer.append((msg.topic, msg))
-                if len(self.message_buffer) >= 100:
-                    self.process_buffered_messages()
+            self.message_queue.put((msg.topic, msg.payload))
 
     def process_buffered_messages(self):
         """
-        function to process buffered messages
-
-        :returns: `None`
+        Processes buffered messages in a separate thread.
         """
-
-        with self.buffer_lock:
-            messages_to_process = self.message_buffer
-            self.message_buffer = []
-
-        for topic, msg in messages_to_process:
-            m = json.loads(msg.payload.decode('utf-8'))
-            if topic.startswith('wis2box/stations'):
-                self.update_stations_gauge(m['station_list'])
-            elif topic.startswith('wis2box/notifications'):
-                wsi = m['properties'].get('wigos_station_identifier', 'none')
-                station_wsi.labels(wsi).set(1)
-                notify_wsi_total.labels(wsi).inc(1)
-                failure_wsi_total.labels(wsi).inc(0)
-                notify_total.inc(1)
-            elif topic.startswith('wis2box/failure'):
-                wsi = m.get('wigos_station_identifier', 'none')
-                notify_wsi_total.labels(wsi).inc(0)
-                failure_wsi_total.labels(wsi).inc(1)
-                failure_total.inc(1)
-            elif topic.startswith('wis2box/storage'):
-                if str(m["Key"]).startswith('wis2box-incoming'):
-                    storage_incoming_total.inc(1)
-                if str(m["Key"]).startswith('wis2box-public'):
-                    storage_public_total.inc(1)
-
-    def periodic_buffer_processing(self):
-        """
-        function to process buffered messages every second
-
-        :returns: `None`
-        """
-
-        while True:
-            self.process_buffered_messages()
-            time.sleep(1)
+        while self.running:
+            topic, payload = self.message_queue.get()
+            try:
+                m = json.loads(payload.decode('utf-8'))
+                if topic.startswith('wis2box/stations'):
+                    self.update_stations_gauge(m['station_list'])
+                elif topic.startswith('wis2box/notifications'):
+                    wsi = m['properties'].get('wigos_station_identifier', 'none') # noqa
+                    station_wsi.labels(wsi).set(1)
+                    notify_wsi_total.labels(wsi).inc(1)
+                    failure_wsi_total.labels(wsi).inc(0)
+                    notify_total.inc(1)
+                elif topic.startswith('wis2box/failure'):
+                    wsi = m.get('wigos_station_identifier', 'none')
+                    notify_wsi_total.labels(wsi).inc(0)
+                    failure_wsi_total.labels(wsi).inc(1)
+                    failure_total.inc(1)
+                elif topic.startswith('wis2box/storage'):
+                    if str(m["Key"]).startswith('wis2box-incoming'):
+                        storage_incoming_total.inc(1)
+                    if str(m["Key"]).startswith('wis2box-public'):
+                        storage_public_total.inc(1)
+            except Exception as e:
+                logging.error(f"Error processing message: {e}")
 
     def gather_mqtt_metrics(self):
         """
@@ -254,18 +239,28 @@ class MetricsCollector:
             client.username_pw_set(broker_username, broker_password)
             client.connect(broker_host, broker_port)
             print("Connected to broker, start MQTT-loop")
-            client.loop_forever()
-            print("MQTT-loop ended")
+            client.loop_start()  # Start MQTT loop in background
         except Exception as err:
             logger.error(f"Failed to setup MQTT-client with error: {err}")
 
+    def start(self):
+        """
+        Starts the metrics collection by initializing components and threads.
+        """
+        self.init_stations_gauge()
+        Thread(target=self.process_buffered_messages, daemon=True).start()
+        self.gather_mqtt_metrics()
+
 
 def main():
+    """
+    Entry point for the script.
+    """
     start_http_server(8001)
     collector = MetricsCollector()
-    collector.init_stations_gauge()
-    Thread(target=collector.periodic_buffer_processing, daemon=True).start()
-    collector.gather_mqtt_metrics()
+    collector.start()
+    while True:
+        time.sleep(1)
 
 
 if __name__ == '__main__':
