@@ -219,4 +219,4 @@ The Docker Compose setup is driven from the resulting ``wis2box.env`` file creat
 updates can also be made to ``docker-compose.yml`` or ``docker-compose.override.yml`` (for changes to ports).
 
 .. _`Env`: https://en.wikipedia.org/wiki/Env
-.. _`GitHub`: https://github.com/wmo-im/wis2box/blob/main/default.env
+.. _`GitHub`: https://https://github.com/World-Meteorological-Organization/wis2box/blob/main/default.env

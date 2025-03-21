@@ -91,8 +91,8 @@ wis2box is built on free and open source (FOSS) technology.
 .. _`OGC API`: https://ogcapi.ogc.org
 .. _`ecCodes`: https://confluence.ecmwf.int/display/ECC
 .. _`csv2bufr`: https://csv2bufr.readthedocs.io
-.. _`synop2bufr`: https://github.com/wmo-im/synop2bufr
-.. _`bufr2geojson`: https://github.com/wmo-im/bufr2geojson
+.. _`synop2bufr`: https://https://github.com/World-Meteorological-Organization/synop2bufr
+.. _`bufr2geojson`: https://https://github.com/World-Meteorological-Organization/bufr2geojson
 .. _`MinIO`: https://dosc.min.io
 .. _`S3`: https://en.wikipedia.org/wiki/Object_storage
 .. _`OWSLib`: https://geopython.github.io/OWSLib

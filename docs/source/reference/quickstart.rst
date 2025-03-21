@@ -12,7 +12,7 @@ To download wis2box from source:
 
 .. code-block:: bash
 
-   git clone https://github.com/wmo-im/wis2box.git
+   git clone https://https://github.com/World-Meteorological-Organization/wis2box.git
 
 
 The test enviroment file is provided in ``tests/test.env``.
@@ -95,4 +95,4 @@ From here, you can run ``python3 wis2box-ctl.py status`` to confirm that contain
 
 To explore your wis2box installation and services, visit http://localhost in your web browser.
 
-.. _`GitHub Actions`: https://github.com/wmo-im/wis2box/blob/main/.github/workflows/tests-docker.yml
+.. _`GitHub Actions`: https://https://github.com/World-Meteorological-Organization/wis2box/blob/main/.github/workflows/tests-docker.yml

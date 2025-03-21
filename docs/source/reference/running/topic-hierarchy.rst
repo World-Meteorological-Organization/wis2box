@@ -16,4 +16,4 @@ To publish data and metadata to WIS2, the topic hierarchy requires a valid centr
 identifier (``centre-id``), which is specified by the member endorsed by the
 Permananent Representative (PR) of the country.
 
-.. _`WIS2 topic hierarchy`: https://github.com/wmo-im/wis2-topic-hierarchy
+.. _`WIS2 topic hierarchy`: https://https://github.com/World-Meteorological-Organization/wis2-topic-hierarchy

@@ -10,12 +10,12 @@ wis2box is Free and Open Source and released under the `Apache License <https://
 
 wis2box consists of multiple software packages that provide all services required to run a WIS2 Node, namely:
 
-- `github.com/wmo-im/wis2box <https://github.com/wmo-im/wis2box>`_ Core services to publish WIS2 Discovery Metadata and  Notification Messages
-- `github.com/wmo-im/wis2box-api <https://github.com/wmo-im/wis2box-api>`_  Application Programming Interface that provides an OGC API to discover, access, and visualize notifications, data -collections and configuration (datasets, stations) and which provides support for data handling of WMO encodings and formats
-- `github.com/wmo-im/wis2box-ui <https://github.com/wmo-im/wis2box-ui>`_ User interface to display datasets and provide visualizations for ingested data
-- `github.com/wmo-im/wis2box-webapp <https://github.com/wmo-im/wis2box-webappp>`_ Web -application to interactively configure wis2box and monitor published data
-- `github.com/wmo-im/wis2box-auth <https://github.com/wmo-im/wis2box-auth>`_ Access control functionality to datasets exposed via wis2box and to apply authentication API services used by wis2box-webapp
-- `github.com/wmo-im/wis2downloader <https://github.com/wmo-im/wis2downloader>`_ Subscription and download capability for access to data published by other WIS2 Nodes
+- `https://github.com/World-Meteorological-Organization/wis2box <https://https://github.com/World-Meteorological-Organization/wis2box>`_ Core services to publish WIS2 Discovery Metadata and  Notification Messages
+- `https://github.com/World-Meteorological-Organization/wis2box-api <https://https://github.com/World-Meteorological-Organization/wis2box-api>`_  Application Programming Interface that provides an OGC API to discover, access, and visualize notifications, data -collections and configuration (datasets, stations) and which provides support for data handling of WMO encodings and formats
+- `https://github.com/World-Meteorological-Organization/wis2box-ui <https://https://github.com/World-Meteorological-Organization/wis2box-ui>`_ User interface to display datasets and provide visualizations for ingested data
+- `https://github.com/World-Meteorological-Organization/wis2box-webapp <https://https://github.com/World-Meteorological-Organization/wis2box-webappp>`_ Web -application to interactively configure wis2box and monitor published data
+- `https://github.com/World-Meteorological-Organization/wis2box-auth <https://https://github.com/World-Meteorological-Organization/wis2box-auth>`_ Access control functionality to datasets exposed via wis2box and to apply authentication API services used by wis2box-webapp
+- `https://github.com/World-Meteorological-Organization/wis2downloader <https://https://github.com/World-Meteorological-Organization/wis2downloader>`_ Subscription and download capability for access to data published by other WIS2 Nodes
 
 WIS2 in a box is released using a Deployment Bundle that simplifies the setup of a WIS2 Node by providing all required services as Docker containers.
 

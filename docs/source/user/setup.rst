@@ -16,7 +16,7 @@ and download the .zip file from the Assets section.
 
 .. code-block:: bash
 
-   wget https://github.com/wmo-im/wis2box/releases/download/1.0.0rc1/wis2box-setup-1.0.0rc1.zip
+   wget https://https://github.com/World-Meteorological-Organization/wis2box/releases/download/1.0.0rc1/wis2box-setup-1.0.0rc1.zip
    unzip wis2box-setup-1.0.0rc1.zip
    cd wis2box-1.0.0rc1
 
@@ -306,7 +306,7 @@ Next steps
 
 The next step is to prepare data ingestion into wis2box, see :ref:`data-ingest`.
 
-.. _`wis2box Releases`: https://github.com/wmo-im/wis2box/releases
-.. _`WIS2 topic hierarchy`: https://github.com/wmo-im/wis2-topic-hierarchy
+.. _`wis2box Releases`: https://https://github.com/World-Meteorological-Organization/wis2box/releases
+.. _`WIS2 topic hierarchy`: https://https://github.com/World-Meteorological-Organization/wis2-topic-hierarchy
 .. _`OSCAR`: https://oscar.wmo.int/surface
 .. _`top level domain of your country`: https://en.wikipedia.org/wiki/Country_code_top-level_domain
