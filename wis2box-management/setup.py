@@ -111,8 +111,8 @@ setup(
     ],
     project_urls={
         'Homepage': 'https://docs.wis2box.wis.wmo.int',
-        'Source Code': 'https://github.com/World-Meteorological-Organization/wis2box',
-        'Issue Tracker': 'https://github.com/World-Meteorological-Organization/wis2box/issues'
+        'Source Code': 'https://github.com/World-Meteorological-Organization/wis2box', # noqa
+        'Issue Tracker': 'https://github.com/World-Meteorological-Organization/wis2box/issues' # noqa
     },
     cmdclass={'test': PyTest},
     test_suite='tests.run_tests'
