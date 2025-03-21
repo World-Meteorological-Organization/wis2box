@@ -31,7 +31,7 @@ import sys
 import json
 import time
 
-from threading import Lock
+from queue import Queue
 from threading import Thread
 
 from prometheus_client import start_http_server, Counter, Gauge
@@ -40,7 +40,6 @@ from prometheus_client import start_http_server, Counter, Gauge
 from prometheus_client import REGISTRY, PROCESS_COLLECTOR, PLATFORM_COLLECTOR
 
 message_buffer = []
-buffer_lock = Lock()
 
 REGISTRY.unregister(PROCESS_COLLECTOR)
 REGISTRY.unregister(PLATFORM_COLLECTOR)
@@ -94,8 +93,11 @@ station_wsi = Gauge('wis2box_stations_wsi',
 
 class MetricsCollector:
     def __init__(self):
-        self.message_buffer = []
-        self.buffer_lock = Lock()
+        """
+        Initializes a message queue for thread-safe message handling.
+        """
+        self.message_queue = Queue()
+        self.running = True
 
     def update_stations_gauge(self, station_list):
         """
@@ -105,6 +107,8 @@ class MetricsCollector:
 
         :returns: `None`
         """
+
+        print(f"update stations-gauge with: {station_list}")
 
         station_wsi._metrics.clear()
         for station in station_list:
@@ -121,19 +125,24 @@ class MetricsCollector:
 
         station_list = []
         url = 'http://wis2box-api:80/oapi/collections/stations/items?f=json'
-        try:
-            res = requests.get(url)
-            json_data = json.loads(res.content)
-            if 'description' in json_data:
-                if json_data['description'] == 'Collection not found':
-                    logger.error("No stations configured yet")
-                    station_list.append('none')
+        station_list_found = False
+        while station_list_found is False:
+            try:
+                res = requests.get(url)
+                json_data = json.loads(res.content)
+                if 'description' in json_data:
+                    if json_data['description'] == 'Collection not found':
+                        logger.warning("Station collection not (yet) found in wis2box-api, sleep and try again") # noqa
+                        time.sleep(1)
+                    else:
+                        msg = f' wis2box-api returned unexpected response: {json_data}' # noqa
+                        raise Exception(msg)
                 else:
-                    logger.error(json_data['description'])
-            else:
-                station_list = [item['id'] for item in json_data["features"]]
-        except Exception as err:
-            logger.error(f'Failed to update stations-gauge: {err}')
+                    station_list_found = True
+                    station_list = [item['id'] for item in json_data["features"]] # noqa
+            except Exception as err:
+                msg = f'Failed to get stations from wis2box-api, with error: {err}' # noqa
+                raise Exception(msg)
         self.update_stations_gauge(station_list)
 
     def sub_connect(self, client, userdata, flags, rc, properties=None):
@@ -177,57 +186,43 @@ class MetricsCollector:
             elif msg.topic.endswith('/dropped'):
                 broker_msg_dropped.set(float(msg.payload))
         else:
-            with self.buffer_lock:
-                self.message_buffer.append((msg.topic, msg))
-                if len(self.message_buffer) >= 100:
-                    self.process_buffered_messages()
+            self.message_queue.put((msg.topic, msg.payload))
 
     def process_buffered_messages(self):
         """
-        function to process buffered messages
-
-        :returns: `None`
+        Processes buffered messages in a separate thread.
         """
-
-        with self.buffer_lock:
-            messages_to_process = self.message_buffer
-            self.message_buffer = []
-
-        for topic, msg in messages_to_process:
-            m = json.loads(msg.payload.decode('utf-8'))
-            if topic.startswith('wis2box/stations'):
-                self.update_stations_gauge(m['station_list'])
-            elif topic.startswith('wis2box/notifications'):
-                wsi = m['properties'].get('wigos_station_identifier', 'none')
-                if (wsi,) not in notify_wsi_total._metrics:
-                    notify_wsi_total.labels(wsi).inc(0)
-                    failure_wsi_total.labels(wsi).inc(0)
+        while self.running:
+            topic, payload = self.message_queue.get()
+            try:
+                m = json.loads(payload.decode('utf-8'))
+                if topic.startswith('wis2box/stations'):
+                    self.update_stations_gauge(m['station_list'])
+                elif topic.startswith('wis2box/notifications'):
+                    wsi = m['properties'].get('wigos_station_identifier', 'none') # noqa
+                    if (wsi,) not in notify_wsi_total._metrics:
+                        logger.warning(f"New station detected: {wsi}, init metrics") # noqa
+                        station_wsi.labels(wsi).set(1)
+                        notify_wsi_total.labels(wsi).inc(0)
+                        failure_wsi_total.labels(wsi).inc(0)
+                        # give prometheus time to register the new metric
+                        time.sleep(5)
                     station_wsi.labels(wsi).set(1)
-                    time.sleep(5)
-                notify_wsi_total.labels(wsi).inc(1)
-                failure_wsi_total.labels(wsi).inc(0)
-                notify_total.inc(1)
-            elif topic.startswith('wis2box/failure'):
-                wsi = m.get('wigos_station_identifier', 'none')
-                notify_wsi_total.labels(wsi).inc(0)
-                failure_wsi_total.labels(wsi).inc(1)
-                failure_total.inc(1)
-            elif topic.startswith('wis2box/storage'):
-                if str(m["Key"]).startswith('wis2box-incoming'):
-                    storage_incoming_total.inc(1)
-                if str(m["Key"]).startswith('wis2box-public'):
-                    storage_public_total.inc(1)
-
-    def periodic_buffer_processing(self):
-        """
-        function to process buffered messages every second
-
-        :returns: `None`
-        """
-
-        while True:
-            self.process_buffered_messages()
-            time.sleep(1)
+                    notify_wsi_total.labels(wsi).inc(1)
+                    failure_wsi_total.labels(wsi).inc(0)
+                    notify_total.inc(1)
+                elif topic.startswith('wis2box/failure'):
+                    wsi = m.get('wigos_station_identifier', 'none')
+                    notify_wsi_total.labels(wsi).inc(0)
+                    failure_wsi_total.labels(wsi).inc(1)
+                    failure_total.inc(1)
+                elif topic.startswith('wis2box/storage'):
+                    if str(m["Key"]).startswith('wis2box-incoming'):
+                        storage_incoming_total.inc(1)
+                    if str(m["Key"]).startswith('wis2box-public'):
+                        storage_public_total.inc(1)
+            except Exception as e:
+                logging.error(f"Error processing message: {e}")
 
     def gather_mqtt_metrics(self):
         """
@@ -250,18 +245,29 @@ class MetricsCollector:
             client.on_message = self.sub_mqtt_metrics
             client.username_pw_set(broker_username, broker_password)
             client.connect(broker_host, broker_port)
-            client.loop_forever()
+            print("Connected to broker, start MQTT-loop")
+            client.loop_start()  # Start MQTT loop in background
         except Exception as err:
             logger.error(f"Failed to setup MQTT-client with error: {err}")
 
+    def start(self):
+        """
+        Starts the metrics collection by initializing components and threads.
+        """
+        self.init_stations_gauge()
+        Thread(target=self.process_buffered_messages, daemon=True).start()
+        self.gather_mqtt_metrics()
+
 
 def main():
+    """
+    Entry point for the script.
+    """
     start_http_server(8001)
     collector = MetricsCollector()
-    collector.init_stations_gauge()
-
-    Thread(target=collector.periodic_buffer_processing, daemon=True).start()
-    collector.gather_mqtt_metrics()
+    collector.start()
+    while True:
+        time.sleep(1)
 
 
 if __name__ == '__main__':
