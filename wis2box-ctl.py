@@ -41,7 +41,7 @@ DOCKER_COMPOSE_ARGS = """
     --project-name wis2box_project
     """
 
-GITHUB_RELEASE_REPO = 'wmo-im/wis2box-release'
+GITHUB_RELEASE_REPO = 'World-Meteorological-Organization/wis2box-release'
 
 LOCAL_BUILD_IMAGES = ['wis2box-broker', 'wis2box-management', 'wis2box-mqtt-metrics-collector']
 

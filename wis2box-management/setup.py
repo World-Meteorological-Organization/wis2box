@@ -110,7 +110,7 @@ setup(
         'Topic :: Scientific/Engineering :: Information Analysis'
     ],
     project_urls={
-        'Homepage': 'https://wmo-im.github.io/wis2box',
+        'Homepage': 'https://docs.wis2box.wis.wmo.int',
         'Source Code': 'https://github.com/World-Meteorological-Organization/wis2box',
         'Issue Tracker': 'https://github.com/World-Meteorological-Organization/wis2box/issues'
     },
