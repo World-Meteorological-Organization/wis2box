@@ -38,7 +38,7 @@ is an example of starting a Jupyter session:
 
 .. code-block:: bash
 
-   git clone https://https://github.com/World-Meteorological-Organization/wis2box.git
+   git clone https://github.com/World-Meteorological-Organization/wis2box.git
    cd docs/source/data-access
    jupyter notebook --ip=0.0.0.0 --port=8888
 

@@ -98,7 +98,7 @@ The wis2box-proxy by default secures the path `/wis2downloader` with a bearer to
 
   python3 wis2box.ctl.py execute wis2box auth add-token --path wis2downloader -y
 
-.. _`wis2downloader`: https://https://github.com/World-Meteorological-Organization/wis2downloader
+.. _`wis2downloader`: https://github.com/World-Meteorological-Organization/wis2downloader
 
 
 

@@ -159,7 +159,7 @@ This plugin takes the incoming XML file, then validates it against the
 `CAP v1.2 schema <https://docs.oasis-open.org/emergency/cap/v1.2/CAP-v1.2-os.html>`_
 and optionally verifies the digital signature before publishing.
 
-The validation is performed using the `capvalidator <https://https://github.com/World-Meteorological-Organization/capvalidator>`_
+The validation is performed using the `capvalidator <https://github.com/World-Meteorological-Organization/capvalidator>`_
 package.
 
 A typical CAP message plugin workflow definition would be defined as follows:
@@ -205,8 +205,8 @@ See :ref:`data-mappings` for a full example data mapping configuration.
 
 .. _`csv2bufr`: https://csv2bufr.readthedocs.io/en/v0.8.5/
 .. _`csv2bufr-environment-variables`: https://csv2bufr.readthedocs.io/en/v0.8.5/installation.html#environment-variables
-.. _`csv2bufr-templates`: https://https://github.com/World-Meteorological-Organization/csv2bufr-templates
-.. _`bufr2geojson`: https://https://github.com/World-Meteorological-Organization/bufr2geojson
+.. _`csv2bufr-templates`: https://github.com/World-Meteorological-Organization/csv2bufr-templates
+.. _`bufr2geojson`: https://github.com/World-Meteorological-Organization/bufr2geojson
 .. _`synop2bufr`: https://synop2bufr.readthedocs.io
 
 .. _`Manual on Codes`: https://library.wmo.int/records/item/35625-manual-on-codes-volume-i-2-international-codes

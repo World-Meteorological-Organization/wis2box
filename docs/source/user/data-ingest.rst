@@ -221,6 +221,6 @@ WIS2 network by enabling external access to your public services.
 Next: :ref:`public-services-setup`
 
 .. _`MinIO`: https://min.io/docs/minio/container/index.html
-.. _`wis2box-data-subscriber`: https://https://github.com/World-Meteorological-Organization/wis2box-data-subscriber
-.. _`WIS2 topic hierarchy`: https://https://github.com/World-Meteorological-Organization/wis2-topic-hierarchy
-.. _`csv2bufr-templates`: https://https://github.com/World-Meteorological-Organization/csv2bufr-templates
+.. _`wis2box-data-subscriber`: https://github.com/World-Meteorological-Organization/wis2box-data-subscriber
+.. _`WIS2 topic hierarchy`: https://github.com/World-Meteorological-Organization/wis2-topic-hierarchy
+.. _`csv2bufr-templates`: https://github.com/World-Meteorological-Organization/csv2bufr-templates

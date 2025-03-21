@@ -1,6 +1,6 @@
 # wis2box
 
-[![Tests](https://https://github.com/World-Meteorological-Organization/wis2box/workflows/tests%20%E2%9A%99%EF%B8%8F/badge.svg)](https://https://github.com/World-Meteorological-Organization/wis2box/actions/workflows/tests-docker.yml)
+[![Tests](https://github.com/World-Meteorological-Organization/wis2box/workflows/tests%20%E2%9A%99%EF%B8%8F/badge.svg)](https://github.com/World-Meteorological-Organization/wis2box/actions/workflows/tests-docker.yml)
 [![Docs](https://readthedocs.org/projects/wis2box/badge)](https://docs.wis2box.wis.wmo.int)
 
 ## WIS2 in a box

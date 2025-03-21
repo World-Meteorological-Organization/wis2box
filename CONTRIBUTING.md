@@ -14,7 +14,7 @@ wis2box has the following modes of contribution:
 
 ## Code of Conduct
 
-Contributors to this project are expected to act respectfully toward others in accordance with the [Code of Conduct](https://https://github.com/World-Meteorological-Organization/wis2box/blob/main/CODE_OF_CONDUCT.md).
+Contributors to this project are expected to act respectfully toward others in accordance with the [Code of Conduct](https://github.com/World-Meteorological-Organization/wis2box/blob/main/CODE_OF_CONDUCT.md).
 
 ## Submitting Bugs
 
@@ -28,7 +28,7 @@ Before submitting a bug, please do the following:
       recent version, your problem may have been solved already! Upgrading is
       always the best first step.
     * [__Search the issue
-      tracker__](https://https://github.com/World-Meteorological-Organization/wis2box/issues)
+      tracker__](https://github.com/World-Meteorological-Organization/wis2box/issues)
       to make sure it's not a known issue.
 
 ### What to put in your bug report
@@ -53,7 +53,7 @@ constitutes a bare minimum; more info is almost always better:
 
 ### Contributor License Agreement
 
-Your contribution will be under our [license](https://https://github.com/World-Meteorological-Organization/wis2box/blob/main/LICENSE) as per [GitHub's terms of service](https://help.github.com/articles/github-terms-of-service/#6-contributions-under-repository-license).
+Your contribution will be under our [license](https://github.com/World-Meteorological-Organization/wis2box/blob/main/LICENSE) as per [GitHub's terms of service](https://help.github.com/articles/github-terms-of-service/#6-contributions-under-repository-license).
 
 ### GitHub Commit Access
 
@@ -63,8 +63,8 @@ Your contribution will be under our [license](https://https://github.com/World-M
 ### GitHub Pull Requests
 
 * Pull requests may include copyright in the source code header by the contributor if the contribution is significant or the contributor wants to claim copyright on their contribution.
-* All contributors shall be listed at https://https://github.com/World-Meteorological-Organization/wis2box/graphs/contributors
-* Unclaimed copyright, by default, is assigned to the main copyright holders as specified in https://https://github.com/World-Meteorological-Organization/wis2box/blob/main/LICENSE
+* All contributors shall be listed at https://github.com/World-Meteorological-Organization/wis2box/graphs/contributors
+* Unclaimed copyright, by default, is assigned to the main copyright holders as specified in https://github.com/World-Meteorological-Organization/wis2box/blob/main/LICENSE
 
 ### Version Control Branching
 

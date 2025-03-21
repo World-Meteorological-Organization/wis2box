@@ -4,7 +4,7 @@ Development
 ===========
 
 wis2box is developed as a free and open source project on GitHub. The wis2box
-codebase can be found at https://https://github.com/World-Meteorological-Organization/wis2box.
+codebase can be found at https://github.com/World-Meteorological-Organization/wis2box.
 
 
 GitHub
@@ -15,7 +15,7 @@ wis2box can be installed using the git CLI as follows:
 .. code-block:: bash
 
     # clone wis2box GitHub repository
-    git clone https://https://github.com/World-Meteorological-Organization/wis2box.git
+    git clone https://github.com/World-Meteorological-Organization/wis2box.git
     cd wis2box
 
 Testing
@@ -47,6 +47,6 @@ Code Conventions
 Python code follows `PEP8`_ coding conventions.
 
 
-.. _`GitHub Actions`: https://https://github.com/World-Meteorological-Organization/wis2box/blob/main/.github/workflows/tests-docker.yml
+.. _`GitHub Actions`: https://github.com/World-Meteorological-Organization/wis2box/blob/main/.github/workflows/tests-docker.yml
 .. _`Semantic Versioning Specification (SemVer)`: https://semver.org
 .. _`PEP8`: https://peps.python.org/pep-0008
