@@ -196,10 +196,17 @@ class MetricsCollector:
             topic, payload = self.message_queue.get()
             try:
                 m = json.loads(payload.decode('utf-8'))
+                wsi = m['properties'].get('wigos_station_identifier', 'none') # noqa
+                if (wsi,) not in notify_wsi_total._metrics:
+                    logger.warning(f"New station detected: {wsi}, set gauges")
+                    station_wsi.labels(wsi).set(1)
+                    notify_wsi_total.labels(wsi).inc(0)
+                    failure_wsi_total.labels(wsi).inc(0)
+                    # sleep to give prometheus time to register the new metric
+                    time.sleep(5)
                 if topic.startswith('wis2box/stations'):
                     self.update_stations_gauge(m['station_list'])
                 elif topic.startswith('wis2box/notifications'):
-                    wsi = m['properties'].get('wigos_station_identifier', 'none') # noqa
                     station_wsi.labels(wsi).set(1)
                     notify_wsi_total.labels(wsi).inc(1)
                     failure_wsi_total.labels(wsi).inc(0)
