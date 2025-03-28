@@ -47,7 +47,7 @@ class ObservationDataBUFR2GeoJSON(ObservationDataGeoJSON):
             msg = f'{filename} did not match {self.file_filter}'
             LOGGER.error(msg)
             raise ValueError(msg)
-        
+
         process_name = 'bufr2geojson'
 
         # check if input_data is Path object
@@ -73,6 +73,11 @@ class ObservationDataBUFR2GeoJSON(ObservationDataGeoJSON):
 
         if 'items' not in result:
             LOGGER.error(f'file={filename} failed to convert to GeoJSON')
+            return False
+
+        # if zero items, return False
+        if len(result['items']) == 0:
+            LOGGER.warning(f'file={filename} BUFR2GeoJSON conversion returned zero items for publication') # noqa
             return False
 
         # loop over items in response

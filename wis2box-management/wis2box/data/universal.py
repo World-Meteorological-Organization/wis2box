@@ -53,7 +53,7 @@ class UniversalData(BaseAbstractData):
         try:
             date_time = match.group(1)
         except IndexError:
-            msg = f'Failed to match first group in filename: {filename} using {self.file_filter}'
+            msg = f'Failed to match first group in filename: {filename} using {self.file_filter}'  # noqa: E501
             LOGGER.error(msg)
             raise ValueError(msg)
 

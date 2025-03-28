@@ -71,10 +71,7 @@ class ObservationDataBUFR(BaseAbstractData):
         }
 
         process_name = 'wis2box-bufr2bufr'
-        LOGGER.warning(f'Calling process {process_name}')
-        LOGGER.warning(f'Payload: {payload}')
         result = execute_api_process(process_name, payload)
-        LOGGER.warning(f'Result: {result}')
 
         try:
             # check for errors
@@ -89,6 +86,11 @@ class ObservationDataBUFR(BaseAbstractData):
 
         if 'data_items' not in result:
             LOGGER.error(f'file={filename} failed to convert to BUFR4 (result={result})') # noqa
+            return False
+
+        # if zero data_items, return False
+        if len(result['data_items']) == 0:
+            LOGGER.warning(f'file={filename} BUFR conversion returned zero items for publication') # noqa
             return False
 
         # loop over data_items in response
