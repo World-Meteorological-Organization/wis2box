@@ -49,6 +49,16 @@ class ObservationDataBUFR(BaseAbstractData):
                   filename: str = '') -> bool:
 
         LOGGER.debug('Processing BUFR4')
+
+        if isinstance(input_data, Path):
+            LOGGER.debug('input_data is a Path')
+            filename = input_data.name
+
+        if self.validate_filename_pattern(filename) is None:
+            msg = f'{filename} did not match {self.file_filter}'
+            LOGGER.error(msg)
+            raise ValueError(msg)
+
         data = self.as_string(input_data, base64_encode=True)
 
         payload = {
@@ -61,7 +71,10 @@ class ObservationDataBUFR(BaseAbstractData):
         }
 
         process_name = 'wis2box-bufr2bufr'
+        LOGGER.warning(f'Calling process {process_name}')
+        LOGGER.warning(f'Payload: {payload}')
         result = execute_api_process(process_name, payload)
+        LOGGER.warning(f'Result: {result}')
 
         try:
             # check for errors
