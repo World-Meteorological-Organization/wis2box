@@ -31,6 +31,10 @@ from pathlib import Path
 from pywis_pubsub.validation import validate_message
 from requests import Session, codes
 
+import sys
+sys.path.insert(1, '/wis2box-management/wis2box')
+from wis2box.metadata.station import publish_from_csv
+
 DATADIR = Path('.').parent.absolute() / 'tests/data'
 
 URL = 'http://localhost'
@@ -121,6 +125,15 @@ def test_metadata_station_publish():
 
     assert stations['numberReturned'] == 104
     assert stations['numberMatched'] == 104
+
+
+def test_metadata_station_encoding():
+    """Test station metadata encoding"""
+
+    try:
+        publish_from_csv(path="metadata/station/brazil.csv")
+    except Exception as err:
+        assert "Invalid utf-8 in station metadata file" in str(err)
 
 
 def test_metadata_discovery_publish():
