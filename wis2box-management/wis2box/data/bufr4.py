@@ -49,6 +49,16 @@ class ObservationDataBUFR(BaseAbstractData):
                   filename: str = '') -> bool:
 
         LOGGER.debug('Processing BUFR4')
+
+        if isinstance(input_data, Path):
+            LOGGER.debug('input_data is a Path')
+            filename = input_data.name
+
+        if self.validate_filename_pattern(filename) is None:
+            msg = f'{filename} did not match {self.file_filter}'
+            LOGGER.error(msg)
+            raise ValueError(msg)
+
         data = self.as_string(input_data, base64_encode=True)
 
         payload = {
@@ -76,6 +86,11 @@ class ObservationDataBUFR(BaseAbstractData):
 
         if 'data_items' not in result:
             LOGGER.error(f'file={filename} failed to convert to BUFR4 (result={result})') # noqa
+            return False
+
+        # if zero data_items, return False
+        if len(result['data_items']) == 0:
+            LOGGER.warning(f'file={filename} BUFR conversion returned zero items for publication') # noqa
             return False
 
         # loop over data_items in response

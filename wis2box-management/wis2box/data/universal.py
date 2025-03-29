@@ -47,13 +47,13 @@ class UniversalData(BaseAbstractData):
         match = self.validate_filename_pattern(filename.name)
 
         if match is None:
-            msg = f'Invalid filename format: {filename} ({self.file_filter})'
+            msg = f'{filename} did not match {self.file_filter}'
             LOGGER.error(msg)
             raise ValueError(msg)
         try:
             date_time = match.group(1)
         except IndexError:
-            msg = 'Missing date/time in filename pattern'
+            msg = f'Failed to match first group in filename: {filename} using {self.file_filter}'  # noqa: E501
             LOGGER.error(msg)
             raise ValueError(msg)
 

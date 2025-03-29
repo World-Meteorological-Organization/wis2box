@@ -57,7 +57,7 @@ class ObservationDataSYNOP2BUFR(BaseAbstractData):
         file_match = self.validate_filename_pattern(filename)
 
         if file_match is None:
-            msg = f'Invalid filename format: {filename} ({self.file_filter})'
+            msg = f'{filename} did not match {self.file_filter}'
             LOGGER.error(msg)
             raise ValueError(msg)
 
@@ -68,7 +68,19 @@ class ObservationDataSYNOP2BUFR(BaseAbstractData):
             year = int(file_match.group(1))
             month = int(file_match.group(2))
         except IndexError:
-            msg = 'Missing year and/or month in filename pattern'
+            msg = f'Failed to parse year/month from filename: {filename} using {self.file_filter}' # noqa
+            LOGGER.error(msg)
+            raise ValueError(msg)
+
+        # check if year/month is a valid date, as is not in the future
+        try:
+            datetime(year, month, 1)
+        except ValueError:
+            msg = f'Invalid year/month parsed from filename: year={year}, month={month}' # noqa
+            LOGGER.error(msg)
+            raise ValueError(msg)
+        if datetime(year, month, 1) > datetime.now():
+            msg = f'Year/month parsed from filename is in the future: year={year}, month={month}' # noqa
             LOGGER.error(msg)
             raise ValueError(msg)
 

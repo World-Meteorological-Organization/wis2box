@@ -56,7 +56,7 @@ class ObservationDataCSV2BUFR(BaseAbstractData):
             filename = input_data.name
 
         if self.validate_filename_pattern(filename) is None:
-            msg = f'Invalid filename format: {filename} ({self.file_filter})'
+            msg = f'{filename} did not match {self.file_filter}'
             LOGGER.error(msg)
             raise ValueError(msg)
 
