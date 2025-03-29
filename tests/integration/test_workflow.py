@@ -32,8 +32,8 @@ from pywis_pubsub.validation import validate_message
 from requests import Session, codes
 
 import sys
-sys.path.insert(1, '/home/runner/work/wis2box/wis2box/wis2box-management/')
-from wis2box.metadata.station import publish_from_csv
+sys.path.insert(1, '/home/runner/work/wis2box/wis2box/wis2box-management/wis2box/metadata')
+from station import publish_from_csv
 
 DATADIR = Path('.').parent.absolute() / 'tests/data'
 
