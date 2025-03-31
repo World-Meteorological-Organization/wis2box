@@ -79,7 +79,8 @@ class DiscoveryMetadata(BaseMetadata):
             md['identification']['extents']['temporal'][0]['begin'] = today
 
         # md set 'distribution' to empty object, we add links later
-        md['distribution'] = {}
+        if 'distribution' not in md:
+            md['distribution'] = {}
 
         LOGGER.debug('Generating OARec discovery metadata')
         record = WMOWCMP2OutputSchema().write(md, stringify=False)

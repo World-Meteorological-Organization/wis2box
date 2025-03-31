@@ -46,7 +46,7 @@ identification:
         temporal:
             - begin: 2023-01-17
               end: null
-              resolution: P6H
+              resolution: PT24H
     url: 
         - https://api.weather.gc.ca/collections/hydrometric-annual-statistics/items
 
@@ -60,3 +60,10 @@ contact:
         email: you@example.org
         hoursofservice: 0700h - 1500h UTC
         contactinstructions: email
+
+distribution:
+    items:
+        url: https://api.weather.gc.ca/collections/hydrometric-annual-statistics/items
+        type: application/geo+json
+        rel: items
+        description: hydrometric-annual-statistics
