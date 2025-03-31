@@ -63,6 +63,7 @@ class DiscoveryMetadata(BaseMetadata):
 
         md = deepcopy(mcf)
 
+        mqtt_topic = None
         if 'wis2box' in mcf and 'topic_hierarchy' in mcf['wis2box']:
             local_topic = mcf['wis2box']['topic_hierarchy'].replace('.', '/')
             mqtt_topic = f'origin/a/wis2/{local_topic}'
@@ -85,7 +86,7 @@ class DiscoveryMetadata(BaseMetadata):
 
         LOGGER.debug('Generating OARec discovery metadata')
         record = WMOWCMP2OutputSchema().write(md, stringify=False)
-        if 'wmo:topicHierarchy' in record['properties']:
+        if mqtt_topic is not None:
             record['properties']['wmo:topicHierarchy'] = mqtt_topic
 
         record['wis2box'] = mcf['wis2box']
