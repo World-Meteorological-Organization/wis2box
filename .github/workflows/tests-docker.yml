@@ -64,15 +64,19 @@ jobs:
         echo '{"topic": "origin/a/wis2/+/data/core/#"}' > test.json
         curl -X POST http://localhost/wis2downloader/subscriptions -H "Content-Type: application/json" -H "Authorization: Bearer github123" -d @test.json
     - name: add Brazil wrongly encoded station data and check for error message
+      id: test-bad-station-csv
       env:
         STATION_METADATA: /data/wis2box/metadata/station/brazil.csv
       run: |
-        output=$(python3 wis2box-ctl.py execute wis2box metadata station publish-collection --path $STATION_METADATA 2>&1)
-        error="Invalid utf-8 in station metadata file"
-        if [[ $output != *"$error"* ]]; then
-          echo "Error: Wrong error message given."
-          exit 1
-        fi
+        {
+          echo "result<<EOF"
+          python3 wis2box-ctl.py execute wis2box metadata station publish-collection --path $STATION_METADATA
+          echo EOF
+        } >> $GITHUB_OUTPUT
+    - name: Check for failure
+      if: ${{ ! contains(steps.test-bad-station-csv.outputs.result, 'Invalid utf-8 in station metadata file')}}
+      run: 
+        exit 1 
     - name: add CAP data, cap-publish 
       env:
         DISCOVERY_METADATA: /data/wis2box/metadata/discovery/int-wmo-test-cap.yml 
