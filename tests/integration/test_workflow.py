@@ -167,6 +167,7 @@ def test_metadata_discovery_publish():
     # test access of discovery metadata from notification message
 
     centre_ids = [
+        'ca-eccc-msc-test',
         'mw-mw_met_centre-test',
         'it-meteoam',
         'dz-meteoalgerie',
@@ -298,7 +299,7 @@ def test_message_api():
 
     # test messages per test dataset
     counts = {
-        'ca-eccc-msc-test': 1,
+        'ca-eccc-msc': 1,
         'mw-mw_met_centre': 25,
         'it-meteoam': 33,
         'dz-meteoalgerie': 29,
