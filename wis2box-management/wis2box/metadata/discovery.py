@@ -69,7 +69,7 @@ class DiscoveryMetadata(BaseMetadata):
 
             LOGGER.debug('Adding topic hierarchy')
             md['identification']['wmo_topic_hierarchy'] = local_topic
-        
+
         LOGGER.debug('Adding revision date')
         md['identification']['dates']['revision'] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')  # noqa
 
@@ -80,14 +80,13 @@ class DiscoveryMetadata(BaseMetadata):
 
         # md set 'distribution' to empty object, we add links later
         md['distribution'] = {}
-        
+
         LOGGER.debug('Generating OARec discovery metadata')
         record = WMOWCMP2OutputSchema().write(md, stringify=False)
         if 'wmo:topicHierarchy' in record['properties']:
             record['properties']['wmo:topicHierarchy'] = mqtt_topic
-        
-        record['wis2box'] = mcf['wis2box']
 
+        record['wis2box'] = mcf['wis2box']
 
         if record['properties']['contacts'][0].get('organization') is None:
             record['properties']['contacts'][0]['organization'] = record['properties']['contacts'][0].pop('name', "NOTSET")  # noqa
