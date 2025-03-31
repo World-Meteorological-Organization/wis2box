@@ -69,6 +69,7 @@ class DiscoveryMetadata(BaseMetadata):
 
             LOGGER.debug('Adding topic hierarchy')
             md['identification']['wmo_topic_hierarchy'] = local_topic
+            md['identification']['wmo_data_policy'] = mqtt_topic.split('/')[5]
 
         LOGGER.debug('Adding revision date')
         md['identification']['dates']['revision'] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')  # noqa
