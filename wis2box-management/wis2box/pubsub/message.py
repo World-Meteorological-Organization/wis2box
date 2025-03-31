@@ -46,23 +46,29 @@ class SecureHashAlgorithms(Enum):
 # map commonly used file extensions to mime types
 # other file extensions will be set to 'application/octet-stream'
 DATA_OBJECT_MIMETYPES = {
-    'txt': 'text/plain',
-    'xml': 'text/xml',
-    'csv': 'text/csv',
-    'nc': 'application/netcdf',
-    'nc4': 'application/netcdf',
-    'zip': 'application/zip',
-    'json': 'application/json',
-    'png': 'image/png',
-    'jpg': 'image/jpeg',
-    'jpeg': 'image/jpeg',
-    'gif': 'image/gif',
-    'tif': 'image/tiff',
-    'bufr4': 'application/bufr',
     'bufr': 'application/bufr',
+    'bufr4': 'application/bufr',
+    'csv': 'text/csv',
+    'docx': 'application/msword',
+    'geojson': 'application/geo+json',
+    'gif': 'image/gif',
     'grib': 'application/grib',
     'grib2': 'application/grib',
-    'geojson': 'application/geo+json'
+    'hdf': 'application/x-hdf',
+    'html': 'text/html',
+    'jpeg': 'image/jpeg',
+    'jpg': 'image/jpeg',
+    'json': 'application/json',
+    'mpg': 'video/mpeg',
+    'nc': 'application/netcdf',
+    'nc4': 'application/netcdf',
+    'pdf': 'application/pdf',
+    'png': 'image/png',
+    'ps': 'application/postscript',
+    'tif': 'image/tiff',
+    'txt': 'text/plain',
+    'xml': 'application/xml',
+    'zip': 'application/zip'
 }
 
 
