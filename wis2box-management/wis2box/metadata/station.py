@@ -212,7 +212,7 @@ def load_datasets() -> Iterator[Tuple[dict, str]]:
         dm = oar.collection_items('discovery-metadata')
         for topic in dm['features']:
             for link in topic['links']:
-                if link['rel'] == 'canonical':
+                if link['rel'] == 'canonical' and 'wmo:topicHierarchy' in topic['properties']: # noqa
                     yield link, topic['properties']['wmo:topicHierarchy']
     except RuntimeError:
         LOGGER.warning('discovery-metadata collection has not been created')
