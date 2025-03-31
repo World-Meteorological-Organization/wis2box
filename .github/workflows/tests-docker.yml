@@ -77,6 +77,14 @@ jobs:
       if: ${{ ! contains(steps.test-bad-station-csv.outputs.result, 'Invalid utf-8 in station metadata file')}}
       run: 
         exit 1 
+    - name: add non-real-time data example Canada 🇨🇦
+      env:
+        DISCOVERY_METADATA: /data/wis2box/metadata/discovery/ca-annual-min-max-daily-water-flow.yml
+        DISCOVERY_METADATA_ID: urn:wmo:md:ca-eccc-msc-test:daily-water-flow
+      run: |
+        python3 wis2box-ctl.py execute wis2box dataset publish $DISCOVERY_METADATA
+        curl -s http://localhost/data/metadata/$DISCOVERY_METADATA_ID.json --output /tmp/$DISCOVERY_METADATA_ID
+        pywcmp ets validate /tmp/$DISCOVERY_METADATA_ID
     - name: add CAP data, cap-publish 
       env:
         DISCOVERY_METADATA: /data/wis2box/metadata/discovery/int-wmo-test-cap.yml 

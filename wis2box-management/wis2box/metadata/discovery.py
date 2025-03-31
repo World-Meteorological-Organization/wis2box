@@ -63,11 +63,13 @@ class DiscoveryMetadata(BaseMetadata):
 
         md = deepcopy(mcf)
 
-        local_topic = mcf['wis2box']['topic_hierarchy'].replace('.', '/')
-        mqtt_topic = f'origin/a/wis2/{local_topic}'
+        if 'wis2box' in mcf and 'topic_hierarchy' in mcf['wis2box']:
+            local_topic = mcf['wis2box']['topic_hierarchy'].replace('.', '/')
+            mqtt_topic = f'origin/a/wis2/{local_topic}'
 
-        LOGGER.debug('Adding topic hierarchy')
-        md['identification']['wmo_topic_hierarchy'] = local_topic
+            LOGGER.debug('Adding topic hierarchy')
+            md['identification']['wmo_topic_hierarchy'] = local_topic
+        
         LOGGER.debug('Adding revision date')
         md['identification']['dates']['revision'] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')  # noqa
 
@@ -76,16 +78,16 @@ class DiscoveryMetadata(BaseMetadata):
             today = date.today().strftime('%Y-%m-%d')
             md['identification']['extents']['temporal'][0]['begin'] = today
 
-        LOGGER.debug('Adding data policy')
-        md['identification']['wmo_data_policy'] = mqtt_topic.split('/')[5]
-
         # md set 'distribution' to empty object, we add links later
         md['distribution'] = {}
-
+        
         LOGGER.debug('Generating OARec discovery metadata')
         record = WMOWCMP2OutputSchema().write(md, stringify=False)
-        record['properties']['wmo:topicHierarchy'] = mqtt_topic
+        if 'wmo:topicHierarchy' in record['properties']:
+            record['properties']['wmo:topicHierarchy'] = mqtt_topic
+        
         record['wis2box'] = mcf['wis2box']
+
 
         if record['properties']['contacts'][0].get('organization') is None:
             record['properties']['contacts'][0]['organization'] = record['properties']['contacts'][0].pop('name', "NOTSET")  # noqa
