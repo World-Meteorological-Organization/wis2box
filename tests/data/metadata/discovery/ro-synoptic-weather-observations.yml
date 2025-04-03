@@ -47,7 +47,7 @@ identification:
         temporal:
             - begin: 2023-01-17
               end: null
-              resolution: P6H
+              resolution: PT6H
     url: https://example.org/malawi-surface-weather-observations
     wmo_data_policy: core
 
