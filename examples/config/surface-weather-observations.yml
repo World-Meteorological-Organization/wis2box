@@ -41,7 +41,7 @@ identification:
         temporal:
             - begin: 2021-11-29
               end: null
-              resolution: P1H
+              resolution: PT1H
     url: https://example.org/surface-weather-observations-webpage
     wmo_data_policy: core
 

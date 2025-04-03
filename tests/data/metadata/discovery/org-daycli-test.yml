@@ -49,7 +49,7 @@ identification:
         temporal:
             - begin: 2024-02-09
               end: null
-              resolution: P1H
+              resolution: PT1H
     rights: WMO Unified Policy for the International Exchange of Earth System Data
     url: https://example.org/fixme
 
