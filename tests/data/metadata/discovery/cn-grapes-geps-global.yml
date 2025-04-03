@@ -50,7 +50,7 @@ identification:
         temporal:
             - begin: 2021-11-29
               end: null
-              resolution: P12H
+              resolution: PT12H
     url: http://gisc.wis.cma.cn/wis/portal.pub?M_PID=urn:wmo:md:int.wmo.wis::CMA_GEPS
     wmo_data_policy: core
 
