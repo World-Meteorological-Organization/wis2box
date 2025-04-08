@@ -37,6 +37,8 @@ LOGGER = logging.getLogger(__name__)
 VALID_PATHS = [
     'collections/stations',
     'processes/wis2box',
+    'processes/wis2box-publish_dataset',
+    'processes/wis2box-synop',
     'wis2downloader'
 ]
 
