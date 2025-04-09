@@ -133,7 +133,13 @@ class DiscoveryMetadata(BaseMetadata):
 
         links = []
         if 'links' in record:
-            links = record['links']
+            for link in record['links']:
+                # links containing identifier will be added later
+                if identifier in link['href']:
+                    LOGGER.debug(f'Skipping link {link["href"]}')
+                    continue
+                links.append(link)
+
         plugins = get_plugins(record)
         # check if any plugin-names contains 2geojson
         has_2geojson = any('2geojson' in plugin for plugin in plugins)
