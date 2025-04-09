@@ -41,6 +41,13 @@ if [ ! -f /data/wis2box/.ssh/id_rsa ]; then
     # generate private key
     ssh-keygen -t rsa -b 4096 -f /data/wis2box/.ssh/id_rsa -N ""
     chmod 600 /data/wis2box/.ssh/id_rsa
+
+    # wait for http://minio:9000/minio/health/live to be available
+    while ! curl -s http://minio:9000/minio/health/live; do
+        echo "Waiting for minio to be available..."
+        sleep 1
+    done
+    echo "MinIO is available, proceed with setup"
 fi
 
 # wis2box commands
