@@ -134,6 +134,10 @@ class DiscoveryMetadata(BaseMetadata):
         links = []
         if 'links' in record:
             for link in record['links']:
+                # link for Notifications will be added later
+                if link['description'] == 'Notifications':
+                    LOGGER.debug('Skipping notifications link')
+                    continue
                 # links containing identifier will be added later
                 if identifier in link['href']:
                     LOGGER.debug(f'Skipping link {link["href"]}')
