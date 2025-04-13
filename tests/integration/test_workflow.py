@@ -207,6 +207,11 @@ def test_metadata_discovery_publish():
         assert 'has_auth' in r['wis2box']
         assert r['wis2box']['has_auth']
 
+        # test object storage publication
+        r = SESSION.get(f'{URL}/data/metadata/{ID}.json').json()
+        assert 'wis2box' not in r
+        assert 'wmo:topicHierarchy' not in r['properties']
+
 
 def test_data_ingest():
     """Test data ingest/process publish"""

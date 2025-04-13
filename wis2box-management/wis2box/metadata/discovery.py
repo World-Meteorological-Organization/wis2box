@@ -312,6 +312,7 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
 
         LOGGER.debug('Removing internal wis2box metadata')
         record.pop('wis2box')
+        record['properties'].pop('wmo:topicHierarchy', None)
 
         LOGGER.debug('Sanitizing links')
         if 'links' in record:
