@@ -38,7 +38,7 @@ VALID_PATHS = [
     'collections/stations',
     'processes/wis2box',
     'processes/wis2box-publish_dataset',
-    'processes/wis2box-synop',
+    'processes/wis2box-synop2bufr',
     'wis2downloader'
 ]
 

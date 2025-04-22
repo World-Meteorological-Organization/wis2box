@@ -165,10 +165,9 @@ For example using the command line from the host running wis2box:
 wis2box-webapp
 --------------
 
-The wis2box-webapp is a web application that includes the following forms for data validation and ingestion:
+The wis2box-webapp is a web application that includes the following form for data validation and ingestion:
 
 * user interface to ingest `FM-12 SYNOP data <https://library.wmo.int/idviewer/35713/33>`_
-* user interface to ingest CSV data using the csv2bufr-plugin and using the predefined "AWS-template" mapping.
 
 The wis2box-webapp is available on your host at `http://<your-public-ip>/wis2box-webapp`.
 
@@ -177,7 +176,7 @@ Interactive data ingestion requires an execution token, which can be generated u
 .. code-block:: bash
 
     python3 wis2box-ctl.py login
-    wis2box auth add-token --path processes/wis2box
+    wis2box auth add-token --path processes/wis2box-synop2bufr
 
 .. note::
 
