@@ -128,7 +128,6 @@ The credentials are defined in the ``wis2box.env`` file by the following environ
 The wis2box-webapp provides access to the following interfaces:
 
 - **SYNOP Form**: to interactively submit FM-12 data using a form
-- **CSV Form**: to interactively submit CSV data, using the 'AWS'-template for the CSV-to-BUFR transformation
 - **Dataset editor**: to create/edit/delete datasets along with their metadata and data mappings configuration
 - **Station editor**: to create/edit/delete stations and associate stations with topics
 - **Monitoring**: to monitor the WIS2 notifications published by your wis2box instance
