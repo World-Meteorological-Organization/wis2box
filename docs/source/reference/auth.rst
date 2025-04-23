@@ -20,15 +20,17 @@ To add a token to the execution of a wis2box process, use the following command:
 
 This will generate a random token that can be used to execute ``wis2box-synop2bufr`` and ``wis2box-publish_dataset``.
 
-To add a token for the exclusive use of submitting FM-12 SYNOP data in the wis2box-webapp, use the following command:
-
-.. code-block:: bash
-
-    wis2box auth add-token --path processes/wis2box-synop2bufr
-
 .. note::
 
    Be sure to record the token now, there is no way to retrieve it once it is lost. You can generate a new token if you lose it.
+
+To add a token for the exclusive use of updating datasets, use the following command:
+
+.. code-block:: bash
+
+    wis2box auth add-token --path processes/wis2box-publish_dataset
+
+When a token is set on the path ``processes/wis2box-publish_dataset``, the general token on the path ``processes/wis2box`` will no longer be authorized to update datasets.	
 
 To add a token to PUT/POST/DELETE requests to the stations collection, use the following command:
 
