@@ -11,8 +11,7 @@ Ensure you have Docker, Docker Compose and Python installed on your host, as det
 Download
 --------
 
-Download the wis2box setup files from the `wis2box Releases`_ page.  Go to the latest release
-and download the .zip file from the Assets section.
+Download `wis2box-setup.zip` from the `wis2box Releases`_ page and unzip using the following commands:
 
 .. code-block:: bash
 
