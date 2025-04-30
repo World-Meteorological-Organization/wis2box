@@ -306,7 +306,7 @@ Next steps
 
 The next step is to prepare data ingestion into wis2box, see :ref:`data-ingest`.
 
-.. _`wis2box Releases`: https://github.com/World-Meteorological-Organization/wis2box/releases
+.. _`wis2box Releases`: https://github.com/World-Meteorological-Organization/wis2box-release/releases
 .. _`WIS2 topic hierarchy`: https://github.com/World-Meteorological-Organization/wis2-topic-hierarchy
 .. _`OSCAR`: https://oscar.wmo.int/surface
 .. _`top level domain of your country`: https://en.wikipedia.org/wiki/Country_code_top-level_domain
