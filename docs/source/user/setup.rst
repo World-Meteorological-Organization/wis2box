@@ -16,9 +16,9 @@ and download the .zip file from the Assets section.
 
 .. code-block:: bash
 
-   wget https://github.com/World-Meteorological-Organization/wis2box/releases/download/1.0.0/wis2box-setup-1.0.0.zip
-   unzip wis2box-setup-1.0.0.zip
-   cd wis2box-1.0.0
+   wget https://github.com/World-Meteorological-Organization/wis2box-release/releases/download/1.0.0/wis2box-setup.zip
+   unzip wis2box-setup.zip
+   cd wis2box
 
 
 Create initial configuration files
