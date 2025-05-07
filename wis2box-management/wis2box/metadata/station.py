@@ -355,13 +355,20 @@ def publish_from_csv(path: Path, new_topic: str = None) -> None:
             except ValueError:
                 barometer_height = None
 
-            LOGGER.debug('Verifying station coordinate types')
-            for pc in ['longitude', 'latitude', 'elevation']:
-                value = get_typed_value(row[pc])
-                if not isinstance(value, (int, float)):
-                    msg = f'Invalid station {pc} value: {value}'
-                    LOGGER.error(msg)
-                    raise RuntimeError(msg)
+            # ensure that any Fixed stations have valid coordinates
+            if row['facility_type'].lower().endswith('fixed'):
+                LOGGER.debug('Verifying station coordinate types')
+                for pc in ['longitude', 'latitude', 'elevation']:
+                    value = get_typed_value(row[pc])
+                    if not isinstance(value, (int, float)):
+                        msg = f'Invalid station {pc} value: {value}'
+                        LOGGER.error(msg)
+                        raise RuntimeError(msg)
+            else:
+                LOGGER.debug('Setting station coordinates to None if empty')
+                for pc in ['longitude', 'latitude', 'elevation']:
+                    if row[pc] in ['', 'null', 'None']:
+                        row[pc] = None
 
             feature = {
                 'id': wigos_station_identifier,
@@ -369,8 +376,8 @@ def publish_from_csv(path: Path, new_topic: str = None) -> None:
                 'geometry': {
                     'type': 'Point',
                     'coordinates': [
-                        get_typed_value(row['longitude']),
-                        get_typed_value(row['latitude'])
+                        float(row['longitude']),
+                        float(row['latitude'])
                     ]
                 },
                 'properties': {
@@ -384,8 +391,7 @@ def publish_from_csv(path: Path, new_topic: str = None) -> None:
                    'url': f"{oscar_baseurl}/{wigos_station_identifier}",
                    'topic': topic2,
                    'topics': topics,
-                   # TODO: update with real-time status as per https://codes.wmo.int/wmdr/_ReportingStatus  # noqa
-                   'status': 'operational'
+                   'status': 'operational' # assume operational by default
                 }
             }
 
@@ -486,7 +492,7 @@ def get(ctx, wsi, verbosity):
         'latitude': station.get('latitude', ''),
         'longitude': station.get('longitude', ''),
         'elevation': station.get('elevation'),
-        'barometer_height': station['barometer_height'],
+        'barometer_height': station.get['barometer_height', ''],
         'territory_name': station.get('territory_name', '')
     })
 
