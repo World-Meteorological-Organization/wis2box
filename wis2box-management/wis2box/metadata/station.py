@@ -180,7 +180,7 @@ def get_stations_csv(wsi: str = '') -> str:
         latitude = None
         longitude = None
         elevation = None
-        if station['geometry'] is not None:
+        if station.get('geometry') is not None:
             latitude = station['geometry']['coordinates'][1]
             longitude = station['geometry']['coordinates'][0]
             if len(station['geometry']['coordinates']) > 2:
