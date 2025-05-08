@@ -423,7 +423,6 @@ def publish_from_csv(path: Path, new_topic: str = None) -> None:
                 delete_collection_item('stations', feature['id'])
             except RuntimeError as err:
                 LOGGER.debug(f'Station does not exist: {err}')
-            LOGGER.info(feature)
             upsert_collection_item('stations', feature)
 
     LOGGER.info(f'Updated station list: {station_list}')
