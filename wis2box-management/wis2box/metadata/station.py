@@ -371,7 +371,7 @@ def publish_from_csv(path: Path, new_topic: str = None) -> None:
                 for pc in ['longitude', 'latitude', 'elevation']:
                     value = get_typed_value(row[pc])
                     if not isinstance(value, (int, float)):
-                        msg = f'Invalid station {pc} value: {value}'
+                        msg = f'Invalid station {pc} value in row: {row}'
                         LOGGER.error(msg)
                         raise RuntimeError(msg)
             else:
