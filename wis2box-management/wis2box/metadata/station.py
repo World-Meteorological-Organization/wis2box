@@ -176,14 +176,24 @@ def get_stations_csv(wsi: str = '') -> str:
 
         barometer_height = station['properties'].get('barometer_height', '')
 
+        # set coordinates to None if geometry is missing
+        latitude = None
+        longitude = None
+        elevation = None
+        if station['geometry'] is not None:
+            latitude = station['geometry']['coordinates'][1]
+            longitude = station['geometry']['coordinates'][0]
+            if len(station['geometry']['coordinates']) > 2:
+                elevation = station['geometry']['coordinates'][2]
+
         obj = {
             'station_name': station['properties']['name'],
             'wigos_station_identifier': wsi,
             'traditional_station_identifier': tsi,
             'facility_type': station['properties']['facility_type'],
-            'latitude': station['geometry']['coordinates'][1],
-            'longitude': station['geometry']['coordinates'][0],
-            'elevation': station['geometry']['coordinates'][2],
+            'latitude': latitude,
+            'longitude': longitude,
+            'elevation': elevation,
             'barometer_height': barometer_height,
             'territory_name': station['properties']['territory_name'],
             'wmo_region': station['properties']['wmo_region']
@@ -373,13 +383,6 @@ def publish_from_csv(path: Path, new_topic: str = None) -> None:
             feature = {
                 'id': wigos_station_identifier,
                 'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [
-                        float(row['longitude']),
-                        float(row['latitude'])
-                    ]
-                },
                 'properties': {
                    'name': row['station_name'],
                    'wigos_station_identifier': wigos_station_identifier,
@@ -391,9 +394,22 @@ def publish_from_csv(path: Path, new_topic: str = None) -> None:
                    'url': f"{oscar_baseurl}/{wigos_station_identifier}",
                    'topic': topic2,
                    'topics': topics,
-                   'status': 'operational' # assume operational by default
+                   'status': 'operational'  # assume operational by default
                 }
             }
+
+            # only add geometry if lat/lon are not None
+            if row['latitude'] is not None and row['longitude'] is not None:
+                geometry = {
+                    'type': 'Point',
+                    'coordinates': [
+                        float(row['longitude']),
+                        float(row['latitude'])
+                    ]
+                }
+                if row['elevation'] is not None:
+                    geometry['coordinates'].append(float(row['elevation']))
+                feature['geometry'] = geometry
 
             LOGGER.debug('Checking properties against WMDR code lists')
             for key, values in get_wmdr_codelists().items():
@@ -402,17 +418,12 @@ def publish_from_csv(path: Path, new_topic: str = None) -> None:
                     msg = f'Invalid value {column_value}'
                     raise RuntimeError(msg)
 
-            station_elevation = get_typed_value(row['elevation'])
-
-            if isinstance(station_elevation, (float, int)):
-                LOGGER.debug('Adding z value to geometry')
-                feature['geometry']['coordinates'].append(station_elevation)
-
             LOGGER.debug('Updating backend')
             try:
                 delete_collection_item('stations', feature['id'])
             except RuntimeError as err:
                 LOGGER.debug(f'Station does not exist: {err}')
+            LOGGER.info(feature)
             upsert_collection_item('stations', feature)
 
     LOGGER.info(f'Updated station list: {station_list}')
@@ -559,7 +570,20 @@ def add_topic(ctx, topic, territory_name, wsi, verbosity):
     click.echo('Done')
 
 
+# add command to return stations_csv
+@click.command()
+@click.pass_context
+@cli_helpers.OPTION_VERBOSITY
+def get_csv(ctx, verbosity):
+    """Get stations in CSV format"""
+
+    click.echo('Getting stations in CSV format')
+    csv_string = get_stations_csv()
+    click.echo(csv_string)
+
+
 station.add_command(get)
 station.add_command(publish_collection)
 station.add_command(setup)
 station.add_command(add_topic)
+station.add_command(get_csv)
