@@ -399,7 +399,7 @@ def publish_from_csv(path: Path, new_topic: str = None) -> None:
             }
 
             # only add geometry if lat/lon are not None
-            if row['latitude'] is not None and row['longitude'] is not None:
+            if None not in [row['latitude'], row['longitude']]:
                 geometry = {
                     'type': 'Point',
                     'coordinates': [
