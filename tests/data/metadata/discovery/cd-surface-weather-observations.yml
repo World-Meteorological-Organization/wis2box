@@ -67,3 +67,9 @@ contact:
         email: you@example.com
         hoursofservice: 0700h - 1500h UTC
         contactinstructions: email
+
+distribution:
+      license:
+          url: https://example.org/license
+          type: text/html
+          rel: license

@@ -28,7 +28,7 @@ import os
 
 from pathlib import Path
 
-from pywis_pubsub.validation import validate_message
+from pywis_pubsub.ets import WNMTestSuite
 from requests import Session, codes
 
 
@@ -336,8 +336,9 @@ def test_message_api():
 
     assert msg is not None
 
-    is_valid, _ = validate_message(msg)
-    assert is_valid
+    ts = WNMTestSuite(msg)
+    ts.run_tests()
+    assert ts.raise_for_status() is None
 
     assert msg['geometry'] is not None
 
@@ -377,8 +378,9 @@ def test_message_api():
 
     assert msg is not None
 
-    is_valid, _ = validate_message(msg)
-    assert is_valid
+    ts = WNMTestSuite(msg)
+    ts.run_tests()
+    assert ts.raise_for_status() is None
 
     assert msg['geometry'] is not None
 

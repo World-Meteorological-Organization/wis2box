@@ -31,6 +31,8 @@ from owslib.ogcapi.records import Records
 from typing import Union
 
 from pygeometa.schemas.wmo_wcmp2 import WMOWCMP2OutputSchema
+from pywcmp.errors import TestSuiteError
+from pywcmp.wcmp2.ets import WMOCoreMetadataProfileTestSuite2
 
 from wis2box import cli_helpers
 from wis2box.api import (delete_collection_item, remove_collection,
@@ -323,6 +325,15 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
                 new_links.append(ol)
 
         record['links'] = new_links
+
+        LOGGER.debug('Validating WCMP2 record')
+        try:
+            ts = WMOCoreMetadataProfileTestSuite2(record)
+            ts.raise_for_status()
+        except TestSuiteError as err:
+            msg = 'WCMP2 validation errors' + '\n'.join(err.errors)
+            LOGGER.error(msg)
+            raise RuntimeError(msg)
 
         LOGGER.debug('Saving to object storage')
         data_bytes = json.dumps(record,
