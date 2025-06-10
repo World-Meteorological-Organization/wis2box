@@ -125,6 +125,11 @@ class ObservationDataSYNOP2BUFR(BaseAbstractData):
             _meta = data_item['_meta']
             # convert isoformat to datetime
             _meta['data_date'] = datetime.fromisoformat(_meta['data_date'])
+            # reject if data_date is in the future
+            if _meta['data_date'] > datetime.now():
+                msg = f'Data date {str(_meta["data_date"])} is in the future, skipping'  # noqa
+                LOGGER.error(msg)
+                continue
             # add relative filepath to _meta
             _meta['relative_filepath'] = self.get_local_filepath(_meta['data_date']) # noqa
             # add to output_data
