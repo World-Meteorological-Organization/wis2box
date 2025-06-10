@@ -36,7 +36,7 @@ from pywcmp.wcmp2.ets import WMOCoreMetadataProfileTestSuite2
 
 from wis2box import cli_helpers
 from wis2box.api import (delete_collection_item, remove_collection,
-                         setup_collection, upsert_collection_item)
+                         setup_collection, upsert_collection_item, load_config)
 from wis2box.data_mappings import refresh_data_mappings, get_plugins
 
 from wis2box.env import (API_URL, BROKER_PUBLIC, DOCKER_API_URL,
