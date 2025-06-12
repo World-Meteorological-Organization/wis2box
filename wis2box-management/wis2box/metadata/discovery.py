@@ -332,7 +332,7 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
             _ = ts.run_tests(fail_on_schema_validation=True)
             ts.raise_for_status()
         except TestSuiteError as err:
-            msg = 'WCMP2 validation errors' + '\n'.join(err.errors)
+            msg = 'WCMP2 validation errors' + '\n'.join([err['message'] for err in err.errors])	 # noqa
             LOGGER.error(msg)
             raise RuntimeError(msg)
 
