@@ -326,9 +326,10 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
 
         record['links'] = new_links
 
-        LOGGER.debug('Validating WCMP2 record')
+        LOGGER.info(f'Validating WCMP2 record {record["id"]}')
         try:
             ts = WMOCoreMetadataProfileTestSuite2(record)
+            _ = ts.run_tests(fail_on_schema_validation=True)
             ts.raise_for_status()
         except TestSuiteError as err:
             msg = 'WCMP2 validation errors' + '\n'.join(err.errors)
