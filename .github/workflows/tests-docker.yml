@@ -52,6 +52,7 @@ jobs:
         python3 wis2box-ctl.py start
         sleep 30
         python3 wis2box-ctl.py status -a
+        docker logs wis2box-minio
         docker logs wis2box-management
     - name: show environment and check collections exist ⚙️
       run: |
