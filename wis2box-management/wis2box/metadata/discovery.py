@@ -34,7 +34,7 @@ from pygeometa.schemas.wmo_wcmp2 import WMOWCMP2OutputSchema
 
 from wis2box import cli_helpers
 from wis2box.api import (delete_collection_item, remove_collection,
-                         setup_collection, upsert_collection_item)
+                         setup_collection, upsert_collection_item, load_config)
 from wis2box.data_mappings import refresh_data_mappings, get_plugins
 
 from wis2box.env import (API_URL, BROKER_PUBLIC, DOCKER_API_URL,
@@ -309,6 +309,24 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
 
         LOGGER.debug('Publishing to API')
         upsert_collection_item('discovery-metadata', record)
+
+        # if 2geojson add data-collection
+        plugins = get_plugins(record)
+        # check if any plugin-names contains 2geojson
+        has_2geojson = any('2geojson' in plugin for plugin in plugins)
+        if has_2geojson:
+            api_config = load_config()
+            api_collections = api_config.list_collections()
+            metadata_id = record['id']
+            # check if metadata_id is in api_collections
+            if metadata_id not in api_collections:
+                LOGGER.info(f'Adding data-collection for: {metadata_id}')
+                try:
+                    from wis2box.data import gcm
+                    meta = gcm(record)
+                    setup_collection(meta=meta)
+                except Exception as err:
+                    LOGGER.error(f'ERROR adding data-collection for: {metadata_id}: {err}') # noqa
 
         LOGGER.debug('Removing internal wis2box metadata')
         record.pop('wis2box')
