@@ -6,7 +6,7 @@ minio
 OWSLib
 paho-mqtt<2
 pygeometa
-pywcmp
+pywcmp>=0.12.1
 pywis-pubsub
 PyYAML
 requests
