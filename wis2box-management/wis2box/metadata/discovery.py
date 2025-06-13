@@ -31,6 +31,8 @@ from owslib.ogcapi.records import Records
 from typing import Union
 
 from pygeometa.schemas.wmo_wcmp2 import WMOWCMP2OutputSchema
+from pywcmp.errors import TestSuiteError
+from pywcmp.wcmp2.ets import WMOCoreMetadataProfileTestSuite2
 
 from wis2box import cli_helpers
 from wis2box.api import (delete_collection_item, remove_collection,
@@ -257,105 +259,114 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
     setup_collection(meta=gcm())
 
     LOGGER.debug('Publishing discovery metadata')
+
+    new_links = []
+    if isinstance(metadata, dict):
+        LOGGER.info('Adding WCMP2 record from dictionary')
+        record = metadata
+        dm = DiscoveryMetadata()
+    else:
+        LOGGER.info('Transforming MCF into WCMP2 record')
+        dm = DiscoveryMetadata()
+        record_mcf = dm.parse_record(metadata)
+        record = dm.generate(record_mcf)
+
+    if 'language' in record['properties']:
+        _ = record['properties'].pop('language')
+
+    distribution_links = dm.get_distribution_links(record, format_='wcmp2')
+    # update links, do not extend or we get duplicates
+    record['links'] = distribution_links
+    for link in record['links']:
+        if 'description' in link:
+            link['title'] = link.pop('description')
+        if 'url' in link:
+            link['href'] = link.pop('url')
+
+    if 'x-wmo' in record['id']:
+        msg = 'Change x-wmo to wmo in metadata identifier'
+        LOGGER.error(msg)
+        raise RuntimeError(msg)
+
+    if 'data_mappings' not in record['wis2box']:
+        msg = 'Missing wis2box.data_mappings definition'
+        LOGGER.error(msg)
+        raise RuntimeError(msg)
+
+    LOGGER.info('Checking if record / auth enabled')
+    oar = Records(DOCKER_API_URL)
     try:
-        new_links = []
-        if isinstance(metadata, dict):
-            LOGGER.info('Adding WCMP2 record from dictionary')
-            record = metadata
-            dm = DiscoveryMetadata()
+        records = oar.collection_items('discovery-metadata')
+        # find record in existing records
+        r = next((r for r in records['features'] if r['id'] == record['id']), None) # noqa
+        if r is None:
+            LOGGER.debug('Record not found in existing records')
+        elif r['wis2box'].get('has_auth', False):
+            LOGGER.debug('Auth enabled, adding to record')
+            record['wis2box']['has_auth'] = True
         else:
-            LOGGER.info('Transforming MCF into WCMP2 record')
-            dm = DiscoveryMetadata()
-            record_mcf = dm.parse_record(metadata)
-            record = dm.generate(record_mcf)
+            LOGGER.debug('No auth defined')
+    except Exception:
+        LOGGER.error('Failed to check for auth')
 
-        if 'language' in record['properties']:
-            _ = record['properties'].pop('language')
+    LOGGER.debug('Publishing to API')
+    upsert_collection_item('discovery-metadata', record)
 
-        distribution_links = dm.get_distribution_links(record, format_='wcmp2')
-        # update links, do not extend or we get duplicates
-        record['links'] = distribution_links
-        for link in record['links']:
-            if 'description' in link:
-                link['title'] = link.pop('description')
-            if 'url' in link:
-                link['href'] = link.pop('url')
+    LOGGER.debug('Removing internal wis2box metadata')
+    record.pop('wis2box')
+    record['properties'].pop('wmo:topicHierarchy', None)
 
-        if 'x-wmo' in record['id']:
-            msg = 'Change x-wmo to wmo in metadata identifier'
-            LOGGER.error(msg)
-            raise RuntimeError(msg)
+    LOGGER.debug('Sanitizing links')
+    if 'links' in record:
+        old_links = record.pop('links')
 
-        if 'data_mappings' not in record['wis2box']:
-            msg = 'Missing wis2box.data_mappings definition'
-            LOGGER.error(msg)
-            raise RuntimeError(msg)
+    for ol in old_links:
+        if API_URL not in ol['href']:
+            new_links.append(ol)
 
-        LOGGER.info('Checking if record / auth enabled')
-        oar = Records(DOCKER_API_URL)
-        try:
-            records = oar.collection_items('discovery-metadata')
-            # find record in existing records
-            r = next((r for r in records['features'] if r['id'] == record['id']), None) # noqa
-            if r is None:
-                LOGGER.debug('Record not found in existing records')
-            elif r['wis2box'].get('has_auth', False):
-                LOGGER.debug('Auth enabled, adding to record')
-                record['wis2box']['has_auth'] = True
-            else:
-                LOGGER.debug('No auth defined')
-        except Exception:
-            LOGGER.error('Failed to check for auth')
+    record['links'] = new_links
 
-        LOGGER.debug('Publishing to API')
-        upsert_collection_item('discovery-metadata', record)
+    LOGGER.info(f'Validating WCMP2 record {record["id"]}')
+    try:
+        ts = WMOCoreMetadataProfileTestSuite2(record)
+        _ = ts.run_tests(fail_on_schema_validation=True)
+        ts.raise_for_status()
+    except TestSuiteError as err:
+        # if the only error is about the WIS2 topic, continue with publishing
+        if len(err.errors) == 1 and 'message' in err.errors[0] and err.errors[0]['message'] == 'Invalid WIS2 topic (unknown centre-id)  for Pub/Sub link channel': # noqa
+            LOGGER.warning(f"{err.errors[0]['message']} continuing with publishing")  # noqa
+        else:
+            msg = 'WCMP2 validation errors: ' + ', '.join([err['message'] for err in err.errors])	 # noqa
+            LOGGER.warning(msg)
 
-        LOGGER.debug('Removing internal wis2box metadata')
-        record.pop('wis2box')
-        record['properties'].pop('wmo:topicHierarchy', None)
+    LOGGER.debug('Saving to object storage')
+    data_bytes = json.dumps(record,
+                            default=json_serial).encode('utf-8')
+    storage_path = f"{STORAGE_SOURCE}/{STORAGE_PUBLIC}/metadata/{record['id']}.json"  # noqa
 
-        LOGGER.debug('Sanitizing links')
-        if 'links' in record:
-            old_links = record.pop('links')
+    put_data(data_bytes, storage_path, 'application/geo+json')
 
-        for ol in old_links:
-            if API_URL not in ol['href']:
-                new_links.append(ol)
-
-        record['links'] = new_links
-
-        LOGGER.debug('Saving to object storage')
-        data_bytes = json.dumps(record,
-                                default=json_serial).encode('utf-8')
-        storage_path = f"{STORAGE_SOURCE}/{STORAGE_PUBLIC}/metadata/{record['id']}.json"  # noqa
-
-        put_data(data_bytes, storage_path, 'application/geo+json')
-
-        LOGGER.debug('Publishing message')
-        # check that id starts with 'urn:wmo:md:'
-        if not record['id'].startswith('urn:wmo:md:'):
-            msg = f'Invalid WCMP2 id: {record["id"]}, does not start with urn:wmo:md:'  # noqa
-            LOGGER.error(msg)
-            raise RuntimeError(msg)
-        # parse centre id from identifier
-        centre_id = record['id'].split(':')[3]
-        try:
-            message = publish_broker_message(record, storage_path,
-                                             centre_id)
-        except Exception as err:
-            msg = 'Failed to publish discovery metadata to public broker'
-            LOGGER.error(msg)
-            raise RuntimeError(msg) from err
-        try:
-            upsert_collection_item('messages', json.loads(message))
-        except Exception as err:
-            msg = f'Failed to publish message to API: {err}'
-            LOGGER.error(msg)
-            raise RuntimeError(msg) from err
-
+    LOGGER.debug('Publishing message')
+    # check that id starts with 'urn:wmo:md:'
+    if not record['id'].startswith('urn:wmo:md:'):
+        msg = f'Invalid WCMP2 id: {record["id"]}, does not start with urn:wmo:md:'  # noqa
+        LOGGER.error(msg)
+        raise RuntimeError(msg)
+    # parse centre id from identifier
+    centre_id = record['id'].split(':')[3]
+    try:
+        message = publish_broker_message(record, storage_path,
+                                         centre_id)
     except Exception as err:
-        LOGGER.warning(err)
-        raise RuntimeError(err)
+        msg = 'Failed to publish discovery metadata to public broker'
+        LOGGER.error(msg)
+        raise RuntimeError(msg) from err
+    try:
+        upsert_collection_item('messages', json.loads(message))
+    except Exception as err:
+        msg = f'Failed to publish message to API: {err}'
+        LOGGER.error(msg)
+        raise RuntimeError(msg) from err
 
     return
 
@@ -404,14 +415,16 @@ def republish(ctx, verbosity):
     oar = Records(DOCKER_API_URL)
     try:
         records = oar.collection_items('discovery-metadata')
-        for record in records['features']:
-            click.echo(f'Republishing {record["id"]}')
-            try:
-                publish_discovery_metadata(record)
-            except Exception as err:
-                raise click.ClickException(f'Failed to publish: {err}')
     except Exception as err:
         click.echo(f'Could not retrieve records: {err}')
+
+    for record in records['features']:
+        click.echo(f'Republishing {record["id"]}')
+        try:
+            publish_discovery_metadata(record)
+        except Exception:
+            click.echo(f'Failed to publish {record["id"]}')
+        click.echo(f'Successfully republished {record["id"]}')
 
 
 @click.command()

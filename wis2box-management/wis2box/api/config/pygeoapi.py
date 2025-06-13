@@ -49,7 +49,7 @@ class PygeoapiConfig(BaseConfig):
             total=4,
             status_forcelist=[429, 500, 502, 503, 504],
             backoff_factor=2,
-            method_whitelist=['GET', 'PUT', 'DELETE']
+            allowed_methods=['GET', 'PUT', 'DELETE']
         )
         adapter = HTTPAdapter(max_retries=retry_strategy)
         self.http.mount('https://', adapter)
