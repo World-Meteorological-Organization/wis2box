@@ -358,8 +358,8 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
         if metadata_id not in api_collections:
             LOGGER.info(f'Adding data-collection for: {metadata_id}')
             try:
-                from wis2box.data import gcm
-                meta = gcm(record)
+                from wis2box.data import gcm as data_gcm
+                meta = data_gcm(record)
                 setup_collection(meta=meta)
             except Exception as err:
                 LOGGER.error(f'ERROR adding data-collection for: {metadata_id}: {err}') # noqa
