@@ -22,7 +22,7 @@
 import base64
 import logging
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Union
 
@@ -125,6 +125,11 @@ class ObservationDataSYNOP2BUFR(BaseAbstractData):
             _meta = data_item['_meta']
             # convert isoformat to datetime
             _meta['data_date'] = datetime.fromisoformat(_meta['data_date'])
+            # reject if data_date is more than 24 hours in the future, to catch month/year edge cases # noqa
+            if _meta['data_date'] > datetime.now() + timedelta(days=1):
+                msg = f'Data date {str(_meta["data_date"])} is in the future, skipping'  # noqa
+                LOGGER.error(msg)
+                continue
             # add relative filepath to _meta
             _meta['relative_filepath'] = self.get_local_filepath(_meta['data_date']) # noqa
             # add to output_data
