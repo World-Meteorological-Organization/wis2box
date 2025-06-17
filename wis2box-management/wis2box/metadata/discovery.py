@@ -346,6 +346,24 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
 
     put_data(data_bytes, storage_path, 'application/geo+json')
 
+    # if 2geojson add data-collection
+    plugins = get_plugins(record)
+    # check if any plugin-names contains 2geojson
+    has_2geojson = any('2geojson' in plugin for plugin in plugins)
+    if has_2geojson:
+        api_config = load_config()
+        api_collections = api_config.list_collections()
+        metadata_id = record['id']
+        # check if metadata_id is in api_collections
+        if metadata_id not in api_collections:
+            LOGGER.info(f'Adding data-collection for: {metadata_id}')
+            try:
+                from wis2box.data import gcm
+                meta = gcm(record)
+                setup_collection(meta=meta)
+            except Exception as err:
+                LOGGER.error(f'ERROR adding data-collection for: {metadata_id}: {err}') # noqa
+
     LOGGER.debug('Publishing message')
     # check that id starts with 'urn:wmo:md:'
     if not record['id'].startswith('urn:wmo:md:'):
