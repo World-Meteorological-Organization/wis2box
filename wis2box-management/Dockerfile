@@ -68,6 +68,9 @@ RUN cd /app \
     # add wis2box user
     && useradd -ms /bin/bash wis2box
 
+# TEST install latest pywcmp from github main
+RUN pip3 install --no-cache-dir https://github.com/World-Meteorological-Organization/pywcmp/archive/refs/heads/master.zip
+
 WORKDIR /home/wis2box
 
 # add wis2box.cron to crontab
