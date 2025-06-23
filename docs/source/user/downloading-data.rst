@@ -96,9 +96,29 @@ The wis2box-proxy by default secures the path `/wis2downloader` with a bearer to
 
 .. code-block:: console
 
-  python3 wis2box.ctl.py execute wis2box auth add-token --path wis2downloader -y
+  python3 wis2box-ctl.py execute wis2box auth add-token --path wis2downloader -y
 
 .. _`wis2downloader`: https://github.com/World-Meteorological-Organization/wis2downloader
 
+The following example shows how to use the token in a curl command to list the current subscriptions:
 
+.. code-block:: console
 
+  curl -H "Authorization: Bearer <token>" <WIS2BOX_URL>/wis2downloader/subscriptions
+
+To make a POST-request to add a subscription to the topic `cache/a/wis2/int-wmo-test/data/core/#`, you would do the following:
+
+.. code-block:: console
+
+  curl -X POST -H "Content-Type: application/json" \
+       -H "Authorization: Bearer <token>" <WIS2BOX_URL>/wis2downloader/subscriptions \ 
+       -d '{"topic": "cache/a/wis2/int-wmo-test/data/core/#"}'
+
+And to delete a subscription to the same topic, you would use:
+
+.. code-block:: console
+
+  curl -X DELETE -H "Authorization: Bearer <token> \
+       -H "Authorization: Bearer <token>" <WIS2BOX_URL>/wis2downloader/subscriptions/cache/a/wis2/int-wmo-test/data/core/%23
+
+Note that the topic in the URL must be URL-encoded, so `#` becomes `%23`.
