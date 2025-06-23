@@ -15,6 +15,10 @@ fi
 if ! grep -q "max_queued_messages" /mosquitto/config/mosquitto.conf; then
     echo "max_queued_messages $WIS2BOX_BROKER_QUEUE_MAX" >> /mosquitto/config/mosquitto.conf
 fi
+# add log_dest topic to mosquitto.conf if not already there
+if ! grep -q "log_dest topic" /mosquitto/config/mosquitto.conf; then
+    echo "log_dest topic" >> /mosquitto/config/mosquitto.conf
+fi
 
 # prepare the acl.conf file
 if [ ! -e "/mosquitto/config/acl.conf" ]; then

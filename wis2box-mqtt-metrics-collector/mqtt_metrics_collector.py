@@ -90,6 +90,11 @@ station_wsi = Gauge('wis2box_stations_wsi',
                     'wis2box configured stations by WSI',
                     ["WSI"])
 
+datasets_total = Gauge('wis2box_datasets_total',
+                       'Total datasets configured in wis2box')
+
+broker_clients = Gauge('wis2box_broker_clients',
+                       'Total number of connected MQTT clients')
 
 class MetricsCollector:
     def __init__(self):
@@ -115,6 +120,31 @@ class MetricsCollector:
             station_wsi.labels(station).set(1)
             notify_wsi_total.labels(station).inc(0)
             failure_wsi_total.labels(station).inc(0)
+
+    def update_datasets_gauge(self):
+        """
+        function to update the datasets-gauge
+
+        :returns: `None`
+        """
+
+        # the number of datasets configured in wis2box is equal to the number of collections in discovery-metadata # noqa
+        url = 'http://wis2box-api:80/oapi/collections/discovery-metadata/items?f=json' # noqa
+        try:
+            res = requests.get(url)
+            json_data = json.loads(res.content)
+            if 'description' in json_data:
+                if json_data['description'] == 'Collection not found':
+                    logger.warning("Discovery-metadata collection not (yet) found in wis2box-api, sleep and try again") # noqa
+                    time.sleep(1)
+                else:
+                    msg = f' wis2box-api returned unexpected response: {json_data}' # noqa
+                    raise Exception(msg)
+            else:
+                datasets_total.set(len(json_data["features"]))
+        except Exception as err:
+            msg = f'Failed to get datasets from wis2box-api, with error: {err}'
+            logger.error(msg)
 
     def init_stations_gauge(self):
         """
@@ -159,7 +189,7 @@ class MetricsCollector:
         """
 
         logger.info(f"on connection to subscribe: {mqtt.connack_string(rc)}")
-        for s in ["wis2box/#", '$SYS/broker/messages/#']:
+        for s in ["wis2box/#", '$SYS/broker/messages/#', '$SYS/broker/clients/connected']:
             client.subscribe(s, qos=1)
 
     def sub_mqtt_metrics(self, client, userdata, msg):
@@ -185,6 +215,16 @@ class MetricsCollector:
                 broker_msg_stored.set(float(msg.payload))
             elif msg.topic.endswith('/dropped'):
                 broker_msg_dropped.set(float(msg.payload))
+        elif msg.topic.startswith('$SYS/broker/clients/connected'):
+            try:
+                broker_clients.set(float(msg.payload))
+            except ValueError as e:
+                logger.error(f"Failed to set broker_clients gauge: {e}")
+        elif msg.topic.startswith('wis2box/data_mappings/refresh'):
+            # this topic is used to trigger a refresh of the data mappings
+            # use this as a signal to update the datasets gauge
+            logger.info("Received data_mappings/refresh message, updating datasets gauge")
+            self.update_datasets_gauge()
         else:
             self.message_queue.put((msg.topic, msg.payload))
 
@@ -255,6 +295,7 @@ class MetricsCollector:
         Starts the metrics collection by initializing components and threads.
         """
         self.init_stations_gauge()
+        self.update_datasets_gauge()
         Thread(target=self.process_buffered_messages, daemon=True).start()
         self.gather_mqtt_metrics()
 
