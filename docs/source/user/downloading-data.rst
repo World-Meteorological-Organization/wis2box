@@ -118,7 +118,7 @@ And to delete a subscription to the same topic, you would use:
 
 .. code-block:: console
 
-  curl -X DELETE -H "Authorization: Bearer <token> \
+  curl -X DELETE  \
        -H "Authorization: Bearer <token>" <WIS2BOX_URL>/wis2downloader/subscriptions/cache/a/wis2/int-wmo-test/data/core/%23
 
 Note that the topic in the URL must be URL-encoded, so `#` becomes `%23`.
