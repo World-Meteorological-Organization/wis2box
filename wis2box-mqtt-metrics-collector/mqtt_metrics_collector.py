@@ -182,21 +182,25 @@ class MetricsCollector:
 
         # the number of datasets configured in wis2box is equal to the number of collections in discovery-metadata # noqa
         url = 'http://wis2box-api:80/oapi/collections/discovery-metadata/items?f=json' # noqa
-        try:
-            res = requests.get(url)
-            json_data = json.loads(res.content)
-            if 'description' in json_data:
-                if json_data['description'] == 'Collection not found':
-                    logger.warning("Discovery-metadata collection not (yet) found in wis2box-api, sleep and try again") # noqa
-                    time.sleep(1)
+        datasets_found = False
+        while datasets_found is False:
+            try:
+                res = requests.get(url)
+                json_data = json.loads(res.content)
+                if 'description' in json_data:
+                    if json_data['description'] == 'Collection not found':
+                        logger.warning("Discovery-metadata collection not (yet) found in wis2box-api, sleep and try again") # noqa
+                        time.sleep(1)
+                    else:
+                        msg = f' wis2box-api returned unexpected response: {json_data}' # noqa
+                        raise Exception(msg)
                 else:
-                    msg = f' wis2box-api returned unexpected response: {json_data}' # noqa
-                    raise Exception(msg)
-            else:
-                datasets_total.set(len(json_data["features"]))
-        except Exception as err:
-            msg = f'Failed to get datasets from wis2box-api, with error: {err}'
-            logger.error(msg)
+                    datasets_total.set(len(json_data["features"]))
+                    datasets_found = True
+                    logger.info(f"datasets_total={len(json_data['features'])}")
+            except Exception as err:
+                msg = f'Failed to get datasets from wis2box-api, with error: {err}' # noqa
+                logger.error(msg)
 
     def init_stations_gauge(self):
         """
