@@ -96,7 +96,7 @@ datasets_total = Gauge('wis2box_datasets_total',
 broker_client_total = Gauge('wis2box_broker_client_total',
                             'Total number of connected MQTT clients')
 
-broker_client_details = Gauge('wis2box_broker_client_details ',
+broker_client_details = Gauge('wis2box_broker_client_details',
                               'Total number of connected MQTT clients by client_type, username, ip_address', # noqa
                               ["client_type", "username", "ip_address"])
 
