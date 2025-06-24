@@ -93,8 +93,13 @@ station_wsi = Gauge('wis2box_stations_wsi',
 datasets_total = Gauge('wis2box_datasets_total',
                        'Total datasets configured in wis2box')
 
-broker_clients = Gauge('wis2box_broker_clients',
-                       'Total number of connected MQTT clients')
+broker_client_total = Gauge('wis2box_broker_client_total',
+                            'Total number of connected MQTT clients')
+
+broker_client_details = Gauge('wis2box_broker_client_details ',
+                              'Total number of connected MQTT clients by client_type, username, ip_address', # noqa
+                              ["client_type", "username", "ip_address"])
+
 
 class MetricsCollector:
     def __init__(self):
@@ -103,6 +108,53 @@ class MetricsCollector:
         """
         self.message_queue = Queue()
         self.running = True
+        self.broker_clients = {}
+
+    def update_subscriber_list(self, mosquitto_log):
+        """
+        Updates the subscriber list with the provided subscriber information.
+
+        :param mosquitto_log: string
+
+        :returns: `None`
+        """
+
+        def extract_type(client_id):
+            if client_id.startswith('wis2box-mqtt'):
+                return 'wis2box'
+            elif client_id.startswith('CR1000X'):
+                return 'CR1000X'
+            elif client_id.startswith('mqtt-explorer'):
+                return 'mqtt-explorer'
+            else:
+                return 'other'
+
+        try:
+            if 'client connected from' in mosquitto_log:
+                # Extract relevant information using string parsing
+                # timestamp = mosquitto_log.split(': New client')[0]
+                ip = mosquitto_log.split(' from ')[1].split(':')[0]
+                client_name = mosquitto_log.split(' as ')[1].split(' (')[0]
+                username = mosquitto_log.split("u'")[1].split("'")[0]
+                client_type = extract_type(client_name)
+                # Store the client information in the broker_clients dictionary
+                self.broker_clients[client_name] = {
+                    'ip_address': ip,
+                    'username': username,
+                    'client_type': client_type
+                }
+                broker_client_details.labels(client_type, username, ip).inc(1)
+            elif 'closed its connection' in mosquitto_log:
+                # Extract relevant information using string parsing
+                client_name = mosquitto_log.split('Client ')[1].split(' closed')[0] # noqa
+                if client_name in self.broker_clients:
+                    ip = self.broker_clients[client_name]['ip_address']
+                    username = self.broker_clients[client_name]['username']
+                    client_type = self.broker_clients[client_name]['client_type'] # noqa
+                    broker_client_details.labels(client_type, username, ip).dec(1) # noqa
+                    del self.broker_clients[client_name]
+        except Exception as e:
+            logger.error(f'Failed to parse "{mosquitto_log}" with error: {e}') # noqa
 
     def update_stations_gauge(self, station_list):
         """
@@ -189,7 +241,7 @@ class MetricsCollector:
         """
 
         logger.info(f"on connection to subscribe: {mqtt.connack_string(rc)}")
-        for s in ["wis2box/#", '$SYS/broker/messages/#', '$SYS/broker/clients/connected']:
+        for s in ["wis2box/#", '$SYS/broker/messages/#', '$SYS/broker/clients/connected', '$SYS/broker/log/N']: # noqa
             client.subscribe(s, qos=1)
 
     def sub_mqtt_metrics(self, client, userdata, msg):
@@ -215,16 +267,6 @@ class MetricsCollector:
                 broker_msg_stored.set(float(msg.payload))
             elif msg.topic.endswith('/dropped'):
                 broker_msg_dropped.set(float(msg.payload))
-        elif msg.topic.startswith('$SYS/broker/clients/connected'):
-            try:
-                broker_clients.set(float(msg.payload))
-            except ValueError as e:
-                logger.error(f"Failed to set broker_clients gauge: {e}")
-        elif msg.topic.startswith('wis2box/data_mappings/refresh'):
-            # this topic is used to trigger a refresh of the data mappings
-            # use this as a signal to update the datasets gauge
-            logger.info("Received data_mappings/refresh message, updating datasets gauge")
-            self.update_datasets_gauge()
         else:
             self.message_queue.put((msg.topic, msg.payload))
 
@@ -235,9 +277,19 @@ class MetricsCollector:
         while self.running:
             topic, payload = self.message_queue.get()
             try:
+                if topic.startswith('$SYS/broker/log/N'):
+                    self.update_subscriber_list(payload.decode('utf-8'))
+                    continue
+                elif topic.startswith('$SYS/broker/clients/connected'):
+                    broker_client_total.set(float(payload))
+                    continue
+                # decode the rest as JSON
                 m = json.loads(payload.decode('utf-8'))
                 if topic.startswith('wis2box/stations'):
                     self.update_stations_gauge(m['station_list'])
+                elif topic.startswith('wis2box/data_mappings/refresh'):
+                    # use this as a signal to update the datasets gauge
+                    self.update_datasets_gauge()
                 elif topic.startswith('wis2box/notifications'):
                     wsi = m['properties'].get('wigos_station_identifier', 'none') # noqa
                     if (wsi,) not in notify_wsi_total._metrics:
@@ -262,7 +314,7 @@ class MetricsCollector:
                     if str(m["Key"]).startswith('wis2box-public'):
                         storage_public_total.inc(1)
             except Exception as e:
-                logging.error(f"Error processing message: {e}")
+                logging.error(f"Error processing message on topic={topic}: {e}") # noqa
 
     def gather_mqtt_metrics(self):
         """
@@ -294,9 +346,11 @@ class MetricsCollector:
         """
         Starts the metrics collection by initializing components and threads.
         """
-        self.init_stations_gauge()
-        self.update_datasets_gauge()
         Thread(target=self.process_buffered_messages, daemon=True).start()
+        # use a thread to initialize the stations-gauge the first time
+        Thread(target=self.init_stations_gauge, daemon=True).start()
+        # use a thread to initialize the datasets-gauge the first time
+        Thread(target=self.update_datasets_gauge, daemon=True).start()
         self.gather_mqtt_metrics()
 
 
