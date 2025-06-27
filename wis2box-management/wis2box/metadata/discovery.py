@@ -44,7 +44,7 @@ from wis2box.env import (API_URL, BROKER_PUBLIC, DOCKER_API_URL,
 from wis2box.metadata.base import BaseMetadata
 from wis2box.plugin import load_plugin, PLUGINS
 from wis2box.pubsub.message import WISNotificationMessage
-from wis2box.storage import put_data, delete_data
+from wis2box.storage import put_data, delete_data, exists
 from wis2box.util import json_serial
 
 LOGGER = logging.getLogger(__name__)
@@ -190,26 +190,28 @@ class DiscoveryMetadata(BaseMetadata):
 
 
 def publish_broker_message(record: dict, storage_path: str,
-                           centre_id: str) -> str:
+                           centre_id: str, operation: str = 'create') -> str:
     """
     Publish discovery metadata to broker
 
     :param record: `dict` of discovery metadata record
     :param storage_path: `str` of storage path/object id
     :param centre_id: centre acronym
+    :param operation: `str` of operation type (create, update, delete)
 
     :returns: `str` of WIS message
     """
 
     topic = f'origin/a/wis2/{centre_id.lower()}/metadata'  # noqa
 
-    datetime_ = datetime.strptime(record['properties']['created'], '%Y-%m-%dT%H:%M:%SZ')  # noqa
+    datetime_ = datetime.strptime(record['properties']['created'], '%Y-%m-%dT%H:%M:%SZ') # noqa
     identifier = f"{centre_id.lower()}/metadata/{record['id']}"
     wis_message = WISNotificationMessage(identifier=identifier,
                                          metadata_id=None,
                                          filepath=storage_path,
                                          datetime_=datetime_,
-                                         geometry=record['geometry']).dumps()
+                                         geometry=record['geometry'],
+                                         operation=operation).dumps()
 
     # load plugin for plugin-broker
     defs = {
@@ -344,6 +346,7 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
                             default=json_serial).encode('utf-8')
     storage_path = f"{STORAGE_SOURCE}/{STORAGE_PUBLIC}/metadata/{record['id']}.json"  # noqa
 
+    operation = 'update' if exists(storage_path) else 'create'
     put_data(data_bytes, storage_path, 'application/geo+json')
 
     LOGGER.debug('Publishing message')
@@ -356,7 +359,7 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
     centre_id = record['id'].split(':')[3]
     try:
         message = publish_broker_message(record, storage_path,
-                                         centre_id)
+                                         centre_id, operation)
     except Exception as err:
         msg = 'Failed to publish discovery metadata to public broker'
         LOGGER.error(msg)
