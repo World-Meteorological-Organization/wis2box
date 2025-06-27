@@ -38,6 +38,7 @@ Sections
 
 wis2box environment variables can be categorized via the following core sections:
 
+- **Contact/identification**: Contact and identification information
 - **Storage**: MinIO configuration
 - **API**: API configuration for provisioning the OGC API capabilities
 - **Logging**: logging configuaration for wis2box
@@ -49,6 +50,47 @@ wis2box environment variables can be categorized via the following core sections
     Configuration directives and reference are described below via annotated examples. Changes in configuration
     require a restart of wis2box to take effect. See the :ref:`administration` section for information on
     managing wis2box.
+
+Contact / identification
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+wis2box provides the ability to customize the contact and identification information for a given installation.  This
+is used by the API and other components accordingly.  If any of these items are not set, default contact/identification
+information is set.
+
+.. code-block:: bash
+
+    # UI customizations
+    WIS2BOX_ICON=https://example.org/icon
+    WIS2BOX_LOGO=https://example.org/logo
+
+    # service identification
+    WIS2BOX_IDENTIFICATION_TITLE=title
+    WIS2BOX_IDENTIFICATION_DESCRIPTION=description
+    WIS2BOX_IDENTIFICATION_TERMS_OF_SERVICE=CC-BY 4.0
+    WIS2BOX_IDENTIFICATION_URL=https://example.org/tos
+    # data license information
+    WIS2BOX_LICENSE_NAME=CC-BY 4.0
+    WIS2BOX_LICENSE_URL=https://creativecommons.org/licenses/by/4.0
+    # service provider information
+    WIS2BOX_PROVIDER_NAME=Firstname Lastname
+    WIS2BOX_PROVIDER_URL=https://example.org/provider
+    # contact information
+    WIS2BOX_CONTACT_NAME=Firstname Lastname
+    WIS2BOX_CONTACT_POSITION=staff
+    WIS2BOX_CONTACT_ADDRESS=123 Main street
+    WIS2BOX_CONTACT_CITY=city
+    WIS2BOX_CONTACT_STATEORPROVINCE=province
+    WIS2BOX_CONTACT_POSTALCODE=postal code
+    WIS2BOX_CONTACT_COUNTRY=country
+    WIS2BOX_CONTACT_PHONE=+xx-xxx-xxx-xxxx
+    WIS2BOX_CONTACT_FAX=+xx-xxx-xxx-xxxx
+    WIS2BOX_CONTACT_EMAIL=you@example.org
+    WIS2BOX_CONTACT_URL=https://example.org/contact
+    WIS2BOX_CONTACT_HOURS=hours of service
+    WIS2BOX_CONTACT_INSTRUCTIONS=contact instructions
+    WIS2BOX_CONTACT_ROLE=host
+
 
 Storage
 ^^^^^^^
@@ -98,7 +140,7 @@ API configurations drive control of the OGC API setup.
 
 .. code-block:: bash
 
-    WIS2BOX_API_TYPE=pygeoapi  # server tpye
+    WIS2BOX_API_TYPE=pygeoapi  # server type
     WIS2BOX_API_URL=http://localhost/pygeoapi  # public landing page endpoint
     WIS2BOX_API_BACKEND_TYPE=Elasticsearch  # backend provider type
     WIS2BOX_API_BACKEND_URL=http://elasticsearch:9200  # internal backend connection URL
