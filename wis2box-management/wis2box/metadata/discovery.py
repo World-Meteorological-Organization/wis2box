@@ -136,15 +136,18 @@ class DiscoveryMetadata(BaseMetadata):
         links = []
         if 'links' in record:
             for link in record['links']:
-                # link for Notifications will be added later
-                if link.get('title') == 'Notifications':
-                    LOGGER.debug('Skipping notifications link')
+                try:
+                    if link.get('title') == 'Notifications':
+                        LOGGER.debug('Skipping notifications link')
+                        continue
+                    # links containing identifier will be added later
+                    if identifier in link['href']:
+                        LOGGER.debug(f'Skipping link {link["href"]}')
+                        continue
+                    links.append(link)
+                except Exception as err:
+                    LOGGER.error(f'Error processing link {link}: {err}')
                     continue
-                # links containing identifier will be added later
-                if identifier in link['href']:
-                    LOGGER.debug(f'Skipping link {link["href"]}')
-                    continue
-                links.append(link)
 
         plugins = get_plugins(record)
         # check if any plugin-names contains 2geojson
@@ -312,7 +315,13 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
         LOGGER.error('Failed to check for auth')
 
     LOGGER.debug('Publishing to API')
-    upsert_collection_item('discovery-metadata', record)
+    try:
+        upsert_collection_item('discovery-metadata', record)
+    except Exception as err:
+        msg = f'Failed to publish discovery metadata: {err} content: {record}'  # noqa
+        LOGGER.error(msg)
+        # avoid crashing the whole process
+        return
 
     LOGGER.debug('Removing internal wis2box metadata')
     record.pop('wis2box')
