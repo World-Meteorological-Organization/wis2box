@@ -239,6 +239,13 @@ def get_password(password_name: str) -> str:
             print(f'Please enter the password to be used for the {password_name}:') # noqa
             password = input()
 
+        # check that the password does not contain the "@" character
+        # if so, repeat the question
+        while '@' in password:
+            print('The password cannot contain the "@" character.')
+            print(f'Please enter the password to be used for the {password_name}:') # noqa
+            password = input()
+
         print(f'{password_name}={password}')
         print('Is this correct? (y/n/exit)')
         answer = input()
