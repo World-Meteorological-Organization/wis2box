@@ -189,7 +189,11 @@ class WIS2BoxSubscriber:
         elif topic == 'wis2box/dataset/publication':
             LOGGER.debug('Publishing dataset')
             metadata = message
-            discovery_metadata.publish_discovery_metadata(metadata)
+            try:
+                discovery_metadata.publish_discovery_metadata(metadata)
+            except Exception as err:
+                LOGGER.error(f'Failed to publish discovery metadata: {err}')
+                return
             has_2geojson = any('2geojson' in plugin for plugin in get_plugins(metadata)) # noqa
             if has_2geojson:
                 try:
