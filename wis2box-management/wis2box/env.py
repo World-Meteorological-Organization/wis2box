@@ -110,6 +110,7 @@ if '@' in BROKER_PASSWORD:
     LOGGER.error(msg)
     raise EnvironmentError(msg)
 
+
 @click.group()
 def environment():
     """Environment management"""
