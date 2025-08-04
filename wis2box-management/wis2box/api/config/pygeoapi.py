@@ -43,7 +43,7 @@ class PygeoapiConfig(BaseConfig):
         """
 
         super().__init__(defs)
-        self.url = f'{DOCKER_API_URL}/admin/resources'
+        self.url = f'{DOCKER_API_URL}/admin/config/resources'
         self.http = Session()
         retry_strategy = Retry(
             total=4,

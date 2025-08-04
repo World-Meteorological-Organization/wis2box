@@ -37,7 +37,7 @@ services:
       elasticsearch:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/oapi/admin/resources"]
+      test: ["CMD", "curl", "-f", "http://localhost/oapi/admin/config/resources"]
       interval: 5s
       retries: 100
     volumes:
