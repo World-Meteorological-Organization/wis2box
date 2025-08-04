@@ -51,9 +51,12 @@ jobs:
       run: |
         python3 wis2box-ctl.py start
         python3 wis2box-ctl.py status -a
-    - name: show environment and check collections exist ⚙️
+    - name: check if wis2box-management started successfully
       run: |
         sleep 30
+        docker logs wis2box-management
+    - name: show environment and check collections exist ⚙️
+      run: |
         python3 wis2box-ctl.py execute wis2box environment show
         curl --fail http://localhost/oapi/collections/stations
         curl --fail http://localhost/oapi/collections/discovery-metadata
@@ -77,7 +80,7 @@ jobs:
       if: ${{ ! contains(steps.test-bad-station-csv.outputs.result, 'Invalid utf-8 in station metadata file')}}
       run: 
         exit 1 
-    - name: add non-real-time data example Canada 🇨🇦
+    - name: add non-real-time data example Canada and test unpublish
       env:
         DISCOVERY_METADATA: /data/wis2box/metadata/discovery/ca-annual-min-max-daily-water-flow.yml
         DISCOVERY_METADATA_ID: urn:wmo:md:ca-eccc-msc-test:daily-water-flow
@@ -85,6 +88,7 @@ jobs:
         python3 wis2box-ctl.py execute wis2box dataset publish $DISCOVERY_METADATA
         curl -s http://localhost/data/metadata/$DISCOVERY_METADATA_ID.json --output /tmp/$DISCOVERY_METADATA_ID
         pywcmp ets validate /tmp/$DISCOVERY_METADATA_ID
+        python3 wis2box-ctl.py execute wis2box metadata discovery unpublish --identifier $DISCOVERY_METADATA_ID
     - name: add CAP data, cap-publish 
       env:
         DISCOVERY_METADATA: /data/wis2box/metadata/discovery/int-wmo-test-cap.yml 
