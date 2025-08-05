@@ -82,9 +82,9 @@ To delete a subscription, you can use the following command:
 
 .. code-block:: console
 
-  wis2downloader delete-subscription --topic <topic>
+  wis2downloader remove-subscription --topic <topic>
 
-This will delete the subscription to the topic you specify and return the JSON object with the current subscriptions.
+This will remove the subscription to the topic you specify and return the JSON object with the current subscriptions.
 
 
 Managing subscriptions from outside the wis2box
