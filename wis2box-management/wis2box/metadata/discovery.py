@@ -278,7 +278,7 @@ def publish_delete_notification(identifier: str):
         'href': 'https://http.codes/204',
         'rel': 'deletion'
     }]
-    wis_message = {
+    message = {
         'id': str(uuid.uuid4()),
         'type': 'Feature',
         'conformsTo': ['http://wis.wmo.int/spec/wnm/1/conf/core'],
@@ -301,7 +301,7 @@ def publish_delete_notification(identifier: str):
     }
     broker = load_plugin('pubsub', defs)
 
-    success = broker.pub(topic, wis_message)
+    success = broker.pub(topic, json.dumps(message, default=json_serial))
 
     return success
 
