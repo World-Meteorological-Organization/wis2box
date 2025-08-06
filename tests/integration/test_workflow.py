@@ -304,6 +304,7 @@ def test_message_api():
 
     # test messages per test dataset
     counts = {
+        'unpublish-test': 2,
         'ca-eccc-msc': 1,
         'mw-mw_met_centre': 25,
         'it-meteoam': 33,
