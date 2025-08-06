@@ -1,0 +1,65 @@
+wis2box:
+    retention: P30D
+    topic_hierarchy: unpublish-test/data/core/weather/experimental/deleteme
+    centre_id: unpublish-test
+    data_mappings:
+        plugins:
+            grib2:
+                - plugin: wis2box.data.universal.UniversalData
+                  notify: true
+                  buckets:
+                    - ${WIS2BOX_STORAGE_INCOMING}
+                  file-pattern: '^.*_(\d{8})\d{2}.*\.grib2$'
+
+mcf:
+    version: 1.0
+
+metadata:
+    identifier: urn:wmo:md:unpublish-test:deleteme
+    hierarchylevel: dataset
+
+identification:
+    title: deleteme test dataset
+    abstract: This dataset is used to test the unpublish functionality of WIS2Box.
+    dates:
+        creation: 2025-08-06
+    keywords:
+        default:
+            keywords:
+                - test
+                - unpublish
+                - development
+        wmo:
+            keywords:
+                - weather
+            keywords_type: theme
+            vocabulary:
+                name: Earth system disciplines as defined by the WMO Unified Data Policy, Resolution 1 (Cg-Ext(2021), Annex 1.
+                url: https://codes.wmo.int/wis/topic-hierarchy/earth-system-discipline
+    extents:
+        spatial:
+            - bbox: [-180.0, -90.0, 180.0, 90.0]
+              crs: 259200
+        temporal:
+            - begin: 2021-11-29
+              end: null
+              resolution: PT12H
+    url: https://example.org/fixme
+    wmo_data_policy: core
+
+contact:
+    host: &contact_poc
+        organization: World Meteorological Organisation
+        url: https://www.wmo.int/
+        individualname: Firstname Lastname
+        positionname: Position Name
+        phone: null
+        fax: null
+        address: null
+        city: null
+        administrativearea: null
+        postalcode: null
+        country: null
+        email: you@example.org
+        hoursofservice: 0800h - 1600h UTC
+        contactinstructions: email

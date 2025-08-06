@@ -275,8 +275,9 @@ def publish_delete_notification(identifier: str):
     topic = f'origin/a/wis2/{centre_id}/metadata'  # noqa
     # prepare WIS message
     links = [{
-        'href': 'https://http.codes/204',
-        'rel': 'deletion'
+        'href': f"{API_URL}/collections/discovery-metadata/items/{identifier}", # noqa
+        'rel': 'deletion',
+        'title': f'Delete discovery metadata for {identifier}'
     }]
     message = {
         'id': str(uuid.uuid4()),
@@ -302,6 +303,13 @@ def publish_delete_notification(identifier: str):
     broker = load_plugin('pubsub', defs)
 
     success = broker.pub(topic, json.dumps(message, default=json_serial))
+    if success:
+        try:
+            upsert_collection_item('messages', message)
+        except Exception as err:
+            msg = f'Failed to publish message to API: {err}'
+            LOGGER.error(msg)
+            raise RuntimeError(msg) from err
 
     return success
 
