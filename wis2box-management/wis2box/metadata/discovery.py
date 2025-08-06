@@ -285,7 +285,7 @@ def publish_delete_notification(identifier: str):
         'conformsTo': ['http://wis.wmo.int/spec/wnm/1/conf/core'],
         'geometry': None,
         'properties': {
-            'data_id': f'{identifier}',
+            'data_id': f'{centre_id}/metadata/{identifier}',
             'metadata_id': identifier,
             'datetime': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
             'pubtime': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
