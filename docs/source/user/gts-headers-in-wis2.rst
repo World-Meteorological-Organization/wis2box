@@ -1,14 +1,14 @@
 .. _gts-headers-in-wis2:
 
-Optional: adding GTS headers to WIS2 notifications during the transition period
-===============================================================================
+Optional: add GTS properties
+============================
 
 Overview
 --------
 
-This section provides guidance how to add GTS headers to your WIS2 notifications.
+This section provides guidance how to add GTS headers to your WIS2 notifications during the `GTS to WIS2 transition period`_
 
-By adding GTS headers to your WIS2 notifications, you can stop your MSS and still have your data available on the GTS during the transition period.
+**NOTE: this step is only required during the transition period and only for datasets currently published on the GTS.**
 
 To enable the WIS2 to GTS Gateway to correctly identify the data to be republished on the GTS, you need to include the GTS property in the WIS2 Notification Message as follows:
 
@@ -59,3 +59,5 @@ the corresponding GTS headers will be added to the WIS2 Notification Message as 
    }
 
 If the `gts_headers_mapping.csv` file is not present in the directory you defined using the `WIS2BOX_HOST_DATADIR` environment variable, wis2box will not add any GTS headers to the WIS2 Notification Message.
+
+.. _GTS to WIS2 transition period: https://community.wmo.int/en/GTS_WIS2_Transition_Guidance

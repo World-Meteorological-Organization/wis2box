@@ -1,7 +1,7 @@
 .. _data-ingest:
 
-Data ingest setup
-=================
+Setting up data ingestion
+=========================
 
 The runtime component of wis2box is data ingestion. This is an event driven workflow driven by S3 notifications from uploading data to wis2box storage.
 

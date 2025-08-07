@@ -1,7 +1,7 @@
 .. _cap-alerts:
 
-Publishing CAP XML with wis2box
-===============================
+Publishing CAP Alerts
+=====================
 
 Overview
 --------
@@ -14,6 +14,10 @@ The WMO CAP Composer is designed to be used by National Meteorological and Hydro
 This software can be installed on another instance to provide a web-server where users can create, edit, and publish CAP alerts.
 
 See the  `WMO CAP Composer documentation <https://cap-composer.readthedocs.io>`_ for instructions on installing and configuring the CAP Composer.
+
+If you already have a system that produces CAP XML, instead of using the WMO CAP Composer, you can ingest the CAP XML directly into wis2box by uploading it into the wis2box-incoming bucket as for any other data type. 
+
+Please make sure to create the dataset as indicated below, which ensures the `CAPMessageData` data plugin is used before publishing to verify the input XML follows the CAP schema specification.
 
 Process Outline
 ---------------

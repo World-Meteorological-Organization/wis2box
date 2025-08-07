@@ -6,7 +6,8 @@ Installation and configuration
 This section summarizes the steps required to install a wis2box instance and setup your own datasets using initial configuration files
 provided by using the ``wis2box-create-config.py`` script.
 
-Ensure you have Docker, Docker Compose and Python installed on your host, as detailed in :ref:`getting-started`.
+Ensure you have Docker, Docker Compose and Python installed on your host, 
+and that you meet the system and network requirements as detailed in the :ref:`getting-started` section.
 
 Download
 --------

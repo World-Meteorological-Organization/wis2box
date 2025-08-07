@@ -1,14 +1,14 @@
 .. _wis2node-operations:
 
-WIS2 Node registration and maintenance
-======================================
+Operating a WIS2 Node
+=====================
 
-This section provides information on how to register and maintain a WIS2 Node.
+This section provides information on how to register and maintain a WIS2 Node using the wis2box software.
 
 WIS2 Node registration
 -----------------------
 
-For a wis2box-instance to function as a WIS2 Node, sharing data with the WIS2 network, it must be registered as a WIS2 Node. 
+For a wis2box-instance to start sharing data with the global WIS2 network, it must be registered as a WIS2 Node. 
 Following registration, the Global Brokers will subscribe to the WIS2 Node and republish all valid WIS2 data notifications published under `origin/a/wis2/CENTRE_ID/#` topic.
 (`CENTRE_ID` is the unique identifier for the WIS2 Node, as defined by the datasets configured in the wis2box.)
 

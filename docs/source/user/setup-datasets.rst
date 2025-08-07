@@ -1,14 +1,31 @@
 .. _setup-datasets:
 
 
-Datasets in the wis2box
-=======================
+Adding datasets and discovery metadata
+======================================
 
+Datasets in the wis2box are required to define the **discovery metadata** and **data mappings plugins** for data you want to publish:
+
+- **Discovery metadata**: dataset properties such as title, description, keywords, and bounding box used to create a WIS Control Metadata Profile (WCMP2) record for the dataset.
+- **Data mappings plugins**: define the actions to be performed on the data before it is published, such as transforming the data from the input source format and validating the data content.
+
+For each dataset you create, a new WCMP2 record will be created and made available in the HTTP storage of your wis2box instance.
+The wis2box-broker will publish a WIS2 data notification for the WCMP2 record at the topic `origin/a/wis2/CENTRE_ID/metadata`, where `CENTRE_ID` is the centre-id of the dataset.
+This metadata-notification enables the WIS2 Global Discovery Catalogue to download and cache the metadata record, allowing users to discover the dataset when searching the WIS2 Global Discovery Catalogue.
 
 The following sections will explain how to create datasets in your wis2box using the wis2box-webapp.
 
+Accessing the wis2box-webapp
+----------------------------
+
 You can access the wis2box-webapp by visiting the URL you specified during the configuration step in your web browser and adding ``/wis2box-webapp`` to the URL.
 For example, if you specified ``http://mywis2box.example.com`` as the URL, you can access the wis2box-webapp by visiting ``http://mywis2box.example.com/wis2box-webapp``.
+
+You can check the WIS2BOX_URL environment variable in the ``wis2box.env`` file to find the URL of your wis2box instance:
+
+.. code-block:: bash
+
+   cat wis2box.env | grep WIS2BOX_URL
 
 The wis2box-webapp used basic authentication to control access to the webapp.  The default username is ``wis2box-user`` and the password is the value specified when running the script ``wis2box-create-config.py``.
 
@@ -16,17 +33,15 @@ The values of ``WIS2BOX_WEBAPP_USERNAME`` and ``WIS2BOX_WEBAPP_PASSWORD`` can be
 
 .. code-block:: bash
 
-   cat wis2box.env | grep WIS2BOX_WEBAPP
+   cat wis2box.env | grep WIS2BOX_WEBAPP_USERNAME
+   cat wis2box.env | grep WIS2BOX_WEBAPP_PASSWORD
 
 .. _adding-datasets:
 
 Adding datasets
 ---------------
 
-In order to publish data using the wis2box you need to create a dataset with discovery metadata and data mappings plugins. The metadata provides the data description needed for users to discover your data when searching the WIS2 Global Discovery Catalogue.
-Data mappings plugins are used to transform the data from the input source format before the data is published.
-
-You can use the wis2box-webapp to create datasets interactively using the dataset editor. Open the wis2box-webapp in your web browser and select the dataset editor from the menu on the left
+Open the wis2box-webapp in your web browser, provide the WIS2BOX_WEBAPP credentials, and select the **dataset editor** from the menu on the left
 
 You should see the following page:
 
@@ -36,7 +51,7 @@ You should see the following page:
 
 To create a new dataset select "Create new" from the dataset editor page.
 
-A popup will appear where you can define your "centre-id" and the type of dataset you want to create:
+A popup will appear where you can define your *"centre-id"* and the *"Template"* of dataset you want to create:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_continuetoform.png
   :width: 600
@@ -46,14 +61,13 @@ A popup will appear where you can define your "centre-id" and the type of datase
 
    Your centre-id should start with the ccTLD of your country, followed by a - and an abbreviated name of your organization, for example ``fr-meteofrance``.
    The centre-id has to be lowercase and use alphanumeric characters only.
-   You can enter the centre-id you want to use, or select one from the dropdown list.
-   
-   The dropdown list shows all currently registered centre-ids on WIS2 as well as any centre-id you have already created in wis2box.
+   **To define a new centre-id type the centre-id into the box**, otherwise select one from the dropdown list.
+   The dropdown list shows all currently registered centre-ids on WIS2 as well as any new centre-ids for datasets created in your wis2box-instance.
 
-There are multiple predefined datasets, such as "weather/surface-based-observations/synop", "weather/surface-based-observations/temp", and "weather/advisories-warnings".
-We recommend using these particular predefined dataset types to publish your "synop", "temp", and CAP alert data, respectively.
-The predefined dataset will predefine the topic and data mappings for you.
-If you want to create a dataset for a different topic, you can select "other" and define the topic and data mappings yourself.
+You have the option to select a *Template*, such as "weather/surface-based-observations/synop", "weather/surface-based-observations/temp", and "weather/advisories-warnings".
+The templates help you to predefine some of the metadata properties and the data mappings plugins for commonly published data-types.
+
+If you don't want to use a template, or your dataset does not fit into one of the predefined templates, select "Other" from the dropdown list.
 
 Please select "Continue to form" to start defining your dataset.
 
