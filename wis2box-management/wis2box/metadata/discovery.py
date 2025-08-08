@@ -341,9 +341,8 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
     try:
         resolution = record['time']['resolution']
         if not resolution.startswith('PT') and resolution.endswith('H'):
-            LOGGER.debug('Fixing time.resolution')
             resolution2 = resolution.replace('P', 'PT')
-            LOGGER.debug('Adjust {resolution} to {resolution2}')
+            LOGGER.debug(f'Adjusting time.resolution {resolution} to {resolution2}')  # noqa
             record['time']['resolution'] = resolution2
     except KeyError:
         pass
