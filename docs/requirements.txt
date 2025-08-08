@@ -2,7 +2,6 @@ ipython_genutils
 jinja2
 jupyter
 nbsphinx
-pygments-csv-lexer
 pyzmq==23.2.1
 pypandoc
 sphinx
