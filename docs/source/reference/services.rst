@@ -30,8 +30,6 @@ Below are some examples of working with the discovery catalogue.
    - adding ``f=json`` to URLs will provide the equivalent JSON/GeoJSON representations
    - query predicates (``datetime``, ``bbox``, ``q``, etc.) can be combined
 
-.. seealso:: :ref:`data-access`
-
 
 Data API
 --------
@@ -65,8 +63,6 @@ Below are some examples of working with the discovery catalogue.
 
    - adding ``f=json`` to URLs will provide the equivalent JSON/GeoJSON representations
    - query predicates (``datetime``, ``bbox``, ``q``, etc.) can be combined
-
-.. seealso:: :ref:`data-access`
 
 
 Management API
