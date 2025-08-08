@@ -81,6 +81,7 @@ information is set.
     WIS2BOX_CONTACT_ADDRESS=123 Main street
     WIS2BOX_CONTACT_CITY=city
     WIS2BOX_CONTACT_STATEORPROVINCE=province
+    # NOTE: if your postal code is only numeric, prefix with "code " to ensure it is interpreted as a string
     WIS2BOX_CONTACT_POSTALCODE=postal code
     WIS2BOX_CONTACT_COUNTRY=country
     WIS2BOX_CONTACT_PHONE=+xx-xxx-xxx-xxxx
