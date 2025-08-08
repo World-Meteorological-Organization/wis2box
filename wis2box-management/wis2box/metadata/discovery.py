@@ -337,6 +337,17 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
 
     record['links'] = new_links
 
+    # TODO: remove at some point
+    try:
+        resolution = record['time']['resolution']
+        if not resolution.startswith('PT') and resolution.endswith('H'):
+            LOGGER.debug('Fixing time.resolution')
+            resolution2 = resolution.replace('P', 'PT')
+            LOGGER.debug('Adjust {resolution} to {resolution2}')
+            record['time']['resolution'] = resolution2
+    except KeyError:
+        pass
+
     LOGGER.info(f'Validating WCMP2 record {record["id"]}')
     try:
         ts = WMOCoreMetadataProfileTestSuite2(record)
