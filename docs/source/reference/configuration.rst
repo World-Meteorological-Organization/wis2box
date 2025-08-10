@@ -55,7 +55,7 @@ Contact / identification
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 wis2box provides the ability to customize the contact and identification information for a given installation.  This
-is used by the API and other components accordingly.  If any of these items are not set, default contact/identification
+is displayed on the public landing page of the API.  If any of these items are not set, default contact/identification
 information is set.
 
 .. code-block:: bash
