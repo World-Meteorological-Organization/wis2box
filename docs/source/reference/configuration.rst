@@ -80,15 +80,11 @@ information is set.
     WIS2BOX_CONTACT_POSITION=staff
     WIS2BOX_CONTACT_ADDRESS=123 Main street
     WIS2BOX_CONTACT_CITY=city
-    WIS2BOX_CONTACT_STATEORPROVINCE=province
     # NOTE: if your postal code is only numeric, prefix with the text "code " to ensure it is interpreted as a string
     WIS2BOX_CONTACT_POSTALCODE=postal code
     WIS2BOX_CONTACT_COUNTRY=country
-    WIS2BOX_CONTACT_PHONE=+xx-xxx-xxx-xxxx
-    WIS2BOX_CONTACT_FAX=+xx-xxx-xxx-xxxx
     WIS2BOX_CONTACT_EMAIL=you@example.org
     WIS2BOX_CONTACT_URL=https://example.org/contact
-    WIS2BOX_CONTACT_HOURS=hours of service
     WIS2BOX_CONTACT_INSTRUCTIONS=contact instructions
     WIS2BOX_CONTACT_ROLE=host
 
