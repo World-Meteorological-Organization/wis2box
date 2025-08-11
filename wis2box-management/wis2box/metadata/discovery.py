@@ -314,6 +314,16 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
     except Exception:
         LOGGER.error('Failed to check for auth')
 
+    # TODO: remove at some point
+    try:
+        resolution = record['time']['resolution']
+        if not resolution.startswith('PT') and resolution.endswith('H'):
+            resolution2 = resolution.replace('P', 'PT')
+            LOGGER.warning(f'Incorrect time resolution detected: adjusting time.resolution {resolution} to {resolution2}')  # noqa
+            record['time']['resolution'] = resolution2
+    except KeyError:
+        pass
+
     LOGGER.debug('Publishing to API')
     try:
         upsert_collection_item('discovery-metadata', record)
@@ -336,16 +346,6 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
             new_links.append(ol)
 
     record['links'] = new_links
-
-    # TODO: remove at some point
-    try:
-        resolution = record['time']['resolution']
-        if not resolution.startswith('PT') and resolution.endswith('H'):
-            resolution2 = resolution.replace('P', 'PT')
-            LOGGER.debug(f'Adjusting time.resolution {resolution} to {resolution2}')  # noqa
-            record['time']['resolution'] = resolution2
-    except KeyError:
-        pass
 
     LOGGER.info(f'Validating WCMP2 record {record["id"]}')
     try:

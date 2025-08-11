@@ -47,7 +47,7 @@ identification:
         temporal:
             - begin: 2023-03-26
               end: null
-              resolution: PT1H
+              resolution: P1H
     url: https://example.org/malawi-surface-weather-observations
     wmo_data_policy: recommended
 
@@ -73,3 +73,4 @@ distribution:
           url: https://example.org/license
           type: text/html
           rel: license
+          title: Title is required to avoid crash at describe_collections (see wis2box issue-969)
