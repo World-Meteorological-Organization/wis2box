@@ -23,8 +23,8 @@ When using the wis2box-webapp, you select in the data-policy during the initial 
    :alt: Data Policy Selection
    :width: 350
 
-**Datasets containing aeronautical meteorological information should be considered recommended data for the purposes of publishing through WIS**.
-For this reason, the wis2box-webapp will automatically set the data policy to recommended for datasets using `weather/aviation` in the topic hierarchy.
+**Datasets containing aeronautical meteorological information should be considered recommended data for the purposes of publishing through WIS2**.
+For this reason, the wis2box-webapp will automatically set the data policy to recommended for datasets containing **weather/aviation** in the topic hierarchy.
 
 When the WMO Data Policy is set to **recommended** , the wis2box-webapp will required you to provide a link to the license that applies to the dataset:
 
