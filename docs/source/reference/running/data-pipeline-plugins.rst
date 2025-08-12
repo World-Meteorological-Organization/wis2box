@@ -81,6 +81,14 @@ Exit the container after creating the custom template:
 
 You can edit the template file on the host system at `$WIS2BOX_HOST_DATADIR/mappings/my_own_template.json` to customize the template further.
 
+.. note::
+
+    After adding a new custom template, you need to restart the wis2box-api container for the changes to take effect:
+    
+    .. code-block:: bash
+
+       python3 wis2box-ctl.py restart wis2box-api
+
 After creating the custom template, you can use it in the csv2bufr plugin configuration in MCF as follows:
 
 .. code-block:: yaml
