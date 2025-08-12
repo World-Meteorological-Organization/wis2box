@@ -4,33 +4,34 @@ Adding a license to recommended datasets
 ========================================
 
 Data are shared on WIS2 in accordance with the WMO Unified Data Policy (Resolution 1 (Cg-Ext(2021))). 
-This data policy describes two categories of data: 
+This data policy describes two categories of data:
+
 - **core** : data that is provided on a free and unrestricted basis, without charge and with no conditions on use.
 - **recommended** : data that may be provided with conditions on use and/or subject to a license.
 
-The WMO data policy is specified by the discovery metadata of the dataset. 
+Data that is shared as **core** is cached by the WIS2 Global Caches and available for download by the general public.
 
-Recommended data:
+Data that is shared with the WMO Data Policy **recommended**:
 
 - May be subject to conditions on use and reuse;
 - May have access controls applied to the data;
 - Are not cached within WIS2 by the Global Caches;
 - Must have a link to a license specifying the conditions of use of the data included in the discovery metadata.
 
-When using the wis2box-webapp, you select in the data-policy during the initial dataset creation step:
+The WMO data policy is specified by the discovery metadata of the dataset. When using the wis2box-webapp, you select the WMO data policy during the initial dataset creation step:
 
 .. image:: ../_static/wis2box-webapp_data_policy_selection.png
    :alt: Data Policy Selection
    :width: 350
 
-**Datasets containing aeronautical meteorological information should be considered recommended data for the purposes of publishing through WIS2**.
+**Note that datasets containing aeronautical meteorological information should be considered recommended data for the purposes of publishing through WIS2**.
 For this reason, the wis2box-webapp will automatically set the data policy to recommended for datasets containing **weather/aviation** in the topic hierarchy.
 
 When the WMO Data Policy is set to **recommended** , the wis2box-webapp will required you to provide a link to the license that applies to the dataset:
 
 .. image:: ../_static/wis2box-webapp_data_policy_license.png
    :alt: Data Policy License
-   :width: 700
+   :width: 600
 
 You can provide a link to a license hosted on your own website, or you can use one of the standard licenses available online, such as the Creative Commons licenses (https://creativecommons.org/licenses/).
 
@@ -45,16 +46,76 @@ To upload a locally created file `license.txt` you can use the `MinIO Console` a
 Note that the MinIO Console is not proxied via wis2box web-proxy; you can only access it directly using the IP address or hostname of your wis2box instance,
  on the local network or via a VPN connection.
 
-You can find the credentials to access the MinIO Console in the `wis2box.env` file, as follows:
+The credentials to access the MinIO Console in the `wis2box.env` file are defined by WIS2BOX_STORAGE_USERNAME and WIS2BOX_STORAGE_PASSWORD environment variables.
+
+You can find these in the `wis2box.env` file as follows:
 
 .. code-block:: bash
 
    cat wis2box.env | grep WIS2BOX_STORAGE_USERNAME
    cat wis2box.env | grep WIS2BOX_STORAGE_PASSWORD
 
-Once you have logged in to the MinIO Console, you can upload the license file into the `wis2box-public` bucket.
+Once you have logged in to the MinIO Console, you can upload the license file into basepath of the `wis2box-public` bucket using the "Upoload" button:
+
+.. image:: ../_static/minio-wis2box-public-basepath.png
+   :alt: MinIO Upload License
+   :width: 800
 
 After uploading the license file, check if the file is accessible by visiting the URL:
 `WIS2BOX_URL/data/<license-file-name>`
 
-If the file is accessible, you can use the URL `WIS2BOX_URL/data/<license-file-name>` as the link to the license in the dataset creation step in the wis2box-webapp.
+After verifying the URL correctly displays the license you uploaded, you can use this URL in the wis2box-webapp:
+
+.. image:: ../_static/wis2box-webapp_data_policy_local_license_url.png
+   :alt: Example showing a custom license hosted on the wis2box instance
+   :width: 600
+
+Applying access control using wis2box
+-------------------------------------
+
+All dataset in wis2box are open by default. The wis2box software provides the option to apply access control to a dataset using an access token.
+
+Access control can be configured using the use the command line available within the wis2box-management container.
+
+To login to the wis2box-management container, run the following command from the wis2box-directory:
+
+.. code-block:: bash
+
+   cd ~/wis2box
+   python3 wis2box-ctl.py login
+
+To create an randomly generated access token for your dataset, run the following command:
+
+.. code-block:: bash
+
+    wis2box auth add-token --metadata-id urn:wmo:md:my-centre-id:my-local-id
+
+Where `urn:wmo:md:my-centre-id:my-local-id` is the metadata identifier of your dataset.
+
+To specify the token yourself you can add this an additional argument, for example the add the token `S3CR3TT0K3N`:
+
+.. code-block:: bash
+
+    wis2box auth add-token --metadata-id urn:wmo:md:my-centre-id:my-local-id S3CR3TT0K3N
+
+Token credentials can be validated using the wis2box command line utility.
+
+.. code-block:: bash
+
+    wis2box auth has-access-topic --metadata-id urn:wmo:md:my-centre-id:my-local-id S3CR3TT0K3N
+
+Once a token has been generated, attempting to download data published for that dataset will result in 403 Forbidden error if no or incorrect token is provided.
+
+To download access-controlled data, tokens need to be passed in the Authentication header. For example to use the token `S3CR3TT0K3N` to download data from the WAF using `wget` you would use the following command:
+
+.. code-block:: bash
+
+    wget --header= "Authorization: Bearer mytoken" "https://www.mywis2box.com/data/urn:wmo:md:my-centre-id:my-local-id/mydata.bufr4"
+
+To remove access control from a dataset, you can use the following command:
+
+.. code-block:: bash
+
+    wis2box auth remove-token --metadata-id urn:wmo:md:my-centre-id:my-local-id
+
+This will remove all tokens for the specified dataset, making it accessible without authentication.
