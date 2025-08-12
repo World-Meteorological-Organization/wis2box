@@ -89,7 +89,7 @@ Please select "Continue to form" to start defining your dataset.
 Defining the metadata identifier of your dataset
 ----------------------------------------
 
-When defining your dataset, you will need to specify a Local ID, which serves as a short and unique identifier for the dataset within your organization. The Local ID is used to generate the WCMP2 identifier for your metadata record.
+When defining your dataset, you will need to specify a **Local ID**, which serves as a short and unique identifier for the dataset within your organization. The Local ID is used to generate the WCMP2 identifier for your metadata record:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_local_id.png
   :width: 1000

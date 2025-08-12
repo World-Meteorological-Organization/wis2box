@@ -9,16 +9,18 @@ This data policy describes two categories of data:
 - **core** : data that is provided on a free and unrestricted basis, without charge and with no conditions on use.
 - **recommended** : data that may be provided with conditions on use and/or subject to a license.
 
-Data that is shared as **core** is cached by the WIS2 Global Caches and available for download by the general public.
+Data that are shared as **core** are cached by the WIS2 Global Caches and available for download by the general public.
 
-Data that is shared with the WMO Data Policy **recommended**:
+Data that are shared as **recommended**:
 
 - May be subject to conditions on use and reuse;
 - May have access controls applied to the data;
 - Are not cached within WIS2 by the Global Caches;
 - Must have a link to a license specifying the conditions of use of the data included in the discovery metadata.
 
-The WMO data policy is specified by the discovery metadata of the dataset. When using the wis2box-webapp, you select the WMO data policy during the initial dataset creation step:
+**Please consult the WMO Unified Data Policy or other WMO publications to help determine the relevant data policy for your datasets.**
+
+When using the wis2box-webapp, you select the WMO data policy during the initial dataset creation step:
 
 .. image:: ../_static/wis2box-webapp_data_policy_selection.png
    :alt: Data Policy Selection
