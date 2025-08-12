@@ -24,8 +24,10 @@ The WMO data policy is specified by the discovery metadata of the dataset. When 
    :alt: Data Policy Selection
    :width: 350
 
-**Note that datasets containing aeronautical meteorological information should be considered recommended data for the purposes of publishing through WIS2**.
-For this reason, the wis2box-webapp will automatically set the data policy to recommended for datasets containing **weather/aviation** in the topic hierarchy.
+.. note::
+   
+   The wis2box-webapp will automatically set the data policy to recommended for datasets using **aviation** in the sub-discipline topic.
+   Datasets containing aeronautical meteorological information are considered recommended data for the purposes of publishing through WIS2 to be compliant with ICAO regulations.
 
 When the WMO Data Policy is set to **recommended** , the wis2box-webapp will required you to provide a link to the license that applies to the dataset:
 
@@ -35,7 +37,7 @@ When the WMO Data Policy is set to **recommended** , the wis2box-webapp will req
 
 You can provide a link to a license hosted on your own website, or you can use one of the standard licenses available online, such as the Creative Commons licenses (https://creativecommons.org/licenses/).
 
-If you need to provide a custom license and have no place to host it, you provide your custom license via the `wis2box-public` bucket of your wis2box instance, as described in the next section.
+If you need to provide a custom license and have no place to host it, you can provide your custom license via the `wis2box-public` bucket of your wis2box instance, as described in the next section.
 
 Using a custom license hosted on your wis2box instance
 ------------------------------------------------------
