@@ -272,10 +272,10 @@ def publish_delete_notification(identifier: str):
         raise RuntimeError(msg)
     # parse centre id from identifier
     centre_id = identifier.split(':')[3]
-    topic = f'origin/a/wis2/{centre_id}/metadata'  # noqa
+    topic = f'origin/a/wis2/{centre_id}/metadata'
     # prepare WIS message
     links = [{
-        'href': f"{API_URL}/collections/discovery-metadata/items/{identifier}", # noqa
+        'href': f'{URL}/data/metadata/{identifier}',
         'rel': 'deletion',
         'title': f'Delete discovery metadata for {identifier}'
     }]
