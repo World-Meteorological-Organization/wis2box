@@ -3,13 +3,13 @@
 Public services setup
 =====================
 
-To share your data with the WIS2 network, you need to expose some of the wis2box services to the Global Services:
+Before you can proceed to register your WIS2 Node to share your data with the WIS2 network, you need to ensure that certain services are available to the public Internet:
 
-* The Global Cache needs to be able to access to your HTTP endpoint to download data published by the wis2box instance.  The web-proxy service in the wis2box stack will proxy the content of ``wis2box-public`` bucket at ``/data/`` on port 80, or on port 443 when using SSL
-* The Global Broker needs to be able to subscribe to your MQTT endpoint to receive WIS2 notifications published by the wis2box instance.  mosquitto is available on port 1883 on your host by default, or on port 8883 when using SSL
+* The Global Broker needs to be able to subscribe to your MQTT endpoint to receive and republish WIS2 notifications published by the MQTT-broker running in your wis2box instance
+* The Global Cache needs to be able to access your HTTP endpoint to download data published by the wis2box instance (to access metadata-records and data with WMO data policy **core**).
 
 Security considerations
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 
 When exposing your services to the public Internet, it is important to consider the security implications of doing so.
 
@@ -25,6 +25,17 @@ Please ensure that you follow these best practices to ensure your wis2box-instan
 The wis2box development team is not responsible for the security of your wis2box-instance and it is your responsibility to ensure that your wis2box instance is secure.
 
 GitHub issues and discussions provide a resource and forum to discuss general wis2box features, bugs and updates.  For specific security related questions, please write to ``wis2-support at wmo.int``.
+
+Connecting your instance to the WIS2 network
+--------------------------------------------
+
+Once the wis2box-instance is available to the public Internet, you can proceed to request this instance to be registered as a WIS2 Node, see :ref:`wis2node-operations`.
+
+
+Public services in wis2box
+---------------------------
+
+The next sections describe the public services available in wis2box and how to configure them.
 
 web-proxy (nginx)
 ^^^^^^^^^^^^^^^^^
@@ -271,13 +282,6 @@ After restarting wis2box, repeat the commands for adding your dataset and publis
   python3 wis2box-ctl.py login
   wis2box data add-collection ${WIS2BOX_HOST_DATADIR}/surface-weather-observations.yml
   wis2box metadata discovery publish ${WIS2BOX_HOST_DATADIR}/surface-weather-observations.yml
-
-Registering your WIS2 Node
---------------------------
-
-Contact wis2-support@wmo.int for the procedure to register your WIS2 Node with the WIS2 network.
-
-Next: :ref:`downloading-data`
 
 .. _`Mosquitto`: https://mosquitto.org/
 .. _`pygeoapi`: https://pygeoapi.io/

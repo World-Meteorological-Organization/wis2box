@@ -156,7 +156,7 @@ Using the MinIO UI
 Files can also be uploaded interactively via the MinIO adminstration interface.  The example below demonstrates this
 capability when browsing the ``wis2box-incoming`` bucket:
 
-.. image:: /_static/minio-upload-files.png
+.. image:: /_static/minio-upload-file.png
    :width: 800px
    :alt: Uploading files using the MinIO adminstration interface
    :align: center

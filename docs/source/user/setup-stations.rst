@@ -3,16 +3,43 @@
 Adding station metadata
 =======================
 
-To publish data-notifications using the wis2box using a plugin other than the 'Universal' plugin, you need to add station metadata to your wis2box instance.
+The following plugins rely on information provided via station metadata configured in wis2box:
 
-The station metadata is used to check that the data you are publishing is associated with a valid station and to add additional metadata where required.
+- BUFR data converted to BUFR
+- FM-12 data converted to BUFR
+- CSV data converted to BUFR
+
+You need to configure stations in wis2box before you can publish data for datasets that use these plugins.
 
 Stations can be added interactively using the wis2box-webapp or by bulk inserting stations from a CSV file.
 
 If you want to bulk insert station metadata from a CSV file, please refer to the `Bulk inserting stations from CSV`_ section.
 
+Creating a token for updating stations
+--------------------------------------
+
+Before proceeding with the next steps, you need to prepare an authentication token to allow you to update the stations collection in wis2box.
+
+To create a token for updating stations:
+
+.. code-block:: bash
+
+   wis2box auth add-token --path collections/stations
+
+Record the token value displayed in the output of the command above. You will use this token to update stations in the next section.
+
+You can now logout of wis2box-management container:
+
+.. code-block:: bash
+
+   exit
+
 Adding stations using the wis2box-webapp
 ----------------------------------------
+
+Go to the wis2box-webapp at *WIS2BOX_URL/wis2box-webapp/*  in your web browser.
+
+You can login with your ``WIS2BOX_WEBAPP_USERNAME`` and ``WIS2BOX_WEBAPP_PASSWORD`` as defined in the ``wis2box.env`` file.
 
 The station editor can be accessed in the wis2box-webapp by selecting "Stations" from the menu on the left.
 
@@ -68,5 +95,5 @@ Next steps
 
 The next step is to prepare data ingestion into wis2box, see :ref:`data-ingest`.
 
-.. _`WIS2 topic hierarchy`: https://github.com/World-Meteorological-Organization/wis2-topic-hierarchy
+.. _`WIS2 topic hierarchy`: https://codes.wmo.int/wis/topic-hierarchy
 .. _`OSCAR`: https://oscar.wmo.int/surface

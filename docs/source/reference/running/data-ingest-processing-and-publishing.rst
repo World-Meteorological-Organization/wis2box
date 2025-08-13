@@ -21,8 +21,8 @@ The `wis2box` CLI provides a data subsystem to process data interactively. CLI
 data ingest/processing/publishing can be run with explicit or implicit topic
 hierarchy routing (which needs to be tied to the pipeline via the :ref:`data-mappings`).
 
-Explicit topic hierarchy workflow
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Explicit metadata_id workflow
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 

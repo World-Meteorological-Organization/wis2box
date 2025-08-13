@@ -121,81 +121,58 @@ Check that all services are Up and not unhealthy:
 
 Refer to the :ref:`troubleshooting` section if this is not the case.
 
-Check MQTT connection
-----------------------
-
-You can check that the MQTT broker is running and accepting connections using `MQTT Explorer`_ or by using a Linux command line tool such as `mosquitto_sub`.
-
-Two sets of users are created for the MQTT broker:
-
-username=**everyone**:
-- This user is used for public access to the MQTT broker and has read-only access on `origin/#` topic. 
-- This user can be used to allow the WIS2 Global Broker to subscribe to the wis2box.
-- The password for this user is ``everyone``.
-
-username=**wis2box**
-- This user is used by wis2box services to publish data to the MQTT broker.
-- The password for this user is defined in the ``WIS2BOX_BROKER_PASSWORD`` environment variable in ``wis2box.env``.
-
-The wis2box MQTT broker is available on port ``1883`` on the host.
-
-The nginx-proxy enables access to the MQTT broker via WebSockets on port ``80`` on the path `/mqtt`.
-
-See the section :ref:`public-services-setup` for information on adding SSL encryption to the MQTT broker.
-
 Check HTTP interfaces on web-proxy
 ----------------------------------
 
-Check the wis2box API is available at `WIS2BOX_URL/oapi`:
+The wis2box-stack includes the *web-proxy*-service, which is a web proxy based on `nginx`_.
+It is configured to listen on port ``80`` and port ``443`` on the host, and it proxies requests to the various services in the wis2box-stack.
+
+To verify that the web-proxy is running and accepting connections, you can check the following URLs in a web browser:
+
+Check the wis2box API is available at `WIS2BOX_URL/oapi`, you should see the following:
 
 .. image:: ../_static/wis2box-api.png
   :width: 1000
-  :alt: wis2box webapp dataset editor page
+  :alt: wis2box API homepage
 
-Check the wis2box user interface is available at `WIS2BOX_URL/`:
+Check the wis2box user interface is available at `WIS2BOX_URL/`, since you have no datasets configured yet, you will see the following:
 
 .. image:: ../_static/wis2box-ui-new-install.png
   :width: 1000
-  :alt: wis2box user interface
+  :alt: wis2box user interface, no dataset
 
-Check the proxy to the "wis2box-public" bucket from the storage service is available at `WIS2BOX_URL/data/`:
+Check the proxy to the "wis2box-public"=bucket from the storage service is available at `WIS2BOX_URL/data/` 
+(make sure to add a trailing slash after 'data'), you should see the following:
 
 .. image:: ../_static/wis2box_url_slash_data.png
   :width: 1000
   :alt: wis2box public bucket
 
-Runtime configuration
----------------------
+Check MQTT connection
+----------------------
 
-Before proceeding with the next steps, you need to prepare authentication tokens for updating your stations and running processes in the wis2box-webapp.
+The wis2box-stack includes the *wis2box-broker* service, which is a MQTT broker based on `mosquitto`_.
 
-Login to the wis2box-management container
+You can check that the wis2box-broker is running and accepting connections using `MQTT Explorer`_ or by using a Linux command line tool such as `mosquitto_sub`.
 
-.. code-block:: bash
+Two sets of MQTT-users are automatically pre-configured when you first start wis2box:
 
-   python3 wis2box-ctl.py login
+**everyone**
 
-To create a token for running wis2box processes:
+- This user is used for public access to the MQTT broker and has read-only access on the `origin/a/wis2/#` topic. 
+- This user can be used to allow the WIS2 Global Broker to subscribe to the wis2box.
+- username=everyone, password=everyone
 
-.. code-block:: bash
+**wis2box**
 
-   wis2box auth add-token --path processes/wis2box
+- This user is used by wis2box services to publish data to the MQTT broker and has read/write access to `origin/a/wis2/#` topic.
+- username=wis2box, password=WIS2BOX_BROKER_PASSWORD (as defined in the `wis2box.env` file).
 
-Record the token value displayed in a safe place, you will need it to run processes in the next section.
+The wis2box MQTT broker is available on port ``1883`` on the host.
 
-To create a token for updating stations:
+The web-proxy also enables access to the MQTT broker via WebSockets on port ``80`` on the path `/mqtt`.
 
-.. code-block:: bash
-
-   wis2box auth add-token --path collections/stations
-
-Record the token value displayed in the output of the command above. You will use this token to update stations in the next section.
-
-You can now logout of wis2box-management container:
-
-.. code-block:: bash
-
-   exit
+See the section :ref:`public-services-setup` for information on adding SSL encryption to the MQTT broker.
 
 Next steps
 ----------
@@ -204,3 +181,5 @@ The next step is to configure datasets in wis2box, see :ref:`setup-datasets`.
 
 .. _`MQTT Explorer`: https://mqtt-explorer.com/
 .. _`wis2box Releases`: https://github.com/World-Meteorological-Organization/wis2box-release/releases
+.. _`nginx`: https://www.nginx.com/
+.. _`mosquitto`: https://mosquitto.org/

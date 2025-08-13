@@ -3,7 +3,7 @@
 Authentication and access control
 =================================
 
-wis2box provides built in access control for the WAF and API on a topic hierarchy basis. Configuration is done
+wis2box provides built in access control for the WAF and API on a dataset-identifier basis. Configuration is done
 using the wis2box command line utility. Authentication tokens are only required for topics that have access control
 configured.
 
@@ -83,8 +83,8 @@ easily added to requests using `cURL`_.
 Removing Access Control
 -----------------------
 
-A topic becomes open and no longer requires authentication when all tokens have been deleted. This can be done by
-deleting individual tokens, or all tokens for a given topic hierarchy.
+A dataset becomes open and no longer requires authentication when all tokens have been deleted. This can be done by
+deleting individual tokens, or all tokens for a given dataset-identifier:
 
 .. code-block:: bash
 

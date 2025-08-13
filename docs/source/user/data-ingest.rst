@@ -1,32 +1,53 @@
 .. _data-ingest:
 
-Setting up data ingestion
-=========================
+Ingesting data for publication
+==============================
 
-The runtime component of wis2box is data ingestion. This is an event driven workflow driven by S3 notifications from uploading data to wis2box storage.
+In WIS2, the availability of new data to be downloaded is announced using WIS2 Notifications sent using the MQTT protocol.
+Each WIS2 Notification will contain a "canonical" URL to the data to enable the data to be downloaded over HTTP(S).
 
-The wis2box storage is provided using a `MinIO`_ container that provides S3-compatible object storage.
+The *wis2box-management* service listens to updates from the *wis2box-storage*-service about new files received and will attempt to process the files based on the datasets and data mappings that have been configured in the previous section.
 
-Any file received in the ``wis2box-incoming`` storage bucket will trigger an action to process the file. 
-What action to take is determined by the data mappings that were setup in the previous section.
+The *wis2box-storage* service is based on `MinIO`_ , the following buckets are pre-configured when the wis2box-stack is started for the first time:
 
-data mappings plugins
-^^^^^^^^^^^^^^^^^^^^^
+- **wis2box-incoming**: this bucket is used to received incoming files and are used as input by the data mappings configured in your wis2box
+- **wis2box-public**: this bucket is used to store files to be shared on WIS2, it is proxied by the web-proxy service to make it available over HTTP(S) at `WIS2BOX_URL/data/`
 
-The plugins you have configured for your dataset mappings will determine the actions taken when data is received in the MinIO storage bucket.
+.. note::
+ 
+ If you use "CSV to BUFR"-plugin in your data mappings, the columns defined in the input CSV file need to match the columns defined by the `csv2bufr-template`. 
+ If the columns do not match, the data will not be processed and you will see an error in the logs of the *wis2box-management* container.
+ 
+ See the :ref:`csv2bufr-plugin` for more information on this data plugin and see the `csv2bufr-templates`_ repository for the template definitions.
 
-The wis2box provides 3 types of built-in plugins to publish data in BUFR format:
+To upload data to wis2box and trigger the data ingest process, you can use one of the following methods:
 
-* `bufr2bufr` : the input is received in BUFR format and split by subset, where each subset is published as a separate bufr message
-* `synop2bufr` : the input is received in `FM-12 SYNOP format <https://library.wmo.int/idviewer/35713/33>`_ and converted to BUFR format. The year and month are extracted from the file pattern
-* `csv2bufr` : the input is received in CSV format and converted to BUFR format, a mapping template is required to convert the CSV columns to BUFR encoded values. See :ref:`csv2bufr-plugin` for information on how to configure the csv2bufr plugin.
+- Use the MinIO Console (recommended to test your setup and understand the data ingest process)
+- Use the FM-12 SYNOP form in the wis2box-webapp, to manually trigger FM-12 SYNOP data ingest process
+- Use the "Upload file" option in the wis2box-webapp to manually upload and process a file
+- Setup an automated workflow to upload data to the `wis2box-incoming` bucket using MinIO client libraries or the MinIO SFTP service
 
-To publish data for other data formats you can use the 'Universal' plugin, which will pass through the data without any conversion.
-Please note that you will need to ensure that the date timestamp can be extracted from the file pattern when using this plugin.
+**For production use, it is recommended to setup an automated workflow and to regularly review the data publication workflow in the Grafana-service.**
 
+Data ingest workflow monitoring
+--------------------------------
 
-MinIO user interface
---------------------
+The wis2box-stack includes a `Grafana`_ service to provide pre-configured moniting dashboards, based on metrics collected by  `Prometheus`_ and logs stored by `Loki`_.
+
+To access the Grafana service, visit ``http://<your-host-ip>:3000`` in your web browser.
+
+The Grafana homepage shows an overview with the number of files received, new files produced and WIS2 notifications published.
+
+The `Station data publishing status` panel (on the left side) shows an overview of notifications and failures per configured station.
+
+The `wis2box ERRORs` panel (on the bottom) prints all ERROR messages reported by the wis2box-management container.
+
+.. image:: ../_static/grafana-homepage.png
+    :width: 800
+    :alt: wis2box workflow monitoring in Grafana
+
+Testing your setup using the MinIO Console
+------------------------------------------
 
 To access the MinIO user interface, visit ``http://<your-host-ip>:9001`` in your web browser.
 
@@ -40,64 +61,36 @@ You can login with your ``WIS2BOX_STORAGE_USERNAME`` and ``WIS2BOX_STORAGE_PASSW
 
    The ``WIS2BOX_STORAGE_USERNAME`` and ``WIS2BOX_STORAGE_PASSWORD`` are defined in the ``wis2box.env`` file.
 
-To test the data ingest, add a sample file for your observations in the ``wis2box-incoming`` storage bucket.
+To test the data ingest, add a sample file for your observations in the ``wis2box-incoming`` storage bucket in the path matching your dataset identifier as follows:
 
-Select 'browse' on the ``wis2box-incoming`` bucket and select 'Choose or create a new path' to define a new folder path:
+- Select 'browse' on the ``wis2box-incoming`` bucket and select 'Choose or create a new path' to define a new folder path. 
+Define a new folder path that matches the dataset metadata identifier or the topic in the data mappings, for example:
 
 .. image:: ../_static/minio-new-folder-path.png
     :width: 800
     :alt: MinIO new folder path
 
-.. note::
-    The folder in which the file is placed will be used to determine the dataset to which the file belongs.
-    
-    The wis2box-management container will match the path of the file to the dataset defined in the data mappings by checking it either contains the metadata identifier or the topic (excluding 'origin/a/wis2/').
-    
-    For example, using a filepath matching the metadata identifier:
+- Enter the folder path and use "Upload" to upload a file from your local machine in the newly created folder path:
 
-    * Metadata identifier: ``urn:wmo:md:it-meteoam:surface-weather-observations.synop``
-    * upload data in path containing: ``it-meteoam:surface-weather-observations.synop``
-
-    For example using a filepath matching the topic hierarchy:
-    
-    * Topic Hierarchy: ``origin/a/wis2/cg-met/data/recommended/weather/surface-based-observations/synop``
-    * upload data in the path containing: ``cg-met/data/recommended/weather/surface-based-observations/synop``
-
-    The error message ``Path validation error: Could not match http://minio:9000/wis2box-incoming/... to dataset, ...`` indicates that a file was stored in a directory that could not be matched to a dataset.
-
-After uploading a file to ``wis2box-incoming`` storage bucket, you can browse the content in the ``wis2box-public`` bucket.  If the data ingest was successful, new data will appear as follows:
-
-.. image:: ../_static/minio-wis2box-public.png
+.. image:: ../_static/minio-upload-file.png
     :width: 800
-    :alt: MinIO wis2box-public storage bucket
+    :alt: MinIO upload file
 
-If no data appears in the ``wis2box-public`` storage bucket, you can inspect the logs from the command line:
+After uploading a file to ``wis2box-incoming`` storage bucket, you can browse the content in the ``wis2box-public`` bucket. 
+If the data ingest was successful, data will have been moved to the ``wis2box-public`` bucket, in a folder matching the dataset identifier.
 
-.. code-block:: bash
-
-   python3 wis2box-ctl.py logs wis2box
-
-Or by visiting the local Grafana instance running at ``http://<your-host-ip>:3000``
-
-wis2box workflow monitoring
----------------------------
-
-The Grafana homepage shows an overview with the number of files received, new files produced and WIS2 notifications published.
-
-The `Station data publishing status` panel (on the left side) shows an overview of notifications and failures per configured station.
-
-The `wis2box ERRORs` panel (on the bottom) prints all ERROR messages reported by the wis2box-management container.
-
-.. image:: ../_static/grafana-homepage.png
-    :width: 800
-    :alt: wis2box workflow monitoring in Grafana
+If the no data appears in the ``wis2box-public`` bucket, check for errors and warnings in the dashboard at ``http://<your-host-ip>:3000``.
+After addressing the issues, you can re-upload the file to the correct folder in ``wis2box-incoming`` bucket to trigger the data ingest process again.
 
 Once you have verified that the data ingest is working correctly you can prepare an automated workflow to send your data into wis2box.
 
-Automating data ingestion
--------------------------
+Uploading data to MinIO using scripts
+-------------------------------------
 
-See below a Python example to upload data using the MinIO package:
+To automate the data ingest process, you can prepare scripts using the MinIO client libraries.
+As MinIO is compatible with the S3 API, you can also use any S3 client library to upload data to MinIO.
+
+See below a Python example to upload data using the MinIO library for Python:
 
 .. code-block:: python
 
@@ -162,52 +155,61 @@ For example using the command line from the host running wis2box:
         put /path/to/your/datafile.csv wis2box-incoming/urn:wmo:md:it-meteoam:surface-weather-observations.synop 
     EOF
 
-wis2box-webapp
---------------
+FM-12 SYNOP form in the wis2box-webapp
+--------------------------------------
 
-The wis2box-webapp is a web application that includes the following form for data validation and ingestion:
+You can manually ingest FM-12 SYNOP data using the wis2box-webapp.
 
-* user interface to ingest `FM-12 SYNOP data <https://library.wmo.int/idviewer/35713/33>`_
+Select the "FM-12 SYNOP" option from the menu on the left:
 
-The wis2box-webapp is available on your host at `http://<your-public-ip>/wis2box-webapp`.
+.. image:: ../_static/wis2box-webapp-fm12-synop.png
+    :width: 1000
+    :alt: wis2box webapp FM-12 SYNOP page
 
-Interactive data ingestion requires an execution token, which can be generated using the ``wis2box auth add-token`` command inside the wis2box-management container:
+Provide the required information in the form:
 
-.. code-block:: bash
+- Month and year in UTC 
+- FM 12 encoded input data
+- Dataset identifier
+- Authentication token for 'processes/wis2box'
 
-    python3 wis2box-ctl.py login
-    wis2box auth add-token --path processes/wis2box-synop2bufr
+Then click "Submit" to ingest the data. 
 
-.. note::
+If there are issues during the data conversion you click to open the "Warnings" and "Errors" sections to see the details:
 
-   Be sure to record the token value, as it will not be shown again. If you lose the token, you can generate a new one.
+.. image:: ../_static/wis2box-webapp-synop-form-error.png
+    :width: 1000
+    :alt: wis2box webapp FM-12 SYNOP page, error example
 
-wis2box-data-subscriber
+If the data conversion is successful you click on "Output BUFR files" to inspect the result:
+
+.. image:: ../_static/wis2box-webapp-synop-form-success.png
+    :width: 1000
+    :alt: wis2box webapp FM-12 SYNOP page, success example
+
+Manual file upload using the wis2box-webapp
+-------------------------------------------
+
+You can also upload files using the wis2box-webapp, to manually trigger the data ingest process.
+
+To access this interface, select the "Upload file" option from the menu on the left:
+
+.. image:: ../_static/wis2box-webapp-file-upload.png
+    :width: 1000
+    :alt: wis2box webapp file upload page
+
+And follow the instructions to upload a file.
+
+wis2box-data-subscriberF
 -----------------------
 
+The `wis2box-data-subscriber` provides an example of an additional service on the host running your wis2box instance to enable data to be received over MQTT.
+
 .. note::
 
-   This service currently only works with Campbell scientific data loggers version CR1000X.
-
-You can add an additional service on the host running your wis2box instance to allow data to be received over MQTT.
+   This service was developed to work with Campbell scientific data loggers version CR1000X for some countries in Africa.
 
 This service subscribes to the topic ``data-incoming/#`` on the wis2box broker and parses the content of received messages and publishes the result in the ``wis2box-incoming`` bucket.
-
-To start the ``wis2box-data-subscriber``, add the following additional variables to ``wis2box.env``:
-
-.. code-block:: bash
-
-    CENTRE_ID=zm-zmb_met_centre  # set centre_id for wis2-topic-hierarchy
-
-These variables determine the destination path in the ``wis2box-incoming`` bucket:
-
-``{CENTRE_ID}/data/core/weather/surface-based-observations/synop/``
-
-You then you can activate the optional 'wis2box-data-subscriber' service as follows:
-
-.. code-block:: bash
-
-    docker compose -f docker-compose.data-subscriber.yml --env-file wis2box.env up -d
 
 See the GitHub `wis2box-data-subscriber`_ repository for more information on this service.
 
@@ -220,6 +222,8 @@ WIS2 network by enabling external access to your public services.
 Next: :ref:`public-services-setup`
 
 .. _`MinIO`: https://min.io/docs/minio/container/index.html
-.. _`wis2box-data-subscriber`: https://github.com/World-Meteorological-Organization/wis2box-data-subscriber
-.. _`WIS2 topic hierarchy`: https://github.com/World-Meteorological-Organization/wis2-topic-hierarchy
+.. _`Grafana`: https://grafana.com/docs/grafana/latest/
+.. _`Prometheus`: https://prometheus.io/docs/introduction/overview/
+.. _`Loki`: https://grafana.com/docs/loki/latest/
+.. _`wis2box-data-subscriber`: https://github.com/wmo-im/wis2box-data-subscriber
 .. _`csv2bufr-templates`: https://github.com/World-Meteorological-Organization/csv2bufr-templates

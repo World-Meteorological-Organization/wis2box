@@ -1,7 +1,7 @@
 .. _recommended:
 
-Adding a license to recommended datasets
-========================================
+Adding a license for recommended datasets
+=========================================
 
 Data are shared on WIS2 in accordance with the WMO Unified Data Policy (Resolution 1 (Cg-Ext(2021))). 
 This data policy describes two categories of data:
@@ -31,7 +31,7 @@ When using the wis2box-webapp, you select the WMO data policy during the initial
    The wis2box-webapp will automatically set the data policy to recommended for datasets using **aviation** in the sub-discipline topic.
    Datasets containing aeronautical meteorological information are considered recommended data for the purposes of publishing through WIS2 to be compliant with ICAO regulations.
 
-When the WMO Data Policy is set to **recommended** , the wis2box-webapp will required you to provide a link to the license that applies to the dataset:
+When the WMO Data Policy is set to **recommended**, the wis2box-webapp will required you to provide a link to the license that applies to the dataset:
 
 .. image:: ../_static/wis2box-webapp_data_policy_license.png
    :alt: Data Policy License

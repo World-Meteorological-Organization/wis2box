@@ -20,6 +20,24 @@ The following sections will explain how to create datasets in your wis2box using
    You can also create datasets by defining MCF files in the ``metadata/discovery`` directory in your wis2box host directory and publish them from the CLI.
    For more information on publishing datasets using MCF files, see the reference documentation.
 
+Creating an authentication token
+--------------------------------
+
+Before proceeding with the next steps, you need to prepare an authentication token for running processes in the wis2box-webapp.
+
+Login to the wis2box-management container
+
+.. code-block:: bash
+
+   python3 wis2box-ctl.py login
+
+To create a token for running wis2box processes:
+
+.. code-block:: bash
+
+   wis2box auth add-token --path processes/wis2box
+
+Record the token value displayed in a safe place, you will need it when you submit data using the wis2box-webapp.
 
 Accessing the wis2box-webapp
 ----------------------------
@@ -153,13 +171,13 @@ For example, if you selected the "weather/surface-based-observations/synop" temp
 If you selected "other" as the template, you will need to add at least one data mappings plugin to your dataset by clicking the "Add a plugin" button:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_add_plugin.png
-   :width: 600
+   :width: 800
    :alt: wis2box webapp dataset editor page, add a plugin
 
 If you wish to publish your data without any transformation or data-validation, you can select the "Universal" plugin:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_universal_plugin.png
-   :width: 600
+   :width: 800
    :alt: wis2box webapp dataset editor page, universal plugin
 
 Please verify that the "File Extension" and "File Pattern" are set to match the data-files you will upload to the `wis2box-incoming` bucket in your MinIO storage.
@@ -175,9 +193,9 @@ and publish it to the topic `origin/a/wis2/CENTRE_ID/metadata`, where `CENTRE_ID
 .. note::
 
    If you want to see the metadata-notification being published, 
-   make sure to use an MQTT-client subscribed to wis2box-host using the "everyone/everyone"-credentials before clicking "Publish".
+   make sure to use an MQTT-client subscribed to your wis2box-broker before clicking "SUBMIT".
 
-Click "submit" to publish the dataset:
+Provide the authentication token you created earlier in the "Authentication Token" field amd click "SUBMIT" to publish the dataset:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_success.png
   :width: 800
