@@ -44,6 +44,8 @@ If services are not running at all (status shows exited or not running), start t
 
    python3 wis2box-ctl.py start
 
+Please check for docker issues as described above during the startup process.
+
 If services are restarting/unhealthy, check the logs to identify the cause.
 
 If Grafana is running: 
