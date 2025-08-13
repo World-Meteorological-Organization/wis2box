@@ -3,27 +3,28 @@
 Troubleshooting
 ===============
 
-This page lists several commonly seen issues and how to address them.
+This page lists common issues encountered and how to address them accordingly.
 
-permission denied after executing "python3 wis2box-ctl.py start"
+Permission denied after executing "python3 wis2box-ctl.py start"
 ----------------------------------------------------------------
 
-This command `python3 wis2box-ctl.py start` is a python-wrapper using `docker compose`-commands, if you see a permission denied error, 
-it is likely that the user running the command does not have the required permissions to run docker commands.
+The ``wis2box-ctl.py`` utility is a Python script which manages using Docker commands in a convenient manner.  When running
+``python3 wis2box-ctl.py start``, if there is a permission denied error, 
+it is likely that the user running this command does not have the required permissions to run Docker commands.
 
-To fix this, make sure to add your user to the `docker` group:
+To fix this, make sure to add your user to the ``docker`` group:
 
 .. code-block:: bash
 
     sudo usermod -aG docker $USER
-    # Log out and back in for changes to take effect
+    # logout and login for changes to take effect
 
 Bind for 0.0.0.0:XX failed: port is already allocated
 -----------------------------------------------------
 
-The wis2box-stack includes a set of services that bind to specific ports on the host system.
+wis2box includes a set of services that bind to specific ports on the host system.
 
-Make sure that the ports required on the host are available see :ref:`getting-started` for the list of ports used by the wis2box-stack.
+Make sure that the ports required on the host are available see :ref:`getting-started` for the list of ports used by wis2box.
 
 If you are unsure which process is using a specific port, you can try to check using one of the following commands:
 
@@ -35,16 +36,16 @@ If you are unsure which process is using a specific port, you can try to check u
 wis2box-ctl.py status: one or more containers are restarting
 ------------------------------------------------------------
 
-If the command ``python3 wis2box-ctl.py status``, showing one or more services as restarting or unhealthy, 
-they are likely failing to start due to an error in the configuration or insufficient resources resulting in the entrypoint script failing.
+If the output of the command ``python3 wis2box-ctl.py status`` displays one or more services as restarting or unhealthy, 
+they are likely failing to start due to an error in the configuration or insufficient resources resulting in a failed startup.
 
-If services are not running at all (status shows exited or not running), start them: 
+If services are not running at all (status shows exited or not running), start them as follows:
 
 .. code-block:: bash
 
    python3 wis2box-ctl.py start
 
-Please check for docker issues as described above during the startup process.
+Please check for Docker issues as described above during the startup process.
 
 If services are restarting/unhealthy, check the logs to identify the cause.
 
@@ -58,7 +59,7 @@ then select 'wis2box-loki' as the datasource and use ``label=container_name`` as
    :width: 1000
    :align: center
 
-Select the ``container_name`` for the service you want to inspect, click on the 'Run query' button and scroll down to view the logs.
+Select the ``container_name`` for the service to be inspected, click on the 'Run query' button and scroll down to view the logs.
 
 If Grafana is not accessible:
 
@@ -76,13 +77,13 @@ Please check the logs for the following containers:
 
 Common causes: 
 
-1. WIS2BOX_STORAGE_PASSWORD too short (MinIO fails to start, edit your `wis2box.env` file and set a longer password)  
+1. ``WIS2BOX_STORAGE_PASSWORD`` is too short (MinIO fails to start, edit `wis2box.env` and set a longer password)  
 
-2. WIS2BOX_BROKER_PASSWORD contains @ (broker authentication fails, edit your `wis2box.env` file and set a password without @)
+2. ``WIS2BOX_BROKER_PASSWORD`` contains the ``@`` character (broker authentication fails, edit `wis2box.env` and set a password without ``@``)
 
-3. Insufficient disk space (Use `df -h` to check disk space)
+3. Insufficient disk space (Use ``df -h`` to check disk space)
 
-4. Docker volumes present from an older wis2box installation (use `docker volume ls` to list volumes and `docker volume rm <volume_name>` to remove them)
+4. Docker volumes present from an older wis2box installation (use ``docker volume ls`` to list volumes and ``docker volume rm <volume_name>`` to remove them)
 
 After fixing the issue, restart all services: 
 
@@ -94,19 +95,20 @@ After fixing the issue, restart all services:
 No station on map in wis2box-ui
 -------------------------------
 
-The stations displayed in the wis2box-ui per dataset are defined by the topic associated with the station. If the topic for this dataset has no stations associated to it, you will get this pop-up:
+The stations displayed in the wis2box-ui per dataset are defined by the topic associated with the station. If the topic for this dataset has no stations associated to it, you will get the following popup:
 
 .. image:: ../_static/troubleshooting_no_station_pop_up.png
-   :alt: No Station pop up
+   :alt: No Station popup
    :width: 1000
    :align: center
    
-Consult the user-guide for instructions on how to manage the stations in the wis2box-webapp.
+Consult the user guide for instructions on how to manage the stations in the wis2box-webapp.
 
 The Access Key Id you provided does not exist in our records
 ------------------------------------------------------------
 
-If you see this error when uploading data to the wis2box-incoming storage, you have provided the wrong username and/or password to access MinIO.
+If this error occurs when uploading data to the wis2box-incoming storage, the username/password credentials for MinIO access are incorrect.
+
 Check the values for ``WIS2BOX_STORAGE_USERNAME`` and ``WIS2BOX_STORAGE_PASSWORD`` set in the ``wis2box.env`` file.
 
 ERROR - Failed to publish, wsi: ..., tsi: XXXXX
@@ -126,21 +128,20 @@ After saving, the cache is refreshed and the station becomes available to pipeli
 wis2box UI connection error
 ---------------------------
 
-If when you access the wis2box UI you see the interface but no datasets are visible; check the ``WIS2BOX_URL`` and ``WIS2BOX_API_URL`` are set correctly.
+If the wis2box UI is available but no datasets are visible, check the ``WIS2BOX_URL`` and ``WIS2BOX_API_URL`` are set correctly.
 
-If when you access the wis2box UI you see a TypeError: Failed to fetch error
-This indicates that the UI could not connect to the wis2box API：
+If error ``TypeError: Failed to fetch error`` appears in the wis2box UI, this indicates that the UI could not connect to the wis2box API：
 
 .. image:: ../_static/wis2box-webapp-dataset_failed_to_fetch.png
    :alt: Fail to Fetch
    :width: 1000
    :align: center
 
-Check that:
+Verify that:
 
-1. WIS2BOX_API_URL in your configuration points to the correct API endpoint (including protocol, host, and port).
+1. ``WIS2BOX_API_URL`` in configuration points to the correct API endpoint (including protocol, host, and port).
 
-2. The wis2box API service is running and accessible from your browser.
+2. The wis2box API service is running and accessible from a web browser.
 
 3. Any reverse proxy or firewall is correctly forwarding requests to the API.
 
@@ -148,13 +149,14 @@ Check that:
 
 wis2box UI is empty
 -------------------
-If when you access the wis2box UI you see the interface but no datasets are visible, and a message appears saying ``Discovery Metadata contains no datasets``
+
+If the wis2box UI is available but no datasets are visible, and the message ``Discovery Metadata contains no datasets`` is displayed:
 
 .. image:: ../_static/wis2box-webapp-dataset_empty.png
    :alt: UI empty
    :width: 1000
    :align: center
 
-This means the collection `discovery-metadata` in the API-backend is empty, either because no datasets have been created yet or the docker volume `wis2box_project_es-data` was removed.
+This means the collection ``discovery-metadata`` in the wisbox API is empty, due to no datasets having been created or Docker volume ``wis2box_project_es-data`` was removed.
 
-Consult the user-guide for instructions on how to create datasets.
+Consult the user guide for instructions on creating datasets.
