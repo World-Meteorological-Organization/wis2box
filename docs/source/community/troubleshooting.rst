@@ -5,10 +5,38 @@ Troubleshooting
 
 This page lists several commonly seen issues and how to address them.
 
+permission denied after executing "python3 wis2box-ctl.py start"
+----------------------------------------------------------------
+
+This command `python3 wis2box-ctl.py start` is a python-wrapper using `docker compose`-commands, if you see a permission denied error, 
+it is likely that the user running the command does not have the required permissions to run docker commands.
+
+To fix this, make sure to add your user to the `docker` group:
+
+.. code-block:: bash
+
+    sudo usermod -aG docker $USER
+    # Log out and back in for changes to take effect
+
+Bind for 0.0.0.0:XX failed: port is already allocated
+-----------------------------------------------------
+
+The wis2box-stack includes a set of services that bind to specific ports on the host system.
+
+Make sure that the ports required on the host are available see :ref:`getting-started` for the list of ports used by the wis2box-stack.
+
+If you are unsure which process is using a specific port, you can try to check using one of the following commands:
+
+.. code-block:: bash
+
+    sudo lsof -i :80   # Find process using port 80
+    sudo netstat -tuln # Alternative check
+
 wis2box-ctl.py status: one or more containers are restarting
 ------------------------------------------------------------
 
-When executing the command ``python3 wis2box-ctl.py status``, showing one or more services as restarting or unhealthy, they are failing to start.
+If the command ``python3 wis2box-ctl.py status``, showing one or more services as restarting or unhealthy, 
+they are likely failing to start due to an error in the configuration or insufficient resources resulting in the entrypoint script failing.
 
 If services are not running at all (status shows exited or not running), start them: 
 
@@ -38,17 +66,21 @@ Check logs directly from the host:
 
    docker compose logs --tail=200 <container_name> 
 
+Please check the logs for the following containers:
+
+- `wis2box-management`
+- `wis2box-minio`
+- `wis2box-api`
+
 Common causes: 
 
-1. Port in use, for example check if port 80 is already used by existing apache/httpd service 
+1. WIS2BOX_STORAGE_PASSWORD too short (MinIO fails to start, edit your `wis2box.env` file and set a longer password)  
 
-2. WIS2BOX_STORAGE_PASSWORD too short (MinIO fails to start)  
+2. WIS2BOX_BROKER_PASSWORD contains @ (broker authentication fails, edit your `wis2box.env` file and set a password without @)
 
-3. WIS2BOX_BROKER_PASSWORD contains @ 
+3. Insufficient disk space (Use `df -h` to check disk space)
 
-4. Missing required files (e.g., metadata/station/station_list.csv) 
-
-5. Insufficient disk space (df -h) 
+4. Docker volumes present from an older wis2box installation (use `docker volume ls` to list volumes and `docker volume rm <volume_name>` to remove them)
 
 After fixing the issue, restart all services: 
 
@@ -67,7 +99,7 @@ The stations displayed in the wis2box-ui per dataset are defined by the topic as
    :width: 1000
    :align: center
    
-To associate a station with a topic, you can edit the station metadata using the station editor in wis2box-webapp or you can use the command wis2box metadata station add-topic to add a topic to a station. See documentation section of adding stations.
+Consult the user-guide for instructions on how to manage the stations in the wis2box-webapp.
 
 The Access Key Id you provided does not exist in our records
 ------------------------------------------------------------
@@ -112,7 +144,7 @@ Check that:
 
 4. After correcting the configuration, restart wis2box for the changes to take effect.
 
-wis2box-ui is empty
+wis2box UI is empty
 -------------------
 If when you access the wis2box UI you see the interface but no datasets are visible, and a message appears saying ``Discovery Metadata contains no datasets``
 
@@ -121,4 +153,6 @@ If when you access the wis2box UI you see the interface but no datasets are visi
    :width: 1000
    :align: center
 
-Open the wis2box-webapp, add a new dataset, and configure the required fields such as the topic hierarchy and etc. Save the dataset to make it visible in the UI.
+This means the collection `discovery-metadata` in the API-backend is empty, either because no datasets have been created yet or the docker volume `wis2box_project_es-data` was removed.
+
+Consult the user-guide for instructions on how to create datasets.
