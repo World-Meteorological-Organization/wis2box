@@ -64,6 +64,7 @@ You can login with your ``WIS2BOX_STORAGE_USERNAME`` and ``WIS2BOX_STORAGE_PASSW
 To test the data ingest, add a sample file for your observations in the ``wis2box-incoming`` storage bucket in the path matching your dataset identifier as follows:
 
 - Select 'browse' on the ``wis2box-incoming`` bucket and select 'Choose or create a new path' to define a new folder path. 
+
 Define a new folder path that matches the dataset metadata identifier or the topic in the data mappings, for example:
 
 .. image:: ../_static/minio-new-folder-path.png
@@ -200,7 +201,7 @@ To access this interface, select the "Upload file" option from the menu on the l
 
 And follow the instructions to upload a file.
 
-wis2box-data-subscriberF
+wis2box-data-subscriber
 -----------------------
 
 The `wis2box-data-subscriber` provides an example of an additional service on the host running your wis2box instance to enable data to be received over MQTT.

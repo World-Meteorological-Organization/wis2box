@@ -105,7 +105,7 @@ If you don't want to use a template, or your dataset does not fit into one of th
 Please select "Continue to form" to start defining your dataset.
 
 Defining the metadata identifier of your dataset
-----------------------------------------
+------------------------------------------------
 
 When defining your dataset, you will need to specify a **Local ID**, which serves as a short and unique identifier for the dataset within your organization. The Local ID is used to generate the WCMP2 identifier for your metadata record:
 
@@ -113,7 +113,7 @@ When defining your dataset, you will need to specify a **Local ID**, which serve
   :width: 1000
   :alt: wis2box webapp dataset editor page, localID
 
-**The local ID is used to generate the metadata identifier for the dataset**. The metadata identifier for your dataset is defined as `urn:wmo:md:<centre-id>:<local-id>`, where `<centre-id>` is the centre-id you defined earlier and `<local-id>` is the local ID you just defined.
+**The local ID is used to generate the metadata identifier for the dataset**. The identifier for your dataset is defined as `urn:wmo:md:<centre-id>:<local-id>`, where `<centre-id>` is the centre-id you defined earlier and `<local-id>` is the local ID you just defined.
 
 .. note::
 
