@@ -9,16 +9,14 @@ The following plugins rely on information provided via station metadata configur
 - FM-12 data converted to BUFR
 - CSV data converted to BUFR
 
-You need to configure stations in wis2box before you can publish data for datasets that use these plugins.
+Station configuration is required to publish data using these plugins.  Stations can be added interactively using the wis2box-webapp or by bulk inserting stations from a CSV file.
 
-Stations can be added interactively using the wis2box-webapp or by bulk inserting stations from a CSV file.
-
-If you want to bulk insert station metadata from a CSV file, please refer to the `Bulk inserting stations from CSV`_ section.
+To bulk insert station metadata from a CSV file, please refer to the `Bulk inserting stations from CSV`_ section.
 
 Creating a token for updating stations
 --------------------------------------
 
-Before proceeding with the next steps, you need to prepare an authentication token to allow you to update the stations collection in wis2box.
+Before proceeding, prepare an authentication token to allow updating the stations collection in wis2box.
 
 To create a token for updating stations:
 
@@ -26,9 +24,9 @@ To create a token for updating stations:
 
    wis2box auth add-token --path collections/stations
 
-Record the token value displayed in the output of the command above. You will use this token to update stations in the next section.
+Record the token value displayed in the output of the command above. This token will be used to update stations in the next section.
 
-You can now logout of wis2box-management container:
+Logout of wis2box-management container:
 
 .. code-block:: bash
 
@@ -37,9 +35,9 @@ You can now logout of wis2box-management container:
 Adding stations using the wis2box-webapp
 ----------------------------------------
 
-Go to the wis2box-webapp at *WIS2BOX_URL/wis2box-webapp/*  in your web browser.
+Go to the wis2box-webapp at *WIS2BOX_URL/wis2box-webapp/*  in a web browser.
 
-You can login with your ``WIS2BOX_WEBAPP_USERNAME`` and ``WIS2BOX_WEBAPP_PASSWORD`` as defined in the ``wis2box.env`` file.
+Login with ``WIS2BOX_WEBAPP_USERNAME`` and ``WIS2BOX_WEBAPP_PASSWORD`` as defined in ``wis2box.env``.
 
 The station editor can be accessed in the wis2box-webapp by selecting "Stations" from the menu on the left.
 
@@ -49,22 +47,27 @@ The station editor can be accessed in the wis2box-webapp by selecting "Stations"
 
 Select "Create new" to start adding a new station.
 
-You need to provide a WIGOS station identifier that will be used to import information about the station from OSCAR:
+Provide a WIGOS station identifier that will be used to import information about the station from OSCAR:
 
 .. image:: ../_static/wis2box-webapp-stations-search.png
   :width: 800
   :alt: wis2box webapp station editor page, import station from OSCAR
 
-You can search for the station in OSCAR by providing the WIGOS station identifier and clicking "search".
+Search for the station in OSCAR by providing the WIGOS station identifier and clicking "search".
+
 If the station is found a new form will be displayed with the station information.
-If the station is not found you have the option to fill the station form manually.
+
+If the station is not found, the station form can be completed manually.
 
 Check the form for any missing information.
-You will need to select a WIS2 topic you would like to associate the station with.
-The station editor will show you the available topics to choose from based on the datasets you have created.
-If you don't see the topic you want to associate the station with, you need to create a dataset for that topic first.
 
-To store the station metadata  click "save" and provide the 'collections/stations' token you created in the previous section:
+Select a WIS2 topic to associate the station with.
+
+The station editor will show the available topics to choose from based on the datasets created.
+
+If a suitable topic is not available, it will be required to first create a dataset for that topic.
+
+To store the station metadata, click "save" and provide the ``collections/stations`` token created in the previous section:
 
 .. image:: ../_static/wis2box-webapp-stations-save.png
   :width: 800
@@ -74,7 +77,7 @@ To store the station metadata  click "save" and provide the 'collections/station
 Bulk inserting stations from CSV
 --------------------------------
 
-You can also bulk insert a set of stations from a CSV file, by defining the stations in ``mystations.csv`` in your wis2box host directory and running the following command:
+A station list CSV can be used to bulk load stations, by defining the stations in ``mystations.csv`` in the wis2box host directory and running the following command:
 
 .. code-block:: bash
 
@@ -84,11 +87,12 @@ You can also bulk insert a set of stations from a CSV file, by defining the stat
 .. note::
 
    The ``path`` argument refers to the path of the CSV file within the wis2box-management container.
-   The directory defined by WIS2BOX_HOST_DATADIR is mounted as /data/wis2box in the wis2box-management container.
 
-   The ``topic-hierarchy`` argument refers to the WIS2 topic hierarchy you want to associate the stations with.
+   The directory defined by ``WIS2BOX_HOST_DATADIR`` is mounted as ``/data/wis2box`` in the wis2box-management container.
 
-After doing a bulk insert please review the stations in wis2box-webapp to ensure the stations were imported correctly.
+   The ``topic-hierarchy`` argument refers to the WIS2 topic hierarchy to associate the stations with.
+
+After doing a bulk insert, review the stations in wis2box-webapp to ensure the stations were imported correctly.
 
 Next steps
 ----------
