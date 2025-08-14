@@ -1,29 +1,30 @@
 .. _setup-datasets:
 
-
 Adding datasets and discovery metadata
 ======================================
 
-Datasets in the wis2box are required to define the **discovery metadata** and **data mappings plugins** for data you want to publish:
+Datasets in wis2box are required to define the **discovery metadata** and **data mappings plugins** for data publishing:
 
-- **Discovery metadata**: dataset properties such as title, description, keywords, and bounding box used to create a WIS Control Metadata Profile (WCMP2) record for the dataset.
+- **Discovery metadata**: dataset documentation properties such as title, description, keywords, spatial and temporal extents used to create a WMO Core Metadata Profile (WCMP2) record for the dataset.
 - **Data mappings plugins**: define the actions to be performed on the data before it is published, such as transforming the data from the input source format and validating the data content.
 
-For each dataset you create, a new WCMP2 record will be created and made available in the HTTP storage of your wis2box instance.
-The wis2box-broker will publish a WIS2 data notification for the WCMP2 record at the topic `origin/a/wis2/CENTRE_ID/metadata`, where `CENTRE_ID` is the centre-id of the dataset.
-This metadata-notification enables the WIS2 Global Discovery Catalogue to download and cache the metadata record, allowing users to discover the dataset when searching the WIS2 Global Discovery Catalogue.
+For each dataset created, a new WCMP2 record will be created and made available in the HTTP storage of the wis2box instance.
 
-The following sections will explain how to create datasets in your wis2box using the wis2box-webapp.
+The wis2box-broker will publish a WIS2 data notification for the WCMP2 record at the topic ``origin/a/wis2/CENTRE_ID/metadata``, where ``CENTRE_ID`` is the centre-id of the dataset.
+
+This metadata notification enables the WIS2 Global Discovery Catalogue to download and cache the metadata record, allowing users to discover the dataset when searching the WIS2 Global Discovery Catalogue.
+
+The following sections will explain how to create datasets in wis2box using the wis2box-webapp.
 
 .. note::
 
-   You can also create datasets by defining MCF files in the ``metadata/discovery`` directory in your wis2box host directory and publish them from the CLI.
-   For more information on publishing datasets using MCF files, see the reference documentation.
+   Datasets can also be created by defining MCF (YAML configuration) files in the ``metadata/discovery`` directory in the wis2box host directory and publish them from the CLI.
+   For more information on publishing datasets using MCF files, see the Reference guide.
 
 Creating an authentication token
 --------------------------------
 
-Before proceeding with the next steps, you need to prepare an authentication token for running processes in the wis2box-webapp.
+Before proceeding with the next steps, prepare an authentication token for running processes in the wis2box-webapp.
 
 Login to the wis2box-management container
 
@@ -37,15 +38,16 @@ To create a token for running wis2box processes:
 
    wis2box auth add-token --path processes/wis2box
 
-Record the token value displayed in a safe place, you will need it when you submit data using the wis2box-webapp.
+Record the token value displayed in a safe place, as it will be required when submitting using the wis2box-webapp.
 
 Accessing the wis2box-webapp
 ----------------------------
 
-You can access the wis2box-webapp by visiting the URL you specified during the configuration step in your web browser and adding ``/wis2box-webapp`` to the URL.
-For example, if you specified ``http://mywis2box.example.com`` as the URL, you can access the wis2box-webapp by visiting ``http://mywis2box.example.com/wis2box-webapp``.
+Access the wis2box-webapp by visiting the URL specified during the configuration step in a web browser and adding ``/wis2box-webapp`` to the URL.
 
-You can check the WIS2BOX_URL environment variable in the ``wis2box.env`` file to find the URL of your wis2box instance:
+For example, if  ``http://mywis2box.example.com`` is specified as the URL, access the wis2box-webapp by visiting ``http://mywis2box.example.com/wis2box-webapp``.
+
+Check the ``WIS2BOX_URL`` environment variable in the ``wis2box.env`` file to find the URL of the wis2box instance:
 
 .. code-block:: bash
 
@@ -65,9 +67,7 @@ The values of ``WIS2BOX_WEBAPP_USERNAME`` and ``WIS2BOX_WEBAPP_PASSWORD`` can be
 Creating a new dataset
 ----------------------
 
-Open the wis2box-webapp in your web browser, provide the WIS2BOX_WEBAPP credentials, and select the **dataset editor** from the menu on the left
-
-You should see the following page:
+Open the wis2box-webapp in a web browser, provide the ``WIS2BOX_WEBAPP`` credentials, and select the **dataset editor** from the menu on the left, as shown below:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor.png
   :width: 1000
@@ -75,7 +75,7 @@ You should see the following page:
 
 To create a new dataset select "Create new" from the dataset editor page.
 
-A popup will appear where you can define your *"centre-id"* and the *"Template"* of dataset you want to create:
+A popup will appear where the *"centre-id"* can be defined and the *"Template"* of dataset to be created:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_continuetoform.png
   :width: 600
@@ -83,20 +83,20 @@ A popup will appear where you can define your *"centre-id"* and the *"Template"*
 
 .. note::
 
-   Your centre-id should start with the ccTLD of your country, followed by a - and an abbreviated name of your organization, for example ``fr-meteofrance``.
-   The centre-id has to be lowercase and use alphanumeric characters only.
+   The centre-id should start with the ccTLD of your country, followed by a dash (``-``) and an abbreviated name of your organization, for example ``fr-meteofrance``.
+   The centre-id must be lowercase and use only alphanumeric characters.
    **To define a new centre-id type the centre-id into the box**, otherwise select one from the dropdown list.
-   The dropdown list shows all currently registered centre-ids on WIS2 as well as any new centre-ids for datasets created in your wis2box-instance.
+   The dropdown list shows all currently registered centre-ids on WIS2 as well as any new centre-ids for datasets created in the wis2box-instance.
 
-You have the option to select a *Template*, such as "weather/surface-based-observations/synop", "weather/surface-based-observations/temp", and "weather/advisories-warnings":
+From here, use the option to select a *Template*, such as "weather/surface-based-observations/synop", "weather/surface-based-observations/temp", and "weather/advisories-warnings":
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_select_template.png
   :width: 600
   :alt: wis2box webapp dataset editor page, template selection
 
-The templates help you to predefine some of the metadata properties and the data mappings plugins for commonly published data-types.
+The templates help predefine some of the metadata properties and the data mappings plugins for commonly published data types.
 
-If you don't want to use a template, or your dataset does not fit into one of the predefined templates, select "other" from the dropdown list:
+If the dataset does not fit into one of the predefined templates, or to continue without using a template, select "other" from the dropdown list:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_template_other.png
   :width: 600
@@ -104,52 +104,57 @@ If you don't want to use a template, or your dataset does not fit into one of th
 
 Please select "Continue to form" to start defining your dataset.
 
-Defining the metadata identifier of your dataset
-------------------------------------------------
+Defining the metadata identifier of the dataset
+-----------------------------------------------
 
-When defining your dataset, you will need to specify a **Local ID**, which serves as a short and unique identifier for the dataset within your organization. The Local ID is used to generate the WCMP2 identifier for your metadata record:
+When defining the dataset, specify a **Local ID**, which serves as a short and unique identifier for the dataset. The Local ID is used to generate the identifier for the WCMP2 metadata record:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_local_id.png
   :width: 1000
-  :alt: wis2box webapp dataset editor page, localID
+  :alt: wis2box webapp dataset editor page, local identifier
 
-**The local ID is used to generate the metadata identifier for the dataset**. The identifier for your dataset is defined as `urn:wmo:md:<centre-id>:<local-id>`, where `<centre-id>` is the centre-id you defined earlier and `<local-id>` is the local ID you just defined.
+**The local ID is used to generate the metadata identifier for the dataset**. The identifier for the dataset is defined as ``urn:wmo:md:<centre-id>:<local-id>``, where ``<centre-id>`` is the centre-id defined earlier and ``<local-id>`` is the local identifier defined.
 
 .. note::
 
-   If you do not provide a Local ID a randomly generated ID will be assigned. It is strongly suggested to define your own human-readable ID instead. Once the dataset is created, the Local ID cannot be changed. To use a different Local ID, you will need to delete and recreate the dataset.
+   If a local identifier is not provided, a randomly generated identifier will be assigned. It is strongly suggested to define a human-readable identifier. Once the dataset is created, the Local identifier cannot be changed. To use a different local identifier, you will need to delete and recreate the dataset.
 
 
 Defining the topic hierarchy
 ----------------------------
 
-If you selected a template, the topic hierarchy will be pre-populated with the default topic hierarchy defined in the template, 
-for example for the "weather/surface-based-observations/synop" template you will see:
+If a template was selected, the topic hierarchy will be pre-populated with the default topic hierarchy defined in the template, 
+for example for the "weather/surface-based-observations/synop" template:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_synop_topic.png
    :width: 1000
    :alt: wis2box webapp dataset editor page, topic hierarchy pre-defined for synop dataset.
 
-If you selected "other" as the template, you have the option of selecting the "Discipline topic" and "Sub-discipline topics", 
-which will be used to define the topic hierarchy for your dataset:
+If "other" was selected as the template, the option exists to select the "Discipline topic" and "Sub-discipline topics", 
+which will be used to define the topic hierarchy for the dataset:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_topic_selection.png
    :width: 1000
    :alt: wis2box webapp dataset editor page, topic hierarchy
 
-You can choose the WMO Data Policy for your dataset, if you choose "recommended" the wis2box-webapp will require you to provide a link to a license that applies to the dataset.
-For more information on publishing recommended datasets, see the section :ref:`recommended`.
+The WMO Data Policy can be selected for the dataset.  If "recommended" is selected, the wis2box-webapp will require a link to a license that applies to the dataset.
 
-If you used "other" as the template you will have the option to select "Publish metadata without WIS2 data notifications". You can use this option if you want to publish metadata only. 
-In this case, no Topic Hierarchy is defined and you will need to provide a link to a URL where the data can be downloaded from.
+.. note::
+
+   For more information on publishing recommended datasets, see the :ref:`recommended`.
+
+If "other" is was used as the template, the user will have the option to select "Publish metadata without WIS2 data notifications". This option can be used to only publish metadata (and no data).
+
+In this case, no WIS2 Topic Hierarchy is defined, a data download link will be required.
 
 Validating the form
 --------------------
 
-Make sure to provide all other fields requested in the form: add a relevant description for your dataset, review and add keywords and choose an appropriate bounding box.
+Provide all other fields requested in the form: add a relevant description for your dataset, review and add keywords and choose an appropriate bounding box.
+
 You will also need to provide some contact information for the dataset.
 
-Before publishing the new dataset make to click "Validate form" to check if all required fields are filled in:
+Before publishing the new dataset, click "Validate form" to check if all required fields are completed:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_validateform.png
   :width: 1000
@@ -162,58 +167,56 @@ Each dataset is associated with data-mappings plugins that transform the data fr
 
 If you selected a template, the data mappings plugins will be pre-populated with the default plugins defined in the template.
 
-For example, if you selected the "weather/surface-based-observations/synop" template, the data mappings plugins will be pre-populated with the following plugins:
+For example, if the "weather/surface-based-observations/synop" template is selected, the data mappings plugins will be pre-populated with the following plugins:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_synop_plugins.png
    :width: 800
    :alt: wis2box webapp dataset editor page, data mappings plugins pre-defined for synop dataset.
 
-If you selected "other" as the template, you will need to add at least one data mappings plugin to your dataset by clicking the "Add a plugin" button:
+If "other" is selected as the template, add at least one data mappings plugin to the dataset by clicking the "Add a plugin" button:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_add_plugin.png
    :width: 800
    :alt: wis2box webapp dataset editor page, add a plugin
 
-If you wish to publish your data without any transformation or data-validation, you can select the "Universal" plugin:
+To publish data without any transformation or data validation, select the "Universal" plugin:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_universal_plugin.png
    :width: 800
    :alt: wis2box webapp dataset editor page, universal plugin
 
-Please verify that the "File Extension" and "File Pattern" are set to match the data-files you will upload to the `wis2box-incoming` bucket in your MinIO storage.
+Verify that the "File Extension" and "File Pattern" are set to match the data files that will be uploaded to the `wis2box-incoming` bucket in MinIO storage.
 
 Note that the "File Pattern" may be used to extract additional metadata from the file name, such as the datetime for the published data.
 
 Publishing the dataset
 ----------------------
 
-When you publish your dataset, the wis2box-webapp will create a WCMP2 record for your dataset 
-and publish it to the topic `origin/a/wis2/CENTRE_ID/metadata`, where `CENTRE_ID` is the centre-id of your dataset.
+When the dataset is published, the wis2box-webapp will create a WCMP2 record and publish it to the topic ``origin/a/wis2/CENTRE_ID/metadata``, where ``CENTRE_ID`` is the centre-id of the dataset.
 
 .. note::
 
-   If you want to see the metadata-notification being published, 
-   make sure to use an MQTT-client subscribed to your wis2box-broker before clicking "SUBMIT".
+   To verify the metadata publication use an MQTT client subscribed to your wis2box-broker before clicking "SUBMIT".
 
-Provide the authentication token you created earlier in the "Authentication Token" field amd click "SUBMIT" to publish the dataset:
+Provide the authentication token created earlier in the "Authentication Token" field amd click "SUBMIT" to publish the dataset:
 
 .. image:: ../_static/wis2box-webapp-dataset_editor_success.png
   :width: 800
   :alt: wis2box webapp dataset editor page, submit
 
-You should see a success message indicating that the dataset has been created successfully.
+A success message will display, indicating that the dataset has been created successfully.
 
 Next steps
 ----------
 
-If your dataset is using any of the following plugins in the data mappings, you will need to provide station metadata before you can start publishing data:
+If the dataset is using any of the following plugins in the data mappings, station metadata will be required before publishing data:
 
 - BUFR data converted to BUFR
 - FM-12 data converted to BUFR
 - CSV data converted to BUFR
 
-See :ref:`setup-stations` on how to add station metadata in your wis2box instance.
+See :ref:`setup-stations` on how to add station metadata in wis2box.
 
-Otherwise, you can start publishing data to the dataset by uploading files to the `wis2box-incoming` bucket in your MinIO storage as described in the :ref:`data-ingest` section of the user guide.
+Otherwise, start publishing data to the dataset by uploading files to the ``wis2box-incoming`` bucket in MinIO storage as described in the :ref:`data-ingest` section of the User guide.
 
 .. _`WIS2 topic hierarchy`: https://github.com/World-Meteorological-Organization/wis2-topic-hierarchy
