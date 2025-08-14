@@ -3,11 +3,10 @@
 Installation and configuration
 ==============================
 
-This section summarizes the steps required to install a wis2box instance and setup your own datasets using initial configuration files
+This section summarizes the steps required to install a wis2box instance and setup datasets using the initial configuration files
 provided by using the ``wis2box-create-config.py`` script.
 
-Ensure you have Docker, Docker Compose and Python installed on your host, 
-and that you meet the system and network requirements as detailed in the :ref:`getting-started` section.
+Ensure that Docker, Docker Compose and Python are installed on the host, and that the system and :ref:`network requirements<getting-started>` are met.
 
 Download
 --------
@@ -124,25 +123,24 @@ Refer to the :ref:`troubleshooting` section if this is not the case.
 Check HTTP interfaces on web-proxy
 ----------------------------------
 
-The wis2box-stack includes the *web-proxy*-service, which is a web proxy based on `nginx`_.
-It is configured to listen on port ``80`` and port ``443`` on the host, and it proxies requests to the various services in the wis2box-stack.
+wis2box includes the *web-proxy*-service, which is a web proxy based on `nginx`_.  It is configured to listen on port ``80`` and port ``443`` on the host, and it proxies requests to the various services in wis2box.
 
-To verify that the web-proxy is running and accepting connections, you can check the following URLs in a web browser:
+To verify that the web-proxy is running and accepting connections, check the following URLs in a web browser:
 
-Check the wis2box API is available at `WIS2BOX_URL/oapi`, you should see the following:
+Check the wis2box API is available at ``WIS2BOX_URL/oapi``:
 
 .. image:: ../_static/wis2box-api.png
   :width: 1000
   :alt: wis2box API homepage
 
-Check the wis2box user interface is available at `WIS2BOX_URL/`, since you have no datasets configured yet, you will see the following:
+Check the wis2box user interface is available at ``WIS2BOX_URL/`` (note that no datasets are configured yet):
 
 .. image:: ../_static/wis2box-ui-new-install.png
   :width: 1000
   :alt: wis2box user interface, no dataset
 
-Check the proxy to the "wis2box-public"=bucket from the storage service is available at `WIS2BOX_URL/data/` 
-(make sure to add a trailing slash after 'data'), you should see the following:
+Check the proxy to the "wis2box-public" bucket from the storage service is available at ``WIS2BOX_URL/data/``
+(make sure to add a trailing slash after ``data``):
 
 .. image:: ../_static/wis2box_url_slash_data.png
   :width: 1000
@@ -151,35 +149,35 @@ Check the proxy to the "wis2box-public"=bucket from the storage service is avail
 Check MQTT connection
 ----------------------
 
-The wis2box-stack includes the *wis2box-broker* service, which is a MQTT broker based on `mosquitto`_.
+wis2box includes the *wis2box-broker* service, which is a MQTT broker based on `mosquitto`_.
 
-You can check that the wis2box-broker is running and accepting connections using `MQTT Explorer`_ or by using a Linux command line tool such as `mosquitto_sub`.
+Check that the wis2box-broker is running and accepting connections using `MQTT Explorer`_ or by using a command line tool such as `mosquitto_sub`.
 
-Two sets of MQTT-users are automatically pre-configured when you first start wis2box:
+Two sets of MQTT users are automatically pre-configured when first starting wis2box:
 
 **everyone**
 
-- This user is used for public access to the MQTT broker and has read-only access on the `origin/a/wis2/#` topic. 
+- This user is used for public access to the MQTT broker and has readonly access on the ``origin/a/wis2/#`` topic. 
 - This user can be used to allow the WIS2 Global Broker to subscribe to the wis2box.
-- username=everyone, password=everyone
+- ``username=everyone``, ``password=everyone``
 
 **wis2box**
 
-- This user is used by wis2box services to publish data to the MQTT broker and has read/write access to `origin/a/wis2/#` topic.
-- username=wis2box, password=WIS2BOX_BROKER_PASSWORD (as defined in the `wis2box.env` file).
+- This user is used by wis2box services to publish data to the MQTT broker and has read/write access to ``origin/a/wis2/#`` topic.
+- ``username=wis2box``, ``password=WIS2BOX_BROKER_PASSWORD`` (as defined in ``wis2box.env``).
 
 The wis2box MQTT broker is available on port ``1883`` on the host.
 
-The web-proxy also enables access to the MQTT broker via WebSockets on port ``80`` on the path `/mqtt`.
+The web-proxy also enables access to the MQTT broker via WebSockets on port ``80`` on the path ``/mqtt``.
 
 See the section :ref:`public-services-setup` for information on adding SSL encryption to the MQTT broker.
 
 Next steps
 ----------
 
-The next step is to configure datasets in wis2box, see :ref:`setup-datasets`.
+The next step is to :ref:`configure datasets<setup-datasets>`.
 
-.. _`MQTT Explorer`: https://mqtt-explorer.com/
-.. _`wis2box Releases`: https://github.com/World-Meteorological-Organization/wis2box-release/releases
-.. _`nginx`: https://www.nginx.com/
-.. _`mosquitto`: https://mosquitto.org/
+.. _`MQTT Explorer`: https://mqtt-explorer.com
+.. _`wis2box releases`: https://github.com/World-Meteorological-Organization/wis2box-release/releases
+.. _`nginx`: https://www.nginx.com
+.. _`mosquitto`: https://mosquitto.org
