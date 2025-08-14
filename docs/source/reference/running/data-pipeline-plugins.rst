@@ -5,7 +5,7 @@ Data pipeline plugins
 
 Driven by datasets, wis2box is a plugin architecture orchestrating all the
 required components of a WIS2 Node.  wis2box also provides a data pipeline plugin
-architecture which allows for users to define a plugin based on a dataset-identifier 
+architecture which allows for users to define a plugin based on a dataset identifier 
 to publish incoming data (see :ref:`data-mappings` for more information).
 
 
@@ -43,9 +43,9 @@ In this the example `aws-template` refers to the `aws_example.json` template def
 
 Environment variables can be set in `wis2box.env` to customize the behavior of the csv2bufr-plugin within the wis2box, see `csv2bufr-environment-variables`_ for the full list of environment variables.
 
-The wis2box-api will compare the location in the BUFR produced by the csv2bufr plugin with the location of the station in the wis2box station list.
+The wis2box API will compare the location in the BUFR produced by the csv2bufr plugin with the location of the station in the wis2box station list.
 For fixed land stations, if the station location and data location are more than ``WIS2BOX_OBSERVATION_DISTANCE_THRESHOLD`` meters apart, the data will not be published.
-The default value for ``WIS2BOX_OBSERVATION_DISTANCE_THRESHOLD`` is 1000 meters, but you can change this in the `wis2box.env` file:
+The default value for ``WIS2BOX_OBSERVATION_DISTANCE_THRESHOLD`` is 1000 meters, but you can change this in `wis2box.env`:
 
 .. code-block:: bash
 
