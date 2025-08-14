@@ -5,8 +5,8 @@ Public services setup
 
 Before you can proceed to register your WIS2 Node to share your data with the WIS2 network, you need to ensure that certain services are available to the public Internet:
 
-* The Global Broker needs to be able to subscribe to your MQTT endpoint to receive and republish WIS2 notifications published by the MQTT-broker running in your wis2box instance
-* The Global Cache needs to be able to access your HTTP endpoint to download data published by the wis2box instance (to access metadata-records and data with WMO data policy **core**).
+* The Global Broker needs to be able to subscribe to your MQTT endpoint to receive and republish WIS2 notifications published by the MQTT broker running in your wis2box instance
+* The Global Cache needs to be able to access your HTTP endpoint to download data published by the wis2box instance (to access **core** data (per the WMO Unified Data Policy) and metadata records).
 
 Security considerations
 -----------------------
@@ -29,7 +29,7 @@ GitHub issues and discussions provide a resource and forum to discuss general wi
 Connecting your instance to the WIS2 network
 --------------------------------------------
 
-Once the wis2box-instance is available to the public Internet, you can proceed to request this instance to be registered as a WIS2 Node, see :ref:`wis2node-operations`.
+Once the wis2box instance is available to the public Internet, you can proceed to request this instance to be registered as a WIS2 Node, see :ref:`wis2node-operations`.
 
 
 Public services in wis2box
