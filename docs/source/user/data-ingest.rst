@@ -15,12 +15,12 @@ The *wis2box-storage* service is based on `MinIO`_ , the following buckets are p
 
 .. note::
  
- If you use "CSV to BUFR"-plugin in your data mappings, the columns defined in the input CSV file need to match the columns defined by the `csv2bufr-template`. 
- If the columns do not match, the data will not be processed and you will see an error in the logs of the *wis2box-management* container.
+ If you use "CSV to BUFR" plugin in your data mappings, the columns defined in the input CSV file must match the columns defined by the `csv2bufr-template`. 
+ If the columns do not match, the data will not be processed and an error will be raised in the logs of the *wis2box-management* container.
  
  See the :ref:`csv2bufr-plugin` for more information on this data plugin and see the `csv2bufr-templates`_ repository for the template definitions.
 
-To upload data to wis2box and trigger the data ingest process, you can use one of the following methods:
+To upload data to wis2box and trigger the data ingest process, one of the following methods may be used:
 
 - Use the MinIO Console (recommended to test your setup and understand the data ingest process)
 - Use the FM-12 SYNOP form in the wis2box-webapp, to manually trigger FM-12 SYNOP data ingest process
@@ -89,7 +89,7 @@ Uploading data to MinIO using scripts
 -------------------------------------
 
 To automate the data ingest process, you can prepare scripts using the MinIO client libraries.
-As MinIO is compatible with the S3 API, you can also use any S3 client library to upload data to MinIO.
+As MinIO is compatible with the S3 API, any S3 client library can be used to upload data to MinIO.
 
 See below a Python example to upload data using the MinIO library for Python:
 
@@ -204,11 +204,11 @@ And follow the instructions to upload a file.
 wis2box-data-subscriber
 -----------------------
 
-The `wis2box-data-subscriber` provides an example of an additional service on the host running your wis2box instance to enable data to be received over MQTT.
+The `wis2box-data-subscriber` provides an example of an additional service on the host running wis2box instance to enable data to be received over MQTT.
 
 .. note::
 
-   This service was developed to work with Campbell scientific data loggers version CR1000X for some countries in Africa.
+   This service was developed to work with Campbell Scientific data loggers version CR1000X for selected countries in Africa.
 
 This service subscribes to the topic ``data-incoming/#`` on the wis2box broker and parses the content of received messages and publishes the result in the ``wis2box-incoming`` bucket.
 
