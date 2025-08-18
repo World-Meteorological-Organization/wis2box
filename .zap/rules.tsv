@@ -4,7 +4,7 @@
 10020	IGNORE	Missing Anti-clickjacking Header	Medium
 90003	IGNORE	Sub Resource Integrity Attribute Missing	Medium
 90022	IGNORE	Application Error Disclosure	Medium
-10055 IGNORE  Failure to Define Directive with No Fallback Medium
+10055	IGNORE	Failure to Define Directive with No Fallback	Medium
 10054	IGNORE	Cookie with SameSite Attribute None	Low
 10017	IGNORE	Cross-Domain JavaScript Source File Inclusion	Low
 10023	IGNORE	Information Disclosure - Debug Error Messages	Low
