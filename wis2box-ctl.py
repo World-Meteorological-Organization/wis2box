@@ -427,6 +427,8 @@ def make(args) -> None:
         # update docker_compose_args with the latest docker-compose.images-*.yml file
         docker_image_file = glob.glob('docker-compose.images-*.yml')[0]
         docker_compose_args = DOCKER_COMPOSE_ARGS + f' --file {docker_image_file}'
+        if args.ssl or (ssl_key and ssl_cert):
+            docker_compose_args +=" --file docker-compose.ssl.yml"
         # if the argument "--restart" is passed, restart all containers and clean old images
         if "--restart" in args.args:
             run(split(
