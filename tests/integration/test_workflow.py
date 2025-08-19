@@ -307,12 +307,12 @@ def test_message_api():
         'unpublish': 2,
         'ca-eccc-msc': 1,
         'mw-mw_met_centre': 25,
-        'it-meteoam:surface': 32,
-        'dz-meteoalgerie:surface': 28,
+        'it-meteoam:surface': 32, # excludes metadata
+        'dz-meteoalgerie:surface': 28, # excludes metadata
         'ro-rnimh': 50,
-        'cg-met:surface': 14,
+        'cg-met:surface': 14, # excludes metadata
         'int-wmo': 13,
-        'cn-cma:grapes': 10,
+        'cn-cma:grapes': 10, # excludes metadata
         'org-daycli': 31
     }
     for key, value in counts.items():
@@ -323,8 +323,8 @@ def test_message_api():
     url = f'{API_URL}/collections/messages/items?sortby=-datetime'
     r = SESSION.get(url).json()
 
-    # should match sum of counts above
-    assert r['numberMatched'] == sum(counts.values())
+    # should match sum of counts above + 4 metadata-messages
+    assert r['numberMatched'] == sum(counts.values()) + 4
 
     # we want to find a particular message with data ID for core data
     target_data_id = 'mw-mw_met_centre-test:surface-weather-observations/WIGOS_0-454-2-AWSLOBI_20211111T125500'  # noqa
