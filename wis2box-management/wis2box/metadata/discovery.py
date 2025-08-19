@@ -416,8 +416,8 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
         ts.raise_for_status()
     except TestSuiteError as err:
         # if the only error is about the WIS2 topic, continue with publishing
-        if len(err.errors) == 1 and 'message' in err.errors[0] and err.errors[0]['message'] == 'Invalid WIS2 topic (unknown centre-id) for Pub/Sub link channel': # noqa
-            LOGGER.warning(f"{err.errors[0]['message']} continuing with publishing")  # noqa
+        if len(err.errors) == 2 and 'message' in err.errors[0] and err.errors[0]['message'].startswith('Invalid centre_id'):  # noqa
+            LOGGER.warning(f"{err.errors[0]['message']}, continuing with publishing")  # noqa
         else:
             msg = 'Metadata invalid, WCMP2 validation errors: ' + ', '.join([err['message'] for err in err.errors])	 # noqa
             LOGGER.error(msg)
