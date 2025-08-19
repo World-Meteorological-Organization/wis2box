@@ -366,7 +366,7 @@ def test_message_api():
     assert b'BUFR' in r.content
 
     # we want to find a particular message with data ID for recommended data
-    url = f'{API_URL}/collections/messages/items?sortby=-datetime&q=cg-met'  # noqa
+    url = f'{API_URL}/collections/messages/items?sortby=-datetime&q=cg-met:surface'  # noqa
     r = SESSION.get(url).json()
 
     target_data_id = "cg-met:surface-weather-observations/WIGOS_0-20000-0-64406_20230803T090000" # noqa
