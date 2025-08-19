@@ -11,12 +11,12 @@ Ensure that Docker, Docker Compose and Python are installed on the host, and tha
 Download
 --------
 
-Download `wis2box-setup.zip` from the `wis2box Releases`_ page and unzip using the following commands:
+Download ``wis2box-setup-1.1.0.zip`` from the `wis2box release page`_ page and unzip using the following commands:
 
 .. code-block:: bash
 
-   wget https://github.com/World-Meteorological-Organization/wis2box-release/releases/download/1.1.0/wis2box-setup.zip
-   unzip wis2box-setup.zip
+   wget https://github.com/World-Meteorological-Organization/wis2box-release/releases/download/1.1.0/wis2box-setup-1.1.0.zip
+   unzip wis2box-setup-1.1.0.zip
    cd wis2box
 
 
@@ -178,6 +178,6 @@ Next steps
 The next step is to :ref:`configure datasets<setup-datasets>`.
 
 .. _`MQTT Explorer`: https://mqtt-explorer.com
-.. _`wis2box releases`: https://github.com/World-Meteorological-Organization/wis2box-release/releases
+.. _`wis2box release page`: https://github.com/World-Meteorological-Organization/wis2box-release/releases/tag/1.1.0
 .. _`nginx`: https://www.nginx.com
 .. _`mosquitto`: https://mosquitto.org
