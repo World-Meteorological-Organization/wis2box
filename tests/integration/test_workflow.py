@@ -307,12 +307,12 @@ def test_message_api():
         'unpublish': 2,
         'ca-eccc-msc': 1,
         'mw-mw_met_centre': 25,
-        'it-meteoam': 33,
-        'dz-meteoalgerie': 29,
+        'it-meteoam:surface': 32,
+        'dz-meteoalgerie:surface': 28,
         'ro-rnimh': 50,
-        'cg-met': 15,
+        'cg-met:surface': 14,
         'int-wmo': 13,
-        'cn-cma': 11,
+        'cn-cma:grapes': 10,
         'org-daycli': 31
     }
     for key, value in counts.items():
