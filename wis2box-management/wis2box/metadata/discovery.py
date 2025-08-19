@@ -525,9 +525,9 @@ def republish(ctx, verbosity):
         click.echo(f'Republishing {record["id"]}')
         try:
             publish_discovery_metadata(record)
+            click.echo(f'Successfully republished {record["id"]}')
         except Exception:
             click.echo(f'Failed to publish {record["id"]}')
-        click.echo(f'Successfully republished {record["id"]}')
 
 
 @click.command()
