@@ -7,6 +7,5 @@ OWSLib
 paho-mqtt<2
 pygeometa
 pywcmp>=0.12.2
-pywis-pubsub
 PyYAML
 requests
