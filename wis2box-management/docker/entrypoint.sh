@@ -50,7 +50,8 @@ if [ ! -f /data/wis2box/.ssh/id_rsa ]; then
     echo "MinIO is available, proceed with setup"
 fi
 
-pywcmp bundle sync
+# run pywcmp bundle sync in background to avoid hanging in case of network issues
+pywcmp bundle sync &
 
 # wis2box commands
 # TODO: avoid re-creating environment if it already exists

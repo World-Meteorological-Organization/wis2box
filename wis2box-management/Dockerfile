@@ -68,6 +68,8 @@ RUN cd /app \
     # add wis2box user
     && useradd -ms /bin/bash wis2box
 
+RUN pywcmp bundle sync
+
 WORKDIR /home/wis2box
 
 # add wis2box.cron to crontab
