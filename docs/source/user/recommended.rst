@@ -37,9 +37,9 @@ When the WMO Data Policy is set to **recommended**, the wis2box-webapp will requ
    :alt: Data Policy License
    :width: 600
 
-A license link can be based on a license specification to a given organization, or based on an open hosted on your own website, or by using a public copyright license such as `Creative Commons`_.
+A license link can be provided by your organization's website, could be a public license such as one from `Creative Commons`_, or a custom license hosted on your own web server.
 
-If a custom license is required with no hosting options, it can be provided via the `wis2box-public` bucket of wis2box, as described in the next section.
+If you do not have an existing license link, you can host the license file directly on the wis2box instance. This can be done using the `wis2box-public` bucket, as detailed in the next section.
 
 Using a custom license hosted on wis2box
 ----------------------------------------
