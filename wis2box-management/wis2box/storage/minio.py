@@ -116,6 +116,12 @@ class MinIOStorage(StorageBase):
         """
 
         LOGGER.debug(f'Creating buckets at MinIO endpoint {self.source}')
+
+        # do not attempt to create bucket if url starts with s3://
+        if self.source.startswith('s3://'):
+            LOGGER.info('Using AWS-managed S3 storage, skipping bucket creation')
+            return True
+
         try:
             self.create_bucket(bucket_policy=self.policy)
             return True
