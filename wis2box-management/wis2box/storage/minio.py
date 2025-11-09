@@ -119,7 +119,7 @@ class MinIOStorage(StorageBase):
 
         # do not attempt to create bucket if url starts with s3://
         if self.source.startswith('s3://'):
-            LOGGER.info('Using AWS-managed S3 storage, skipping bucket creation')
+            LOGGER.info('Using AWS-managed S3 storage, skipping bucket creation') # noqa
             return True
 
         try:

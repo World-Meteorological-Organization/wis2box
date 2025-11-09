@@ -127,7 +127,8 @@ def validate_and_load(path: str,
     topic_hierarchy = None
     # determine if path matches a metadata_id
     for key in data_mappings.keys():
-        if key in path:
+        # replace ':' with '.' for matching
+        if key.replace(':', '.') in path.replace(':', '.'):
             metadata_id = key
             topic_hierarchy = data_mappings[key]['topic_hierarchy']
     # else try to match topic_hierarchy
