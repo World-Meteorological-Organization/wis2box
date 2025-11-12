@@ -639,7 +639,7 @@
             "uid": "P55348B596EBB51C3"
           },
           "editorMode": "builder",
-          "expr": "{compose_service=\"wis2box-api\"} |= `wis2box-api` |= `ERROR`",
+          "expr": "{compose_service=\"wis2box-api\"} |= `wis2box_api` |= `ERROR`",
           "hide": false,
           "queryType": "range",
           "refId": "C"
@@ -650,7 +650,7 @@
             "uid": "P55348B596EBB51C3"
           },
           "editorMode": "builder",
-          "expr": "{compose_service=\"wis2box-api\"} |= `wis2box-api` |= `WARNING` ",
+          "expr": "{compose_service=\"wis2box-api\"} |= `wis2box_api` |= `WARNING` ",
           "hide": false,
           "queryType": "range",
           "refId": "D"
