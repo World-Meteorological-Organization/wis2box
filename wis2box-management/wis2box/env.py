@@ -141,7 +141,7 @@ def test(ctx, verbosity):
     broker = load_plugin('pubsub', defs)
 
     try:
-        result = broker.test(topic='origin/a/wis2/test', message='wis2box pub test') # noqa
+        result = broker.test(topic='origin/a/wis2/test', message='wis2box pub test at startup') # noqa
     except Exception as err:
         LOGGER.error(err)
         raise EnvironmentError(err)
