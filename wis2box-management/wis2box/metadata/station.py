@@ -502,7 +502,7 @@ def get(ctx, wsi, verbosity):
         'latitude': station.get('latitude', ''),
         'longitude': station.get('longitude', ''),
         'elevation': station.get('elevation'),
-        'barometer_height': station.get['barometer_height', ''],
+        'barometer_height': station.get('barometer_height', ''),
         'territory_name': station.get('territory_name', '')
     })
 
