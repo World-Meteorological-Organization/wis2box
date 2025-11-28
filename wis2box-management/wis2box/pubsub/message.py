@@ -213,15 +213,17 @@ class WISNotificationMessage(PubSubMessage):
         if gts is not None:
             self.message['properties']['gts'] = gts
 
-        if self.length < 4096:
+        # only bother encoding small files inline
+        if self.length < 3070:
             LOGGER.debug('Including data inline via properties.content')
             content_value = base64.b64encode(self.filebytes)
-
-            self.message['properties']['content'] = {
-                'encoding': 'base64',
-                'value': content_value,
-                'size': self.length
-            }
+            # check length again after encoding
+            if len(content_value) < 4096:
+                self.message['properties']['content'] = {
+                    'encoding': 'base64',
+                    'value': content_value,
+                    'size': self.length
+                }
 
         if wigos_station_identifier is not None:
             self.message['properties']['wigos_station_identifier'] = wigos_station_identifier  # noqa
@@ -232,7 +234,7 @@ class WISNotificationMessage(PubSubMessage):
             }
             self.message['links'].append(link)
 
-        # check if metadata record exists and has access control
+        # check if metadata record exists
         if metadata_id is not None:
             LOGGER.debug(f'Find metadata record with id={metadata_id}')
             try:
