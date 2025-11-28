@@ -215,10 +215,10 @@ class WISNotificationMessage(PubSubMessage):
 
         # only bother encoding small files inline
         if self.length < 3070:
-            LOGGER.debug('Including data inline via properties.content')
             content_value = base64.b64encode(self.filebytes)
             # check length again after encoding
             if len(content_value) < 4096:
+                LOGGER.debug('Including data inline via properties.content')
                 self.message['properties']['content'] = {
                     'encoding': 'base64',
                     'value': content_value,
