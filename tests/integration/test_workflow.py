@@ -299,6 +299,13 @@ def test_message_api():
     # get links from 2nd message
     links = r['features'][1]['links']
 
+    # check message with q=grapes-geps-global has properties cache=false
+    url = f'{API_URL}/collections/messages/items?q=grapes-geps-global&limit=1'  # noqa
+    r = SESSION.get(url).json()
+    props = r['features'][0]['properties']
+    assert 'cache' in props
+    assert not props['cache']
+
     # check link contains rel='update'
     assert any(link['rel'] == 'update' for link in links)
 

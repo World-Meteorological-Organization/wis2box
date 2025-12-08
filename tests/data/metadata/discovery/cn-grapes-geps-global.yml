@@ -3,6 +3,7 @@ wis2box:
     topic_hierarchy: cn-cma/data/core/weather/prediction/forecast/medium-range/probabilistic/global
     country: chn
     centre_id: cn-cma
+    cache: false
     data_mappings:
         plugins:
             grib2:
@@ -16,7 +17,7 @@ mcf:
     version: 1.0
 
 metadata:
-    identifier: urn:wmo:md:cn-cma:grapes-geps-global
+    identifier: urn:wmo:md:cn-cma:
     hierarchylevel: dataset
 
 identification:
