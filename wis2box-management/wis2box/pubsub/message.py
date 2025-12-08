@@ -240,12 +240,11 @@ class WISNotificationMessage(PubSubMessage):
             try:
                 oar = Records(DOCKER_API_URL)
                 record = oar.collection_item('discovery-metadata', metadata_id)
-                # if cache is set to false, update message to indicate no caching
+                # check cache if false, update message to indicate no caching
                 cache = record['wis2box'].get('cache', True)
                 if cache is False:
                     LOGGER.debug('Setting message to no-cache')
                     self.message['properties']['cache'] = False
-                
                 # if record has access control, update message links
                 if record and record['wis2box'].get('has_auth'):
                     LOGGER.debug('Updating message with access control')
