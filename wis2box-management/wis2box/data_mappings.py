@@ -89,7 +89,7 @@ def get_data_mappings() -> dict:
                 continue
             value = record['wis2box']['data_mappings']
             if 'wmo:topicHierarchy' not in record['properties']:
-                LOGGER.error(f'No topic hierarchy for {record["id"]}')
+                LOGGER.info(f'No topic hierarchy for {record["id"]}')
                 continue
             value['topic_hierarchy'] = record['properties']['wmo:topicHierarchy'] # noqa
             metadata_id = record['id']
