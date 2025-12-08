@@ -17,7 +17,7 @@ mcf:
     version: 1.0
 
 metadata:
-    identifier: urn:wmo:md:cn-cma:
+    identifier: urn:wmo:md:cn-cma:grapes-geps-global
     hierarchylevel: dataset
 
 identification:
