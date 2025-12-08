@@ -104,6 +104,10 @@ class ObservationDataBUFR(BaseAbstractData):
             _meta = data_item['_meta']
             # convert isoformat to datetime
             _meta['data_date'] = datetime.fromisoformat(_meta['data_date'])
+            # drop year with less than 4 digits
+            if _meta['data_date'].year < 1000:
+                msg = f'file={filename}, invalid year in data_date: {_meta["data_date"]}'  # noqa
+                raise ValueError(msg)
             # add relative filepath to _meta
             _meta['relative_filepath'] = self.get_local_filepath(_meta['data_date']) # noqa
             # add to output_data
