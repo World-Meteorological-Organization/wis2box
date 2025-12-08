@@ -242,7 +242,7 @@ class WISNotificationMessage(PubSubMessage):
                 record = oar.collection_item('discovery-metadata', metadata_id)
                 # check cache if false, update message to indicate no caching
                 cache = record['wis2box'].get('cache', True)
-                if cache is False:
+                if not cache:
                     LOGGER.debug('Setting message to no-cache')
                     self.message['properties']['cache'] = False
                 # if record has access control, update message links
