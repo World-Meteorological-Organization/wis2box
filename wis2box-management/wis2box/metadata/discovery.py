@@ -176,6 +176,15 @@ class DiscoveryMetadata(BaseMetadata):
                 'rel': 'items',
                 'channel': topic
             }
+            has_obs_plugin = any('ObservationData' in plugin for plugin in plugins)  # noqa
+            if has_obs_plugin:
+                mqp_link['filters'] = {
+                    'wigos_station_identifier': {
+                        'type': 'string',
+                        'title': 'WIGOS Station Identifier',
+                        'description': 'Filter by WIGOS Station Identifier'
+                    }
+                }
             links.append(mqp_link)
 
         canonical_link = {
