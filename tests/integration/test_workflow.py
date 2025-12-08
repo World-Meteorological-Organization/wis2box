@@ -300,7 +300,7 @@ def test_message_api():
     links = r['features'][1]['links']
 
     # check message with q=grapes-geps-global has properties cache=false
-    url = f'{API_URL}/collections/messages/items?q=grapes-geps-global&limit=1'  # noqa
+    url = f'{API_URL}/collections/messages/items?q=cn-cma:grapes-geps-global&limit=1'  # noqa
     r = SESSION.get(url).json()
     props = r['features'][0]['properties']
     assert 'cache' in props
