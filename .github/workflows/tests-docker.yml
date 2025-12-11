@@ -47,6 +47,10 @@ jobs:
       run: |
         python3 wis2box-ctl.py build
         python3 wis2box-ctl.py update
+    - name: TMP override wis2box-api with wis2box-api:noble_eccodes-2.44
+      run: |
+        sed -i 's|wis2box-api:1.1.0|wis2box-api:noble_eccodes-2.44|g' docker-compose.images-LOCAL_BUILD.yml
+        less docker-compose.images-LOCAL_BUILD.yml | grep wis2box-api | grep image
     - name: start containers ⚙️
       run: |
         python3 wis2box-ctl.py start
