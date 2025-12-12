@@ -117,7 +117,6 @@ class MinIOStorage(StorageBase):
 
         LOGGER.debug(f'Creating buckets at MinIO endpoint {self.source}')
         # do not attempt to create bucket if url indicates AWS-managed S3
-        # check netloc matches ends with 'amazonaws.com'
         netloc = urlparse(self.source).netloc
         if netloc.endswith('amazonaws.com'):
             LOGGER.info('Using AWS-managed S3 storage, skipping bucket creation') # noqa
