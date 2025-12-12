@@ -358,6 +358,9 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
             link['title'] = link.pop('description')
         if 'url' in link:
             link['href'] = link.pop('url')
+        if not link.get('title'):
+            # set link title to record title if not defined, else empty string
+            link['title'] = record['properties'].get('title', '')
 
     if 'x-wmo' in record['id']:
         msg = 'Change x-wmo to wmo in metadata identifier'
