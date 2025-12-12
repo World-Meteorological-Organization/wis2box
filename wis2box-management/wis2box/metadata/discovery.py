@@ -358,7 +358,7 @@ def publish_discovery_metadata(metadata: Union[dict, str]):
             link['title'] = link.pop('description')
         if 'url' in link:
             link['href'] = link.pop('url')
-        if not link.get('title'):
+        if link.get('title') is None:
             # set link title to record title if not defined, else empty string
             link['title'] = record['properties'].get('title', '')
 
