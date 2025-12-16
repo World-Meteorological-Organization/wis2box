@@ -119,7 +119,7 @@ class MinIOStorage(StorageBase):
         # do not attempt to create bucket if url indicates AWS-managed S3
         netloc = urlparse(self.source).netloc
         if netloc.endswith('amazonaws.com'):
-            LOGGER.info('Using AWS-managed S3 storage, skipping bucket creation') # noqa
+            LOGGER.info('Using AWS-managed S3 storage, skipping bucket creation')  # noqa
             return True
 
         try:
