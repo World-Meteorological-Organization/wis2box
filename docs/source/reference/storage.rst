@@ -161,12 +161,12 @@ capability when browsing the ``wis2box-incoming`` bucket:
    :alt: Uploading files using the MinIO adminstration interface
    :align: center
 
-Using actual S3-buckets provided by Amazon AWS
-----------------------------------------------
+Using S3 buckets provided by Amazon AWS
+---------------------------------------
 
-It is also possible to use actual S3-buckets provided by Amazon AWS instead of MinIO.
+It is also possible to use S3 buckets provided by Amazon AWS instead of MinIO.
 
-In this case, the wis2box.env needs to be configured with the appropriate S3 endpoint URL, bucket names and AWS credentials:
+In this case, ``wis2box.env`` needs to be configured with the appropriate S3 endpoint URL, bucket names and AWS credentials:
 
 .. code-block:: bash
 
@@ -181,10 +181,10 @@ In this case, the wis2box.env needs to be configured with the appropriate S3 end
     WIS2BOX_STORAGE_USERNAME=<your-aws-access-key-id>
     WIS2BOX_STORAGE_PASSWORD=<your-aws-secret-access-key>
 
-When using AWS S3 buckets, you are responsible for creating and managing the S3 buckets on AWS and need to ensure the public bucket enables public read access.
+When using AWS S3 buckets, you are responsible for creating and managing the S3 buckets on AWS and need to ensure the public bucket allows for public read access.
 
-For wis2box to process data stored in Amazon S3, both the incoming and public bucket must be configured to share S3-event notifications on update and create events
-with the wis2box-instance. To achieve this, you can configure the S3-event notifications to send messages to an AWS SNS topic:
+For wis2box to process data stored in Amazon S3, both the incoming and public bucket must be configured to share S3 event notifications on update and create events
+with the wis2box instance. To achieve this, you can configure the S3 event notifications to send messages to an AWS SNS topic as follows:
 
 .. image:: /_static/Amazon-S3-event-notifications.png
    :width: 1000px
