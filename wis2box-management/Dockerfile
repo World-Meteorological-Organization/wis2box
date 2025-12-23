@@ -51,7 +51,7 @@ RUN . /home/wis2box/venv/bin/activate \
     https://github.com/wmo-cop/pyoscar/archive/refs/tags/0.9.0.zip \
     https://github.com/geopython/pygeometa/archive/refs/tags/0.16.0.zip \
     https://github.com/World-Meteorological-Organization/pywis-topics/archive/refs/tags/0.3.5.zip \
-    capvalidator>=0.1.0-dev4 \
+    capvalidator==0.1.0-dev4 \
     cython pygeos==0.13 \
     shapely \
     botocore boto3 \
