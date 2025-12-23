@@ -26,10 +26,15 @@ LABEL maintainer="tomkralidis@gmail.com; mlimper@wmo.int"
 ARG WIS2BOX_PIP3_EXTRA_PACKAGES
 ENV TZ="Etc/UTC" \
     DEBIAN_FRONTEND="noninteractive" \
-    DEBIAN_PACKAGES="cron bash vim curl git libffi-dev python3-cryptography libssl-dev libudunits2-0 apache2-utils python3 python3-pip python3-venv curl python3-paho-mqtt python3-dateparser python3-tz python3-setuptools unzip"
+    DEBIAN_PACKAGES="cron bash vim curl git libffi-dev python3-cryptography libssl-dev libudunits2-0 apache2-utils python3 python3-pip curl python3-paho-mqtt python3-dateparser python3-tz python3-setuptools unzip"
+
+RUN if [ "$WIS2BOX_PIP3_EXTRA_PACKAGES" = "None" ]; \
+    then export WIS2BOX_PIP3_EXTRA_PACKAGES=echo; \
+    else export WIS2BOX_PIP3_EXTRA_PACKAGES=pip3 install ${WIS2BOX_PIP3_EXTRA_PACKAGES}; \
+    fi
 
 # Install dependencies
-RUN apt-get update -y && apt-get install -y ${DEBIAN_PACKAGES} \
+RUN apt-get update -y && apt-get install -y ${DEBIAN_PACKAGES} python3-venv \
     # Cleanup
     && apt autoremove -y \
     && apt-get -q clean \
@@ -51,9 +56,7 @@ RUN . /home/wis2box/venv/bin/activate \
     https://github.com/wmo-cop/pyoscar/archive/refs/tags/0.9.0.zip \
     https://github.com/geopython/pygeometa/archive/refs/tags/0.16.0.zip \
     https://github.com/World-Meteorological-Organization/pywis-topics/archive/refs/tags/0.3.5.zip \
-    capvalidator==0.1.0-dev4 \
-    shapely botocore boto3 \
-    && if [ "$WIS2BOX_PIP3_EXTRA_PACKAGES" != "None" ]; then pip install ${WIS2BOX_PIP3_EXTRA_PACKAGES}; fi
+    capvalidator==0.1.0-dev4 shapely botocore boto3
 
 # Copy WMDR codelists
 COPY --chown=wis2box:wis2box ./wmdr-codelists /home/wis2box/wmdr-codelists
@@ -63,8 +66,10 @@ COPY --chown=wis2box:wis2box . /app
 
 # Install wis2box and plugins
 RUN cd /app \
-    && pip install -e . \
-    && if [ -n "$PIP_PLUGIN_PACKAGES" ]; then pip install $PIP_PLUGIN_PACKAGES; fi
+    # install wis2box as an editable package in /app/wis2box
+    && pip3 install -e . \
+    # install wis2box plugins, if defined
+    && $PIP_PLUGIN_PACKAGES
 
 # Sync pywcmp bundle
 RUN pywcmp bundle sync
