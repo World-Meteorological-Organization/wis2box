@@ -26,27 +26,10 @@ LABEL maintainer="tomkralidis@gmail.com; mlimper@wmo.int"
 ARG WIS2BOX_PIP3_EXTRA_PACKAGES
 ENV TZ="Etc/UTC" \
     DEBIAN_FRONTEND="noninteractive" \
-    DEBIAN_PACKAGES="cron bash vim curl git libffi-dev python3-cryptography libssl-dev libudunits2-0 apache2-utils python3 python3-pip curl python3-paho-mqtt python3-dateparser python3-tz python3-setuptools unzip"
-
-RUN if [ "$WIS2BOX_PIP3_EXTRA_PACKAGES" = "None" ]; \
-    then export WIS2BOX_PIP3_EXTRA_PACKAGES=echo; \
-    else export WIS2BOX_PIP3_EXTRA_PACKAGES=pip3 install ${WIS2BOX_PIP3_EXTRA_PACKAGES}; \
-    fi
+    DEBIAN_PACKAGES="cron bash vim curl git libffi-dev python3-cryptography libssl-dev libudunits2-0 apache2-utils python3 python3-pip curl python3-paho-mqtt python3-dateparser python3-tz python3-setuptools unzip python3-venv"
 
 # install dependencies
 RUN apt-get update -y && apt-get install -y ${DEBIAN_PACKAGES} \
-    # install wis2box data pipeline dependencies
-    && pip3 install --no-cache-dir \
-    https://github.com/wmo-cop/pyoscar/archive/refs/tags/0.9.0.zip \
-    https://github.com/geopython/pygeometa/archive/refs/tags/0.16.0.zip \
-    https://github.com/World-Meteorological-Organization/pywis-topics/archive/refs/tags/0.3.5.zip \
-    # install cap validator
-    && pip3 install --no-cache-dir capvalidator>=0.1.0-dev4 \
-    # install shapely
-    && pip3 install --no-cache-dir cython pygeos==0.13 \
-    && pip3 install shapely \
-    # install boto3 and botocore
-    && pip3 install --no-cache-dir botocore boto3 \
     # cleanup
     && apt autoremove -y  \
     && apt-get -q clean \
@@ -59,16 +42,6 @@ COPY ./wmdr-codelists /home/wis2box/wmdr-codelists
 
 # copy the app
 COPY . /app
-# install wis2box
-RUN cd /app \
-    # install wis2box as an editable package in /app/wis2box
-    && pip3 install -e . \
-    # install wis2box plugins, if defined
-    && $PIP_PLUGIN_PACKAGES \
-    # add wis2box user
-    && useradd -ms /bin/bash wis2box
-
-RUN pywcmp bundle sync
 
 WORKDIR /home/wis2box
 
@@ -77,12 +50,37 @@ COPY ./docker/wis2box.cron /etc/cron.d/wis2box.cron
 
 RUN chmod 0644 /etc/cron.d/wis2box.cron && crontab /etc/cron.d/wis2box.cron
 
-# add user wis2box
-RUN chown -R wis2box:wis2box /home/wis2box \
-    && chown -R wis2box:wis2box /app
+# create wis2box user
+RUN groupadd -r wis2box && useradd -r -g wis2box wis2box \
+    && chown -R wis2box:wis2box /app \
+    && chown -R wis2box:wis2box /home/wis2box
 
 USER wis2box
 
-COPY ./docker/entrypoint.sh /entrypoint.sh
+# install wis2box in a virtual environment
+RUN cd /app \
+    && python3 -m venv /app/venv --system-site-packages \
+    && . /app/venv/bin/activate \
+    # install wis2box as an editable package in /app/wis2box
+    && pip3 install -e . \
+    # install wis2box plugins, if defined
+    && $PIP_PLUGIN_PACKAGES \
+    && pip3 install --no-cache-dir \
+    https://github.com/wmo-cop/pyoscar/archive/refs/tags/0.9.0.zip \
+    https://github.com/geopython/pygeometa/archive/refs/tags/0.16.0.zip \
+    https://github.com/World-Meteorological-Organization/pywis-topics/archive/refs/tags/0.3.5.zip \
+    && pip3 install --no-cache-dir capvalidator==0.1.0-dev4 cython shapely botocore boto3
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+RUN if [ "$WIS2BOX_PIP3_EXTRA_PACKAGES" = "None" ]; \
+    then export WIS2BOX_PIP3_EXTRA_PACKAGES=echo; \
+    else export WIS2BOX_PIP3_EXTRA_PACKAGES=pip3 install ${WIS2BOX_PIP3_EXTRA_PACKAGES}; \
+    fi
+
+# set PATH to include the virtual environment
+ENV PATH="/app/venv/bin:${PATH}"
+
+RUN pywcmp bundle sync
+
+COPY ./docker/entrypoint.sh /home/wis2box/entrypoint.sh
+
+ENTRYPOINT [ "/home/wis2box/entrypoint.sh" ]
