@@ -33,58 +33,56 @@ RUN if [ "$WIS2BOX_PIP3_EXTRA_PACKAGES" = "None" ]; \
     else export WIS2BOX_PIP3_EXTRA_PACKAGES=pip3 install ${WIS2BOX_PIP3_EXTRA_PACKAGES}; \
     fi
 
-# Install dependencies
-RUN apt-get update -y && apt-get install -y ${DEBIAN_PACKAGES} python3-venv \
-    # Cleanup
-    && apt autoremove -y \
-    && apt-get -q clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Create a non-root user
-RUN useradd -ms /bin/bash wis2box
-
-# Create and activate a virtual environment for Python dependencies
-RUN python3 -m venv /home/wis2box/venv \
-    && chown -R wis2box:wis2box /home/wis2box/venv
-
-USER wis2box
-ENV PATH="/home/wis2box/venv/bin:$PATH"
-
-# Install Python dependencies in the virtual environment
-RUN . /home/wis2box/venv/bin/activate \
-    && pip install --no-cache-dir \
+# install dependencies
+RUN apt-get update -y && apt-get install -y ${DEBIAN_PACKAGES} \
+    # install wis2box data pipeline dependencies
+    && pip3 install --no-cache-dir \
     https://github.com/wmo-cop/pyoscar/archive/refs/tags/0.9.0.zip \
     https://github.com/geopython/pygeometa/archive/refs/tags/0.16.0.zip \
     https://github.com/World-Meteorological-Organization/pywis-topics/archive/refs/tags/0.3.5.zip \
-    capvalidator==0.1.0-dev4 shapely botocore boto3
+    # install cap validator
+    && pip3 install --no-cache-dir capvalidator>=0.1.0-dev4 \
+    # install shapely
+    && pip3 install --no-cache-dir cython pygeos==0.13 \
+    && pip3 install shapely \
+    # install boto3 and botocore
+    && pip3 install --no-cache-dir botocore boto3 \
+    # cleanup
+    && apt autoremove -y  \
+    && apt-get -q clean \
+    && rm -rf /var/lib/apt/lists/* \
+    # create directory for wmdr codelists
+    && mkdir -p /home/wis2box/wmdr-codelists 
 
-# Copy WMDR codelists
-COPY --chown=wis2box:wis2box ./wmdr-codelists /home/wis2box/wmdr-codelists
+# copy wmdr codelists
+COPY ./wmdr-codelists /home/wis2box/wmdr-codelists
 
-# Copy the app
-COPY --chown=wis2box:wis2box . /app
-
-# Install wis2box and plugins
+# copy the app
+COPY . /app
+# install wis2box
 RUN cd /app \
     # install wis2box as an editable package in /app/wis2box
     && pip3 install -e . \
     # install wis2box plugins, if defined
-    && $PIP_PLUGIN_PACKAGES
+    && $PIP_PLUGIN_PACKAGES \
+    # add wis2box user
+    && useradd -ms /bin/bash wis2box
 
-# Sync pywcmp bundle
 RUN pywcmp bundle sync
 
 WORKDIR /home/wis2box
 
-# Add wis2box.cron to crontab
-COPY --chown=wis2box:wis2box ./docker/wis2box.cron /etc/cron.d/wis2box.cron
+# add wis2box.cron to crontab
+COPY ./docker/wis2box.cron /etc/cron.d/wis2box.cron
 
-USER root
 RUN chmod 0644 /etc/cron.d/wis2box.cron && crontab /etc/cron.d/wis2box.cron
+
+# add user wis2box
+RUN chown -R wis2box:wis2box /home/wis2box \
+    && chown -R wis2box:wis2box /app
+
 USER wis2box
 
-# Copy entrypoint script
-COPY --chown=wis2box:wis2box ./docker/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY ./docker/entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
