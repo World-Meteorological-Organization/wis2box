@@ -26,6 +26,12 @@ echo "START /entrypoint.sh"
 
 set -e
 
+# create .ssh directory if not exists
+if [ ! -d /data/wis2box/.ssh ]; then
+    echo "Creating /data/wis2box/.ssh"
+    mkdir /data/wis2box/.ssh
+fi
+
 # create private key file if not exists
 if [ ! -f /data/wis2box/.ssh/id_rsa ]; then
     echo "Creating /data/wis2box/.ssh/id_rsa"

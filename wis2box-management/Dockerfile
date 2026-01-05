@@ -53,7 +53,7 @@ WORKDIR /home/wis2box
 RUN groupadd -r wis2box && useradd -r -g wis2box wis2box \
     && chown -R wis2box:wis2box /app \
     && chown -R wis2box:wis2box /home/wis2box \
-    && mkdir -p /data/wis2box/.ssh \
+    && mkdir -p /data/wis2box \
     && chown -R wis2box:wis2box /data/wis2box
 
 USER wis2box

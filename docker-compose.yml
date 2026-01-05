@@ -56,10 +56,10 @@ services:
       - MINIO_BROWSER_LOGIN_ANIMATION=off
       - MINIO_BROWSER_REDIRECT=false
       - MINIO_UPDATE=off
-    command: server --quiet --console-address ":9001" --sftp="address=:8022" --sftp="ssh-private-key=/home/miniouser/.ssh/id_rsa" /data
+    command: server --quiet --console-address ":9001" --sftp="address=:8022" --sftp="ssh-private-key=/home/miniouser/wis2box-data/.ssh/id_rsa" /data
     volumes:
       - minio-data:/data
-      - ${WIS2BOX_HOST_DATADIR}/.ssh:/home/miniouser/.ssh:ro
+      - ${WIS2BOX_HOST_DATADIR}:/home/miniouser/wis2box-data:ro
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 5s
