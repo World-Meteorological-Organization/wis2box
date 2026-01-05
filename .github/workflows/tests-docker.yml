@@ -51,6 +51,7 @@ jobs:
       run: |
         python3 wis2box-ctl.py start
         python3 wis2box-ctl.py status -a
+        docker logs -f wis2box-management
     - name: check if wis2box-management started successfully
       run: |
         sleep 30
