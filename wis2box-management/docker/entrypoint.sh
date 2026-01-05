@@ -26,9 +26,6 @@ echo "START /entrypoint.sh"
 
 set -e
 
-#ensure environment-variables are available for cronjob
-printenv | grep -v "no_proxy" >> /etc/environment
-
 # create .ssh directory if not exists
 if [ ! -d /data/wis2box/.ssh ]; then
     echo "Creating /data/wis2box/.ssh"
@@ -53,6 +50,10 @@ fi
 # run pywcmp bundle sync in background to avoid hanging in case of network issues
 pywcmp bundle sync &
 
+# start supercronic to run cron jobs
+echo "Starting cron"
+/usr/local/bin/supercronic /app/docker/wis2box.cron &
+
 # wis2box commands
 # TODO: avoid re-creating environment if it already exists
 # TODO: catch errors and avoid bounce in conjuction with restart: always
@@ -64,10 +65,6 @@ wis2box api setup
 
 # test the wis2box is not misconfigured
 wis2box environment test
-
-# ensure cron is running
-service cron start
-service cron status
 
 # check if WIS2BOX_WEBAPP_USERNAME and WIS2BOX_WEBAPP_PASSWORD are set, otherwise set them
 if [ -z "$WIS2BOX_WEBAPP_USERNAME" ]; then

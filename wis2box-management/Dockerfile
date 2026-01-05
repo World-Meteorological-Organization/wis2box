@@ -26,7 +26,7 @@ LABEL maintainer="tomkralidis@gmail.com; mlimper@wmo.int"
 ARG WIS2BOX_PIP3_EXTRA_PACKAGES
 ENV TZ="Etc/UTC" \
     DEBIAN_FRONTEND="noninteractive" \
-    DEBIAN_PACKAGES="cron bash vim curl git libffi-dev python3-cryptography libssl-dev libudunits2-0 apache2-utils python3 python3-pip curl python3-paho-mqtt python3-dateparser python3-tz python3-setuptools unzip python3-venv"
+    DEBIAN_PACKAGES="bash vim curl git libffi-dev python3-cryptography libssl-dev libudunits2-0 apache2-utils python3 python3-pip curl python3-paho-mqtt python3-dateparser python3-tz python3-setuptools unzip python3-venv"
 
 # install dependencies
 RUN apt-get update -y && apt-get install -y ${DEBIAN_PACKAGES} \
@@ -35,7 +35,11 @@ RUN apt-get update -y && apt-get install -y ${DEBIAN_PACKAGES} \
     && apt-get -q clean \
     && rm -rf /var/lib/apt/lists/* \
     # create directory for wmdr codelists
-    && mkdir -p /home/wis2box/wmdr-codelists 
+    && mkdir -p /home/wis2box/wmdr-codelists \
+    # Install Supercronic for job management
+    && curl -fsSLO "https://github.com/aptible/supercronic/releases/download/v0.2.41/supercronic-linux-amd64" \
+    && chmod +x supercronic-linux-amd64 \
+    && mv supercronic-linux-amd64 /usr/local/bin/supercronic
 
 # copy wmdr codelists
 COPY ./wmdr-codelists /home/wis2box/wmdr-codelists
@@ -44,11 +48,6 @@ COPY ./wmdr-codelists /home/wis2box/wmdr-codelists
 COPY . /app
 
 WORKDIR /home/wis2box
-
-# add wis2box.cron to crontab
-COPY ./docker/wis2box.cron /etc/cron.d/wis2box.cron
-
-RUN chmod 0644 /etc/cron.d/wis2box.cron && crontab /etc/cron.d/wis2box.cron
 
 # create wis2box user
 RUN groupadd -r wis2box && useradd -r -g wis2box wis2box \
