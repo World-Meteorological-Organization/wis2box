@@ -217,10 +217,7 @@ def prepare_ssh_keys(host_datadir: str) -> None:
     private_key_path = ssh_dir / 'id_rsa'
 
     print('Generating SSH keys for MinIO SFTP access...')
-    if not WINDOWS:
-        os.system(f'ssh-keygen -t rsa -b 4096 -f {private_key_path} -N ""')
-    else:
-        os.system(f'ssh-keygen -t rsa -b 4096 -f {private_key_path} -N "" -q')
+    os.system(f'ssh-keygen -t rsa -b 4096 -f {private_key_path} -N "" -q')
     print(f'SSH keys are prepared in {ssh_dir}.')
 
 

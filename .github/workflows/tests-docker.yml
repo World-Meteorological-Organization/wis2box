@@ -28,8 +28,7 @@ jobs:
     - name: prepare ssh-keys for MinIO sftp 📦
       run: |
         mkdir -p tests/data/wis2box/.ssh
-        ssh-keygen -t rsa -b 4096 -f tests/data/wis2box/.ssh/id_rsa -N ""
-        chmod 600 tests/data/wis2box/.ssh/id_rsa
+        ssh-keygen -t rsa -b 4096 -f tests/data/wis2box/.ssh/id_rsa -N "" -q
         ls -lh tests/data/wis2box/.ssh/
     - name: setup wis2downloader
       run: |
@@ -57,9 +56,11 @@ jobs:
       run: |
         python3 wis2box-ctl.py start
         python3 wis2box-ctl.py status -a
+        sleep 5
+        docker logs wis2box-minio
     - name: check if wis2box-management started successfully
       run: |
-        sleep 30
+        sleep 10
         docker logs wis2box-management
     - name: show environment and check collections exist ⚙️
       run: |
