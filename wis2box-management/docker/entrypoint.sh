@@ -26,26 +26,12 @@ echo "START /entrypoint.sh"
 
 set -e
 
-# create .ssh directory if not exists
-if [ ! -d /data/wis2box/.ssh ]; then
-    echo "Creating /data/wis2box/.ssh"
-    mkdir /data/wis2box/.ssh
-fi
-
-# create private key file if not exists
-if [ ! -f /data/wis2box/.ssh/id_rsa ]; then
-    echo "Creating /data/wis2box/.ssh/id_rsa"
-    # generate private key
-    ssh-keygen -t rsa -b 4096 -f /data/wis2box/.ssh/id_rsa -N ""
-    chmod 600 /data/wis2box/.ssh/id_rsa
-
-    # wait for http://minio:9000/minio/health/live to be available
-    while ! curl -s http://minio:9000/minio/health/live; do
-        echo "Waiting for minio to be available..."
-        sleep 1
-    done
+# wait for http://minio:9000/minio/health/live to be available
+while ! curl -s http://minio:9000/minio/health/live; do
+    echo "Waiting for minio to be available..."
+    sleep 1
+done
     echo "MinIO is available, proceed with setup"
-fi
 
 # run pywcmp bundle sync in background to avoid hanging in case of network issues
 pywcmp bundle sync &

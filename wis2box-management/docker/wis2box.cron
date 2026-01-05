@@ -1,4 +1,4 @@
-0 0 * * * su wis2box -c "wis2box data clean" > /proc/1/fd/1 2>/proc/1/fd/2
-0 1 * * * su wis2box -c "wis2box api clean" > /proc/1/fd/1 2>/proc/1/fd/2
-0 15 * * * su root -c "wis2box metadata discovery republish" > /proc/1/fd/1 2>/proc/1/fd/2
-*/10 * * * * su wis2box -c "echo 'wis2box.cron is alive'" > /proc/1/fd/1 2>/proc/1/fd/2
+0 0 * * * wis2box data clean > /proc/1/fd/1 2>/proc/1/fd/2
+0 1 * * * wis2box api clean > /proc/1/fd/1 2>/proc/1/fd/2
+0 15 * * * wis2box metadata discovery republish > /proc/1/fd/1 2>/proc/1/fd/2
+*/10 * * * * echo 'wis2box.cron is alive' > /proc/1/fd/1 2>/proc/1/fd/2

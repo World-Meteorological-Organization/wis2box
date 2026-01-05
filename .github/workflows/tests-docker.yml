@@ -25,6 +25,12 @@ jobs:
         docker version
         docker compose version
         python3 -V
+    - name: prepare ssh-keys for MinIO sftp 📦
+      run: |
+        mkdir -p tests/data/wis2box/.ssh
+        ssh-keygen -t rsa -b 4096 -f tests/data/wis2box/.ssh/id_rsa -N ""
+        chmod 600 tests/data/wis2box/.ssh/id_rsa
+        ls -lh tests/data/wis2box/.ssh/
     - name: setup wis2downloader
       run: |
         # make sure current user in docker group

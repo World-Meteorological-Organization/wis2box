@@ -202,6 +202,28 @@ def get_tld_and_centre_id() -> Tuple[str, str]:
     return (country_code, centre_id)
 
 
+def prepare_ssh_keys(host_datadir: str) -> None:
+    """
+    Prepares the SSH keys for MinIO SFTP access.
+
+    :param host_datadir: `str` of path to the config directory
+
+    :returns: None
+    """
+
+    ssh_dir = Path(host_datadir) / '.ssh'
+    ssh_dir.mkdir(parents=True, exist_ok=True)
+
+    private_key_path = ssh_dir / 'id_rsa'
+
+    print('Generating SSH keys for MinIO SFTP access...')
+    if not WINDOWS:
+        os.system(f'ssh-keygen -t rsa -b 4096 -f {private_key_path} -N ""')
+    else:
+        os.system(f'ssh-keygen -t rsa -b 4096 -f {private_key_path} -N "" -q')
+    print(f'SSH keys are prepared in {ssh_dir}.')
+
+
 def get_password(password_name: str) -> str:
     """
     asks the user to enter a password or to use a randomly generated password
@@ -704,6 +726,9 @@ def main():
     # create it and write host_datadir as the value for WIS2BOX_HOST_DATADIR to wis2box.env # noqa
     if not dev_env.is_file():
         create_wis2box_env(host_datadir)
+
+    # prepare SSH keys for MinIO SFTP access
+    prepare_ssh_keys(host_datadir)
 
     print("The configuration is complete.")
     exit()
