@@ -38,7 +38,7 @@ pywcmp bundle sync &
 
 # start supercronic to run cron jobs
 echo "Starting cron"
-/usr/local/bin/supercronic -log-level error /app/docker/wis2box.cron &
+/usr/local/bin/supercronic -quiet /app/docker/wis2box.cron &
 
 # wis2box commands
 # TODO: avoid re-creating environment if it already exists
