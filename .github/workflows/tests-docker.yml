@@ -58,8 +58,18 @@ jobs:
         python3 wis2box-ctl.py status -a
     - name: check if wis2box-management started successfully
       run: |
-        sleep 10
+        for i in {1..12}; do
+          if docker logs wis2box-management | grep -q "Starting wis2box subscriber"; then
+            echo "wis2box-management started successfully."
+            exit 0
+          fi
+          echo "Waiting for wis2box-management to start..."
+          sleep 5
+        done
+
+        echo "wis2box-management did not start successfully"
         docker logs wis2box-management
+        exit 1
     - name: show environment and check collections exist ⚙️
       run: |
         python3 wis2box-ctl.py execute wis2box environment show
