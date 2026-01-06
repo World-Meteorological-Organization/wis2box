@@ -27,9 +27,9 @@ jobs:
         python3 -V
     - name: prepare ssh-keys for MinIO sftp 📦
       run: |
-        mkdir -p tests/data/wis2box/.ssh
-        ssh-keygen -t rsa -b 4096 -f tests/data/wis2box/.ssh/id_rsa -N "" -q
-        ls -lh tests/data/wis2box/.ssh/
+        mkdir -p tests/data/.ssh
+        ssh-keygen -t rsa -b 4096 -f tests/data/.ssh/id_rsa -N "" -q
+        ls -lh tests/data/.ssh/
     - name: setup wis2downloader
       run: |
         # make sure current user in docker group
@@ -56,12 +56,10 @@ jobs:
       run: |
         python3 wis2box-ctl.py start
         python3 wis2box-ctl.py status -a
-        sleep 5
-        docker compose --env-file wis2box.env logs minio
     - name: check if wis2box-management started successfully
       run: |
         sleep 10
-        docker compose --env-file wis2box.env logs wis2box-management
+        docker logs wis2box-management
     - name: show environment and check collections exist ⚙️
       run: |
         python3 wis2box-ctl.py execute wis2box environment show
