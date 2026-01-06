@@ -120,7 +120,6 @@ services:
     image: WIS2BOX-RELEASE
     env_file:
       - wis2box.env
-    user: 1001:${DOCKER_GID}
     volumes:
       - ${WIS2BOX_HOST_DATADIR}:/data/wis2box:rw
     depends_on:

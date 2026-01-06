@@ -25,11 +25,12 @@ jobs:
         docker version
         docker compose version
         python3 -V
-    - name: prepare ssh-keys for MinIO sftp 📦
+    - name: prepare ssh-keys for MinIO sftp and create .htpasswd directory 🔧
       run: |
         mkdir -p tests/data/.ssh
         ssh-keygen -t rsa -b 4096 -f tests/data/.ssh/id_rsa -N "" -q
         ls -lh tests/data/.ssh/
+        mkdir -p tests/data/.htpasswd
     - name: setup wis2downloader
       run: |
         # make sure current user in docker group
