@@ -49,8 +49,8 @@ COPY . /app
 
 WORKDIR /home/wis2box
 
-# create wis2box user
-RUN groupadd -r wis2box && useradd -r -g wis2box wis2box \
+# create wis2box user with userid 1001
+RUN groupadd -g 1001 -r wis2box && useradd -u 1001 -r -g wis2box wis2box \
     && chown -R wis2box:wis2box /app \
     && chown -R wis2box:wis2box /home/wis2box \
     && mkdir -p /data/wis2box \

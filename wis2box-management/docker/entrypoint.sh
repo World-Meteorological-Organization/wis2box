@@ -62,22 +62,22 @@ if [ -z "$WIS2BOX_WEBAPP_PASSWORD" ]; then
     export WIS2BOX_WEBAPP_PASSWORD=${WIS2BOX_STORAGE_PASSWORD}
 fi
 
-# create directory /home/wis2box/.htpasswd/ if not exists
-if [ ! -d /home/wis2box/.htpasswd/ ]; then
-    echo "Creating /home/wis2box/.htpasswd/"
-    mkdir /home/wis2box/.htpasswd/
+# create directory /data/wis2box/nginx/.htpasswd/ if not exists
+if [ ! -d /data/wis2box/.htpasswd/ ]; then
+    echo "Creating /data/wis2box/.htpasswd/"
+    mkdir /data/wis2box/.htpasswd/
 fi
 
-# create /home/wis2box/.htpasswd/webapp if not exists
+# create /data/wis2box/.htpasswd/webapp if not exists
 # otherwise, delete the file and create it
 # in case of failure continue
-if [ ! -f /home/wis2box/.htpasswd/webapp ]; then
-    echo "Creating /home/wis2box/.htpasswd/webapp"
-    htpasswd -bc /home/wis2box/.htpasswd/webapp $WIS2BOX_WEBAPP_USERNAME $WIS2BOX_WEBAPP_PASSWORD || true
+if [ ! -f /data/wis2box/.htpasswd/webapp ]; then
+    echo "Creating /data/wis2box/.htpasswd/webapp"
+    htpasswd -bc /data/wis2box/.htpasswd/webapp $WIS2BOX_WEBAPP_USERNAME $WIS2BOX_WEBAPP_PASSWORD || true
 else
-    rm /home/wis2box/.htpasswd/webapp
-    echo "Re-creating /home/wis2box/.htpasswd/webapp"
-    htpasswd -bc /home/wis2box/.htpasswd/webapp $WIS2BOX_WEBAPP_USERNAME $WIS2BOX_WEBAPP_PASSWORD || true
+    rm /data/wis2box/.htpasswd/webapp
+    echo "Re-creating /data/wis2box/.htpasswd/webapp"
+    htpasswd -bc /data/wis2box/.htpasswd/webapp $WIS2BOX_WEBAPP_USERNAME $WIS2BOX_WEBAPP_PASSWORD || true
 fi
 
 # Check if the path is restricted and capture the output
