@@ -20,6 +20,54 @@ When choosing the environment for the wis2box, consider the following:
     
     Before exposing the wis2box to the Internet, please review the 'security considerations' section in the :ref:`public-services-setup` section. 
 
+External resources used by wis2box
+----------------------------------
+
+Make sure that your wis2box-instance can access content from **GitHub**, **GitHub Container Registry**, and **Docker Hub**; otherwise, the `wis2box-stack` will be unable to start. The software used within `wis2box` will reference standards defined on websites such as `iana.org` and `codes.wmo.int` to verify WIS2 compliance.
+
+The following domains must be reachable from your instance for the `wis2box-stack` to function correctly:
+
+.. list-table::
+  :header-rows: 1
+  :widths: 30 70
+
+  * - Domain
+    - Description
+  * - ``ghcr.io``
+    - GitHub Container Registry
+  * - ``pkg-containers.githubusercontent.com``
+    - GitHub Packages for containers
+  * - ``containers.githubusercontent.com``
+    - GitHub-hosted container resources
+  * - ``github.com``
+    - GitHub repository access
+  * - ``api.github.com``
+    - GitHub API access
+  * - ``registry-1.docker.io``
+    - Docker Hub registry
+  * - ``auth.docker.io``
+    - Docker Hub authentication
+  * - ``index.docker.io``
+    - Docker Hub index
+  * - ``hub.docker.com``
+    - Docker Hub website
+  * - ``iana.org``
+    - Standards reference
+  * - ``codes.wmo.int``
+    - WMO code registry
+  * - ``oscar.wmo.int``
+    - WMO OSCAR database
+
+.. note::
+
+  Since a `wis2box` instance must be exposed to the public internet in order to operate as a WIS2 Node, it is **not recommended** to deploy a `wis2box` instance on a server within your internal network.
+
+  Please consider setting up your `wis2box` instance in the **cloud** or in another suitably isolated, internet-facing environment such as a **perimeter network (DMZ)**.
+
+.. important::
+
+  It is recommended to **push data** from your internal network to the `wis2box` host environment and to limit your firewall to strictly required inbound and outbound connections only, following the **principle of least privilege**.
+
 Network requirements
 --------------------
 
