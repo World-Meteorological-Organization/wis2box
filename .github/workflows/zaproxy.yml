@@ -8,9 +8,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: build and start containers using tests/test.env ⚙️
+    - name: prepare test config and SSH keys 🔧
       run: |
         cp tests/test.env wis2box.env
+        mkdir -p tests/data/.ssh
+        ssh-keygen -t rsa -b 4096 -f tests/data/.ssh/id_rsa -N "" -q
+        ls -lh tests/data/.ssh/
+    - name: build and start containers ⚙️
+      run: |
         python3 wis2box-ctl.py build
         python3 wis2box-ctl.py start
         python3 wis2box-ctl.py status -a
