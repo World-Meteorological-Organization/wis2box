@@ -509,6 +509,10 @@ def create_host_datadir() -> str:
         mappings_dir = host_datadir / 'mappings'
         mappings_dir.mkdir(parents=True)
 
+        # add .htpasswd directory
+        htpasswd_dir = host_datadir / '.htpasswd'
+        htpasswd_dir.mkdir()
+
         # add downloads directory
         download_dir = host_datadir / 'downloads'
         download_dir.mkdir(mode=0o775)
