@@ -12,6 +12,7 @@ jobs:
       run: |
         cp tests/test.env wis2box.env
         mkdir -p tests/data/.ssh
+        mkdir -p tests/data/.htpasswd
         ssh-keygen -t rsa -b 4096 -f tests/data/.ssh/id_rsa -N "" -q
         ls -lh tests/data/.ssh/
     - name: build and start containers ⚙️
