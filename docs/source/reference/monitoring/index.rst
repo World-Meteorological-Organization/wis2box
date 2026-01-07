@@ -32,12 +32,16 @@ Loki logging
 
 The logs of the following Docker containers are sent to Loki:
 
-- mosquitto
-- mqp-publisher
-- wis2box
+- wis2box-management
 - wis2box-api
 - wis2box-auth
 - wis2box-ui
+- wis2box-minio
+- wis2box-webapp
+- wis2downloader
+- elasticsearch
+- mosquitto
+- nginx
 
 The default retention period for Loki logs is 10 days. 
 This value can be modified in the Loki configuration at ``loki/loki-config.yml``. 
