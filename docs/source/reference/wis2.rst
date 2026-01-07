@@ -1,24 +1,22 @@
 WIS2
 ====
 
-The `WMO Information System`_ is a coordinated global infrastructure responsible for telecommunications
-and data management functions and is owned and operated by WMO Members.
+The `WMO Information System 2.0`_ (WIS2) is the framework for WMO data sharing for all WMO domains and disciplines. The Commission for Observation, Infrastructure and Information Systems (`INFCOM`_) approved the technical specifications of WIS 2.0 and its implementation plan in October 2022.
+The new data-sharing infrastructure of WIS 2.0 will gradually replace the Global Telecommunication System (GTS).
 
-WIS provides an integrated approach suitable for all WMO Programmes to meet the requirements for routine
-collection and automated dissemination of observed data and products, as well as data discovery, access,
-and retrieval services for weather, climate, water, and related data produced by centres and Member
-countries in the framework of any WMO Programme. It is capable of exchanging large data volumes, such
-as new ground and satellite-based systems, finer resolutions in numerical weather prediction, and
-hydrological models and their applications. These data and products must be available to National
-Hydrological and Meteorological Services (NHMS), but also national disaster authorities for more timely
-alerts where and when needed.
+WIS2 was designed to support the WMO Unified Data policy and the Global Basic Observing Network (GBON) and to make data sharing between WMO Members simple, effective and cost-efficient.
+The idea that *no Member should be left behind* and the objective of lowering the barrier to adoption has been at the core of WIS 2.0 development.
+These objectives inspire the principles underpinning the WIS 2.0 technical framework, such as adopting open standards and Web technologies to facilitate sharing of increasing variety and volume of real-time data.  
 
-WIS is a vital data communications backbone for integrating the diverse real-time and non-real-time high
-priority data sets, regardless of location.
+The `Manual`_ on the WMO Information System (WMO-No.1060), Volume II contains standard and recommended practices, procedures, and specifications.
+The `Guide`_ to the WMO Information System (WMO-No.1061), Volume II provides additional information concerning practices, procedures, 
+and specifications that Members are invited to follow or implement in establishing and conducting their arrangements in compliance with the WMO Technical Regulations 
+and in developing meteorological and hydrological services.
 
-Further documentation on WIS2 can be found at the following links:
+For more information on WIS2, please refer to the `WIS2 Overview`_ on the WMO community website.
 
-* `WIS Overview`_
-
-.. _`WMO Information System`: https://community.wmo.int/activity-areas/wis
-.. _`WIS Overview`: https://community.wmo.int/activity-areas/wis/wis-overview
+.. _`WMO Information System 2.0`: https://community.wmo.int/site/knowledge-hub/programmes-and-initiatives/wmo-information-system-wis
+.. _`INFCOM`: https://community.wmo.int/site/knowledge-hub/governance/infcom
+.. _`Manual`: https://community.wmo.int/node/37558
+.. _`Guide`: https://community.wmo.int/node/37510
+.. _`WIS2 Overview`: https://community.wmo.int/site/knowledge-hub/programmes-and-initiatives/wmo-information-system-wis/wis2-overview
