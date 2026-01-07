@@ -74,6 +74,8 @@ Please check the logs for the following containers:
 - `wis2box-management`
 - `wis2box-minio`
 - `wis2box-api`
+- `elasticsearch`
+- `mosquitto`
 
 Common causes: 
 
@@ -160,3 +162,71 @@ If the wis2box UI is available but no datasets are visible, and the message ``Di
 This means the collection ``discovery-metadata`` in the wisbox API is empty, due to no datasets having been created or Docker volume ``wis2box_project_es-data`` was removed.
 
 Consult the user guide for instructions on creating datasets.
+
+Elasticsearch not starting: "java.lang.OutOfMemoryError: Java heap space"
+-------------------------------------------------------------------------
+
+If you notice Elasticsearch failing to start and the logs contain the message ``java.lang.OutOfMemoryError: Java heap space``, 
+this indicates that the Elasticsearch container does not have enough memory allocated to it.
+
+You can edit the Edit the Elasticsearch configuration in the file docker-compose.yml to increase the memory assigned to Elasticsearch as follows:
+
+First stop the wis2box-stack:
+.. code-block:: bash
+
+   python3 wis2box-ctl.py stop
+
+Then edit docker-compose.yml and replace:
+.. code-block:: yaml
+   - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+with:
+.. code-block:: yaml
+   - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+
+and also  replace:
+.. code-block:: yaml
+   mem_limit: 1.5g
+   memswap_limit: 1.5g
+with:
+.. code-block:: yaml
+   mem_limit: 2g
+   memswap_limit: 2g
+
+MinIO unable to start SFTP server to sftp id_rsa missing
+---------------------------------------------------------
+
+When you see the following error in the logs of the `wis2box-minio` container:
+
+.. code-block:: bash
+   FATAL unable to start SFTP server: invalid arguments passed, private key file is not accessible: open /home/miniouser/.ssh/id_rsa: no such file or directory
+
+It means that the SSH keys required to start the SFTP server are missing.
+
+If you used the `wis2box-create-config.py` script to create your configuration files, the SSH keys are generated automatically in the directory `.ssh` inside the directory defined by `WIS2BOX_HOST_DATADIR` (from wis2box-1.2)
+
+If required, you can manually create the SSH keys as follows:
+
+.. code-block:: bash
+
+   mkdir -p <your-wis2box-host-datadir>/.ssh
+   ssh-keygen -t rsa -b 4096 -f <your-wis2box-host-datadir>/minio/.ssh/id_rsa -N "" -q
+
+Make sure to replace `<your-wis2box-host-datadir>` with the actual path defined by `WIS2BOX_HOST_DATADIR` in your `wis2box.env` file.
+
+You can disabled the SFTP server in MinIO to allow the wis2box-stack to start without SSH keys.
+
+To do so, first stop the wis2box-stack:
+.. code-block:: bash
+   python3 wis2box-ctl.py stop
+
+Then edit docker-compose.yml and replace:
+.. code-block:: yaml
+   command: server --quiet --console-address ":9001" --sftp="address=:8022" --sftp="ssh-private-key=/home/miniouser/.ssh/id_rsa" /data
+
+With:
+.. code-block:: yaml
+   command: server --quiet --console-address ":9001" /data
+
+After making the changes, start the wis2box-stack again:
+.. code-block:: bash
+   python3 wis2box-ctl.py start
