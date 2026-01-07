@@ -178,19 +178,33 @@ First stop the wis2box-stack:
 
 Then edit docker-compose.yml and replace:
 .. code-block:: yaml
+
    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+
 with:
 .. code-block:: yaml
+
    - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
 
 and also  replace:
 .. code-block:: yaml
+
    mem_limit: 1.5g
    memswap_limit: 1.5g
+
 with:
 .. code-block:: yaml
+
    mem_limit: 2g
    memswap_limit: 2g
+
+Then start the wis2box-stack again:
+
+.. code-block:: bash
+
+   python3 wis2box-ctl.py start
+
+Make sure that your host has enough free memory for the new settings.
 
 MinIO unable to start SFTP server to sftp id_rsa missing
 ---------------------------------------------------------
@@ -198,6 +212,7 @@ MinIO unable to start SFTP server to sftp id_rsa missing
 When you see the following error in the logs of the `wis2box-minio` container:
 
 .. code-block:: bash
+
    FATAL unable to start SFTP server: invalid arguments passed, private key file is not accessible: open /home/miniouser/.ssh/id_rsa: no such file or directory
 
 It means that the SSH keys required to start the SFTP server are missing.
@@ -213,20 +228,30 @@ If required, you can manually create the SSH keys as follows:
 
 Make sure to replace `<your-wis2box-host-datadir>` with the actual path defined by `WIS2BOX_HOST_DATADIR` in your `wis2box.env` file.
 
-You can disabled the SFTP server in MinIO to allow the wis2box-stack to start without SSH keys.
+You can disable the SFTP server in MinIO to allow the wis2box-stack to start without SSH keys. You will not be able to ingest data using SFTP in this case.
 
 To do so, first stop the wis2box-stack:
 .. code-block:: bash
+
    python3 wis2box-ctl.py stop
 
 Then edit docker-compose.yml and replace:
 .. code-block:: yaml
+
    command: server --quiet --console-address ":9001" --sftp="address=:8022" --sftp="ssh-private-key=/home/miniouser/.ssh/id_rsa" /data
 
 With:
 .. code-block:: yaml
+
    command: server --quiet --console-address ":9001" /data
 
 After making the changes, start the wis2box-stack again:
 .. code-block:: bash
+
    python3 wis2box-ctl.py start
+
+And check if the all the services are now running correctly:
+
+.. code-block:: bash
+
+   python3 wis2box-ctl.py status
