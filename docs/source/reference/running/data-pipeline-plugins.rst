@@ -166,6 +166,18 @@ A typical BUFR4 plugin workflow definition would be defined as follows:
          notify: true  # trigger GeoJSON publishing for API and UI
          file-pattern: '^.*\.bin$'
 
+When using this plugin, you have the option to apply **BUFR-overrides** to modify BUFR data prior to publication.
+
+For example to correct the station elevation for a specific WIGOS Station Identifier and set the BUFR header centre to 98 for all messages, you can add the following to your dataset mapping configuration:
+
+.. code-block:: yaml
+
+   bufr_overrides: 
+        "0-20000-0-16344": 
+            "#1#heightOfStationGroundAboveMeanSeaLevel": 150
+        all:
+            "bufrHeaderCentre": 98
+
 .. _cap-message-data-plugin:
 
 ``wis2box.data.cap_message.CAPMessageData``
