@@ -22,9 +22,14 @@ Please ensure that you follow these best practices to ensure your wis2box-instan
 * Use SSL/TLS encryption to secure your services
 * Consider customizing the default web configuration defined in ``nginx/nginx.conf`` to expose only the services to be shared with the public
 
+.. important::
+
+  It is recommended to **push data** from your internal network to the wis2box host environment, rather than allowing the wis2box instance to pull data from your internal network.
+  Make sure to limit your firewall to strictly required inbound and outbound connections only, following the **principle of least privilege**.
+
 The wis2box development team is not responsible for the security of your wis2box-instance and it is your responsibility to ensure that your wis2box instance is secure.
 
-GitHub issues and discussions provide a resource and forum to discuss general wis2box features, bugs and updates.  For specific security related questions, please write to ``wis2-support at wmo.int``.
+GitHub issues and discussions provide a resource and forum to discuss general wis2box features, bugs and updates. For specific security related questions, please write to ``wis2-support at wmo.int``.
 
 Connecting your instance to the WIS2 network
 --------------------------------------------

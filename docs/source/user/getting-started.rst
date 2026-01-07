@@ -17,8 +17,14 @@ When choosing the environment for the wis2box, consider the following:
 * Ensure that the system providing input data can access the wis2box instance
 
 .. note::
-    
-    Before exposing the wis2box to the Internet, please review the 'security considerations' section in the :ref:`public-services-setup` section. 
+
+  Since a wis2box instance must be exposed to the public internet in order to operate as a WIS2 Node, it is **not recommended** to host a wis2box instance on a server within your internal network.
+
+  Please consider setting up your wis2box instance in the **cloud** or in another suitably isolated, internet-facing environment such as a **perimeter network (DMZ)** and setup
+   a secure method to push data from your internal network to the wis2box instance.
+
+  Before exposing the wis2box to the Internet, please review the 'security considerations' section in the :ref:`public-services-setup` section. 
+
 
 External resources used by wis2box
 ----------------------------------
@@ -57,16 +63,6 @@ The following domains must be reachable from your instance for the `wis2box-stac
     - WMO code registry
   * - ``oscar.wmo.int``
     - WMO OSCAR database
-
-.. note::
-
-  Since a `wis2box` instance must be exposed to the public internet in order to operate as a WIS2 Node, it is **not recommended** to deploy a `wis2box` instance on a server within your internal network.
-
-  Please consider setting up your `wis2box` instance in the **cloud** or in another suitably isolated, internet-facing environment such as a **perimeter network (DMZ)**.
-
-.. important::
-
-  It is recommended to **push data** from your internal network to the `wis2box` host environment and to limit your firewall to strictly required inbound and outbound connections only, following the **principle of least privilege**.
 
 Network requirements
 --------------------
