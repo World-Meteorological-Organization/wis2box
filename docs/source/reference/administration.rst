@@ -58,8 +58,8 @@ A default wis2box installation utilizes the following ports for public services:
 Public services
 ^^^^^^^^^^^^^^^
 
-- ``80``: web-proxy for UI, web-app, API and storage
-- ``443``: web-proxy for UI, web-app, API and storage (if SSL/TLS certs are provided)
+- ``80``: web proxy for UI, webapp, API and storage
+- ``443``: web proxy for UI, webapp, API and storage (if SSL/TLS certs are provided)
 - ``1883``: Message broker via MQTT
 - ``8884``: Message broker via MQTT/WebSockets
 
