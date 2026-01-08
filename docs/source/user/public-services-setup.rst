@@ -24,8 +24,8 @@ Please ensure that you follow these best practices to ensure your wis2box-instan
 
 .. important::
 
-  It is recommended to **push data** from your internal network to the wis2box host environment, rather than allowing the wis2box instance to pull data from your internal network.
-  Make sure to limit your firewall to strictly required inbound and outbound connections only, following the **principle of least privilege**.
+  It is recommended to **push data** from your internal network to the wis2box host environment, rather than allowing the wis2box instance to pull data from the internal network.
+  Make sure to limit your firewall to strictly required inbound and outbound connections only, following the "principle of least privilege".
 
 The wis2box development team is not responsible for the security of your wis2box-instance and it is your responsibility to ensure that your wis2box instance is secure.
 
