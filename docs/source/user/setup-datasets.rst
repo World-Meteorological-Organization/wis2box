@@ -177,7 +177,7 @@ For example, if the "weather/surface-based-observations/synop" template is selec
 
    If  "core" is selected as a data policy, data will be cached by the WIS2 Global Cache by default. Uncheck the box below the "Data Mappings" section if you wish for data NOT to be cached by the WIS2 Global Cache.
    
-   In this case, users will directly download core data from your HTTP storage endpoint, which must be able to handle the expected data traffic and is accessible to any incoming connections.
+   In this case, users will directly download core data from your HTTP storage endpoint, which must be able to handle the expected data traffic and be accessible to any incoming connections.
 
 If "other" is selected as the template, add at least one data mappings plugin to the dataset by clicking the "Add a plugin" button:
 
