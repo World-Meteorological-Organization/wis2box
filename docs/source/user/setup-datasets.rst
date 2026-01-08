@@ -175,9 +175,9 @@ For example, if the "weather/surface-based-observations/synop" template is selec
 
 .. note::
 
-   If you select "core" as data-policy, your data will be cached by the WIS2 Global Cache by default. You can uncheck the box below the "Data Mappings" section if you do not wish data to be cached by the WIS2 Global Cache.
+   If  "core" is selected as a data policy, data will be cached by the WIS2 Global Cache by default. Uncheck the box below the "Data Mappings" section if you wish for data NOT to be cached by the WIS2 Global Cache.
    
-   In this case, users will directly download core data from your HTTP storage end-point so you must ensure your host can handle the expected data traffic and is accessible to any incoming connections.
+   In this case, users will directly download core data from your HTTP storage endpoint, which must be able to handle the expected data traffic and is accessible to any incoming connections.
 
 If "other" is selected as the template, add at least one data mappings plugin to the dataset by clicking the "Add a plugin" button:
 
@@ -197,7 +197,7 @@ Note that the "File Pattern" may be used to extract additional metadata from the
 
 .. note::
 
-   See the :ref:`extending-wis2box` section for more information on available data mappings plugins and how to create your own plugins.
+   See the :ref:`extending-wis2box` section for more information on available data mappings plugins and how to create custom plugins.
 
 Publishing the dataset
 ----------------------
