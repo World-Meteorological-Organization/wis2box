@@ -172,27 +172,32 @@ this indicates that the Elasticsearch container does not have enough memory allo
 You can edit the Edit the Elasticsearch configuration in the file docker-compose.yml to increase the memory assigned to Elasticsearch as follows:
 
 First stop the wis2box-stack:
+
 .. code-block:: bash
 
    python3 wis2box-ctl.py stop
 
 Then edit docker-compose.yml and replace:
+
 .. code-block:: yaml
 
    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
 
 with:
+
 .. code-block:: yaml
 
    - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
 
 and also  replace:
+
 .. code-block:: yaml
 
    mem_limit: 1.5g
    memswap_limit: 1.5g
 
 with:
+
 .. code-block:: yaml
 
    mem_limit: 2g
@@ -231,21 +236,25 @@ Make sure to replace `<your-wis2box-host-datadir>` with the actual path defined 
 You can disable the SFTP server in MinIO to allow the wis2box-stack to start without SSH keys. You will not be able to ingest data using SFTP in this case.
 
 To do so, first stop the wis2box-stack:
+
 .. code-block:: bash
 
    python3 wis2box-ctl.py stop
 
 Then edit docker-compose.yml and replace:
+
 .. code-block:: yaml
 
    command: server --quiet --console-address ":9001" --sftp="address=:8022" --sftp="ssh-private-key=/home/miniouser/.ssh/id_rsa" /data
 
 With:
+
 .. code-block:: yaml
 
    command: server --quiet --console-address ":9001" /data
 
 After making the changes, start the wis2box-stack again:
+
 .. code-block:: bash
 
    python3 wis2box-ctl.py start
