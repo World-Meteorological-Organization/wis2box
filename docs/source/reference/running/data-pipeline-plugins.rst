@@ -166,9 +166,9 @@ A typical BUFR4 plugin workflow definition would be defined as follows:
          notify: true  # trigger GeoJSON publishing for API and UI
          file-pattern: '^.*\.bin$'
 
-When using this plugin, you have the option to apply **BUFR-overrides** to modify BUFR data prior to publication.
+This plugin allows for overriding and updating various BUFR elements prior to data publication.
 
-For example to correct the station elevation for a specific WIGOS Station Identifier and set the BUFR header centre to 98 for all messages, you can add the following to your dataset mapping configuration:
+For example, to correct the station elevation for a specific WIGOS Station Identifier and set the BUFR header centre to ``98`` for all messages, add the following to the dataset mapping configuration:
 
 .. code-block:: yaml
 
