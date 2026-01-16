@@ -69,7 +69,7 @@ MAPPINGS = {
                         }
                     }
                 },
-                'pubTime': {
+                'pubtime': {
                     'type': 'date',
                     'fields': {
                         'raw': {
@@ -416,8 +416,8 @@ class ElasticBackend(BaseBackend):
             'query': {
                 'bool': {
                     'should': [
-                        {'range': {'properties.pubTime': {'lte': before}}},
-                        {'range': {'properties.pubTime': {'gte': after}}}
+                        {'range': {'properties.pubtime': {'lte': before}}},
+                        {'range': {'properties.pubtime': {'gte': after}}}
                     ]
                 }
             }
