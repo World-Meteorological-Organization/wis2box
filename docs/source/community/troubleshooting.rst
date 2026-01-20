@@ -264,3 +264,30 @@ And check if the all the services are now running as expected:
 .. code-block:: bash
 
    python3 wis2box-ctl.py status
+
+wis2downloader commands fails with 500 Internal Server Error
+-------------------------------------------------------------
+
+If you encounter a 500 Internal Server Error when executing ``wis2downloader`` commands, for example when adding a subscription:
+
+.. code-block:: bash
+
+   (.venv) wis2downloader@7953c8fccfa8:~$ wis2downloader add-subscription --topic cache/a/wis2/de-dwd-gts-to-wis2/#
+   Subscription not added
+   Error: 500
+   <!doctype html>
+   <html lang=en>
+   <title>500 Internal Server Error</title>
+   <h1>Internal Server Error</h1>
+   <p>Internal server error: [Errno 13] Permission denied: &#39;/home/wis2downloader/app/data/downloads/.session-info.json&#39;</p
+
+This error indicates that the ``wis2downloader`` user inside the ``wis2box-wis2downloader`` container does not have write permissions to the
+``/home/wis2downloader/app/data/downloads/`` directory.
+
+To fix this, run the following commands to give wis2downloader the required permissions:
+
+.. code-block:: bash
+
+   docker exec -it --user root wis2downloader chown -R wis2downloader:wis2downloader /home/wis2downloader/app/data
+
+Then try to execute the ``wis2downloader`` command again.
