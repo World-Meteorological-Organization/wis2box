@@ -721,6 +721,12 @@ def main():
     if not host_datadir:
         host_datadir = create_host_datadir()
 
+    # create directory for discovery metadata if it does not exist
+    discovery_metadata_dir = Path(host_datadir) / 'metadata' / 'discovery'
+
+    if not discovery_metadata_dir.exists():
+        discovery_metadata_dir.mkdir(parents=True)
+    
     create_station_list(host_datadir)
 
     # if wis2box.env does not exist
