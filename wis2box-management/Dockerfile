@@ -54,6 +54,10 @@ RUN groupadd -g 1001 -r wis2box && useradd -u 1001 -r -g wis2box wis2box \
     && chown -R wis2box:wis2box /app \
     && chown -R wis2box:wis2box /home/wis2box \
     && mkdir -p /data/wis2box \
+    && mkdir -p /data/wis2box/metadata/discovery \
+    && mkdir -p /data/wis2box/metadata/station \
+    && mkdir -p /data/wis2box/mappings \
+    && mkdir -p /data/wis2box/.htpasswd \
     && chown -R wis2box:wis2box /data/wis2box
 
 USER wis2box
