@@ -726,7 +726,7 @@ def main():
 
     if not discovery_metadata_dir.exists():
         discovery_metadata_dir.mkdir(parents=True)
-    
+
     create_station_list(host_datadir)
 
     # if wis2box.env does not exist
