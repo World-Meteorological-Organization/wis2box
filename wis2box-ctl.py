@@ -407,6 +407,12 @@ def make(args) -> None:
             else:
                 run(split(f'{DOCKER_COMPOSE_COMMAND} {docker_compose_args} up -d'))
                 remove_old_docker_images()
+        # set folder-permissions on wis2box-management after start
+        run(split('docker exec -it --user root wis2box-management chown -R wis2box:wis2box /data/wis2box'), silence_stderr=True)
+        # set folder-permissions on wis2box-auth
+        run(split('docker exec -it --user root wis2box-auth chown -R wis2box-auth:wis2box-auth /data/wis2box'), silence_stderr=True)
+        # set folder-permissions on wis2box-api
+        run(split('docker exec -it --user root wis2box-api chown -R wis2box-api:wis2box-api /data/wis2box'), silence_stderr=True)
     elif args.command == "execute":
         run(['docker', 'exec', '-i', 'wis2box-management', 'sh', '-c', containers])
     elif args.command == "login":
