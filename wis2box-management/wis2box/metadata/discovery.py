@@ -188,7 +188,7 @@ class DiscoveryMetadata(BaseMetadata):
             links.append(mqp_link)
 
         canonical_link = {
-            'href': f"{URL}/metadata/data/{identifier}.json",  # noqa
+            'href': f"{URL}/data/metadata/{identifier}.json",  # noqa
             'type': 'application/geo+json',
             'name': identifier,
             'description': identifier,
