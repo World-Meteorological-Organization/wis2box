@@ -37,7 +37,7 @@ RUN apt-get update -y && apt-get install -y ${DEBIAN_PACKAGES} \
     # create directory for wmdr codelists
     && mkdir -p /home/wis2box/wmdr-codelists \
     # Install Supercronic for job management
-    && curl -fsSLO "https://github.com/aptible/supercronic/releases/download/v0.2.41/supercronic-linux-amd64" \
+    && curl -fsSLO "https://github.com/aptible/supercronic/releases/download/v0.2.43/supercronic-linux-amd64" \
     && chmod +x supercronic-linux-amd64 \
     && mv supercronic-linux-amd64 /usr/local/bin/supercronic
 
