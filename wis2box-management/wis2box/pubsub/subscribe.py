@@ -154,6 +154,10 @@ class WIS2BoxSubscriber:
             if key.endswith('/'):
                 LOGGER.info(f'Do not process directories: {key}')
                 return
+            # ignore temporary dot-files
+            if key.split('/')[-1].startswith('.'):
+                LOGGER.info(f'Ignoring temporary object: {key}')
+                return
             filepath = f'{STORAGE_SOURCE}/{key}'
             # start a new process to handle the received data
             while len(mp.active_children()) == mp.cpu_count():
