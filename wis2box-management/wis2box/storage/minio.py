@@ -173,7 +173,7 @@ class MinIOStorage(StorageBase):
                 queue_config_list=[
                     QueueConfig(
                         queue='arn:minio:sqs::WIS2BOX:mqtt',
-                        events=['s3:ObjectCreated:*', 's3:ObjectRemoved:*'],
+                        events=['s3:ObjectCreated:*'],
                         config_id='1'
                     )
                 ]
