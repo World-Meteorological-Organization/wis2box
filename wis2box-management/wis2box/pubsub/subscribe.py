@@ -156,7 +156,7 @@ class WIS2BoxSubscriber:
                 return
             # ignore temporary dot-files
             if key.split('/')[-1].startswith('.'):
-                LOGGER.info(f'Ignoring temporary object: {key}')
+                LOGGER.warning(f'Ignoring temporary file: {key}')
                 return
             filepath = f'{STORAGE_SOURCE}/{key}'
             # start a new process to handle the received data
