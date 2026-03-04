@@ -70,7 +70,11 @@ RUN cd /app \
     https://github.com/wmo-cop/pyoscar/archive/refs/tags/0.9.0.zip \
     https://github.com/geopython/pygeometa/archive/refs/tags/0.16.0.zip \
     https://github.com/World-Meteorological-Organization/pywis-topics/archive/refs/tags/0.3.5.zip \
-    && pip3 install --no-cache-dir capvalidator==0.1.0-dev4 cython shapely botocore boto3
+    && pip3 install --no-cache-dir capvalidator==0.1.0-dev4 cython shapely botocore boto3 \
+    && pip3 install --force-reinstall numpy==2.3.5
+
+# reinstall numpy system-wide to avoid issues with system packages that depend on it
+RUN pip3 install --break-system-packages --force-reinstall numpy==2.3.5
 
 RUN if [ "$WIS2BOX_PIP3_EXTRA_PACKAGES" = "None" ]; \
     then export WIS2BOX_PIP3_EXTRA_PACKAGES=echo; \
