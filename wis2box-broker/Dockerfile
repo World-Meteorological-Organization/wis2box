@@ -19,15 +19,19 @@
 #
 ###############################################################################
 
-FROM eclipse-mosquitto:2.0.22
+FROM eclipse-mosquitto:2.1.2-alpine
 
-RUN apk update && apk upgrade
-
-RUN mkdir -p /data/wis2box/mosquitto
-RUN ln -s /mosquitto /data/wis2box/mosquitto
+RUN apk update && \
+    apk upgrade --no-cache && \
+    mkdir -p /data/wis2box/mosquitto && \
+    ln -s /mosquitto /data/wis2box/mosquitto
 
 COPY mosquitto.conf /mosquitto/config/mosquitto.conf
-
 COPY entrypoint.sh /docker-entrypoint.sh
 
 RUN chmod +x /docker-entrypoint.sh
+
+RUN chgrp -R 0 /mosquitto && \
+    chmod -R g=u /mosquitto
+
+USER 1001
