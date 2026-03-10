@@ -93,12 +93,12 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Editor
       - GF_AUTH_ANONYMOUS_HIDE_VERSION=true
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/home.json
       - GF_ANALYTICS_CHECK_FOR_UPDATES=false
       - GF_USERS_VIEWERS_CAN_EDIT=true
-      - GF_UNIFIED_ALERTING_ENABLED=false
-      - GF_ALERTING_ENABLED=true
+      - GF_UNIFIED_ALERTING_ENABLED=true
       - GF_USERS_DEFAULT_THEME=dark
       - GF_DISABLE_SIGNOUT_MENU=true
       - GF_SERVER_ROOT_URL=${WIS2BOX_URL:-http://localhost}/monitoring
