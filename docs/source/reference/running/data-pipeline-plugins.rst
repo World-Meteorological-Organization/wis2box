@@ -127,6 +127,8 @@ A typical bufr2geojson plugin workflow definition would be defined as follows:
 
 This plugin is for the purposes of publishing GeoJSON data to the API.
 
+.. _synop2bufr-plugin:
+
 ``wis2box.data.synop2bufr.SYNOP2BUFR``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

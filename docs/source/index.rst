@@ -82,7 +82,6 @@ of information on wis2box for easy reference.
    reference/monitoring/index
    reference/services
    reference/auth
-   reference/data-access/index
    reference/development
    reference/extending-wis2box
 
@@ -92,7 +91,7 @@ Community
 The community documentation provides information on where to find support and how to contribute to wis2box.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Community
    :name: toc-community
 
