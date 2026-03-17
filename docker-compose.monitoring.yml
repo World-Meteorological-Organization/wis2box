@@ -101,7 +101,7 @@ services:
       - GF_UNIFIED_ALERTING_ENABLED=true
       - GF_USERS_DEFAULT_THEME=dark
       - GF_DISABLE_SIGNOUT_MENU=true
-      - GF_SERVER_ROOT_URL=${WIS2BOX_URL}:3000/monitoring
+      - GF_SERVER_ROOT_URL=http://localhost:3000
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
       - GF_USAGE_STATS_ENABLED=false
       - GF_LOG_LEVEL=warn
