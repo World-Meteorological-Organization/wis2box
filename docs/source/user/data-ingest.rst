@@ -37,12 +37,12 @@ Data ingest methods
    data-ingest/webapp-manual-ingestion
    data-ingest/minio-scripts
    data-ingest/minio-sftp
-   data-ingest/IBL-Moving-Weather
+   data-ingest/Moving-Weather
    data-ingest/CDMS-SURFACE
    data-ingest/CDMS-ClimSoft
    data-ingest/CDMS-CLIDE
    data-ingest/tools-ADT
-   data-ingest/wmo-raf-ADL
+   data-ingest/tools-ADL
    data-ingest/campbell-mqtt
 
 Testing and monitoring

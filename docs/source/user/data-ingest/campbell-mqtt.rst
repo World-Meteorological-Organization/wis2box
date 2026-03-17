@@ -3,13 +3,13 @@
 Using CR1000X over MQTT
 =======================
 
-`Campbell Scientific CR1000X data loggers <https://www.campbellsci.com/cr1000x>`_ can be used to send a data-extract over MQTT to the wis2box broker and from there into the `wis2box-incoming` bucket.
+`CR1000X data loggers <https://www.campbellsci.com/cr1000x>`_ can be used to send a data-extract over MQTT to the wis2box broker and from there into the `wis2box-incoming` bucket.
 
 .. note::
 
    This data ingestion work-flow was originally developed for selected countries in Africa as part of the WIS2 pilot in 2021.
 
-The following steps are required to enable the ingestion of data from Campbell Scientific CR1000X data loggers over MQTT into wis2box:
+The following steps are required to enable the ingestion of data from CR1000X data loggers over MQTT into wis2box:
 
 - The wis2box data-plugin must use csv2bufr with the `"CampbellAfrica-v1-template" <https://github.com/World-Meteorological-Organization/csv2bufr-templates/blob/main/templates/CampbellAfrica-v1-template.json>`_ (a.k.a. "WIS2-pilot-template-2021").
 - The data-loggers need to be configured to send data over MQTT to the broker endpoint in the wis2box instance.

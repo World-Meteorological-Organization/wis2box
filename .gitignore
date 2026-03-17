@@ -48,3 +48,6 @@ docker/.env
 
 docker-compose.images-*.yml
 docker-compose.images-*.yml.bak
+tests/data/.htpasswd
+tests/data/.ssh
+tests/data/downloads
