@@ -21,6 +21,8 @@
 
 FROM eclipse-mosquitto:2.0.22
 
+RUN apk update && apk upgrade
+
 RUN mkdir -p /data/wis2box/mosquitto
 RUN ln -s /mosquitto /data/wis2box/mosquitto
 
