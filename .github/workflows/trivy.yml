@@ -19,7 +19,7 @@ jobs:
           docker build -t ${{ matrix.image }}:test ${{ matrix.image }}
       - name: Run Trivy vulnerability scanner on ${{ matrix.image }}
         if: always()
-        uses: aquasecurity/trivy-action@0.20.0
+        uses: aquasecurity/trivy-action@v0.35.0
         env:
           TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
           TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
@@ -30,4 +30,4 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
-          ignorefile: '.trivyignore'
+          trivyignores: '.trivyignore'

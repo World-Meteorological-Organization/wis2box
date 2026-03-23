@@ -21,6 +21,8 @@
 
 FROM python:3-alpine
 
+RUN apk update && apk upgrade
+
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 	
