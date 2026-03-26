@@ -2,7 +2,7 @@ broker: mqtt://everyone:everyone@localhost:1883
 
 # list of topics to subscribe to
 subscribe_topics:
-    - 'origin/a/wis2/#'
+    - 'origin/a/wis2/+/data/#'
 
 # whether to verify data
 verify_data: true
