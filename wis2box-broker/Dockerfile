@@ -23,7 +23,9 @@ FROM eclipse-mosquitto:2.1.2-alpine
 
 RUN apk update && \
     apk upgrade --no-cache && \
-    mkdir -p /data/wis2box/mosquitto && \
+    mkdir -p /data/wis2box/mosquitto/config && \
+    mkdir -p /data/wis2box/mosquitto/log && \
+    mkdir -p /data/wis2box/mosquitto/data && \
     ln -s /mosquitto /data/wis2box/mosquitto
 
 COPY mosquitto.conf /mosquitto/config/mosquitto.conf
@@ -31,7 +33,7 @@ COPY entrypoint.sh /docker-entrypoint.sh
 
 RUN chmod +x /docker-entrypoint.sh
 
-RUN chgrp -R 0 /mosquitto && \
-    chmod -R g=u /mosquitto
+# ensure permissions set for mosquitto
+RUN chown -R mosquitto:mosquitto /mosquitto
 
-USER 1001
+USER mosquitto
