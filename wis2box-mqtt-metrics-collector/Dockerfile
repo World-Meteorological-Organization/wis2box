@@ -25,14 +25,22 @@ RUN apk update && apk upgrade
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
-	
+
 COPY requirements.txt /usr/src/app
-RUN pip install --no-cache-dir -r requirements.txt
-	
+RUN apk update && \
+    apk upgrade --no-cache && \
+	rm -fr /var/cache/apk/* && \
+	pip3 install --no-cache-dir -r requirements.txt
+
 COPY *.py /usr/src/app/
-	
+
 EXPOSE 8000
 
 ENV PYTHONUNBUFFERED="true"
-	
+
+RUN chgrp -R 0 /usr/src/app && \
+    chmod -R g=u /usr/src/app
+
+USER 1001
+
 ENTRYPOINT [ "python3","-u","mqtt_metrics_collector.py" ]

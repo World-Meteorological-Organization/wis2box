@@ -413,6 +413,8 @@ def make(args) -> None:
         run(split('docker exec -it --user root wis2box-auth chown -R wis2box-auth:wis2box-auth /data/wis2box'), silence_stderr=True)
         # set folder-permissions on wis2box-api
         run(split('docker exec -it --user root wis2box-api chown -R wis2box-api:wis2box-api /data/wis2box'), silence_stderr=True)
+        # set folder-permissions on mosquitto
+        run(split('docker exec -it --user root mosquitto chown -R mosquitto:mosquitto /mosquitto'), silence_stderr=True)
     elif args.command == "execute":
         run(['docker', 'exec', '-i', 'wis2box-management', 'sh', '-c', containers])
     elif args.command == "login":
