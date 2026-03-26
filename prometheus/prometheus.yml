@@ -29,12 +29,6 @@ scrape_configs:
     labels:
       alias: 'cadvisor'
 
-- job_name: wis2downloader
-  metrics_path: /metrics
-  scheme: http
-  static_configs:
-  - targets: ['wis2downloader:5000']
-
 - job_name: 'elasticsearch-exporter'
   scrape_interval: 15s
   static_configs:
