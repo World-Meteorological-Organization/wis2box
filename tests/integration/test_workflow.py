@@ -50,17 +50,17 @@ def test_wis2downloader():
     DOWNLOAD_DIR = DATADIR / 'downloads'
 
     topic_nfiles_dict = {
-        'urn:wmo:md:mw-mw_met_centre-test:surface-weather-observations': 23, # noqa
-        'urn:wmo:md:dz-meteoalgerie:surface-weather-observations': 28, # noqa
-        'urn:wmo:md:cn-cma:grapes-geps-global': 10, # noqa
-        'urn:wmo:md:ro-rnimh-test:synoptic-weather-observations': 49, # noqa
-        'urn:wmo:md:cg-met:surface-weather-observations': 0, # noqa
-        'urn:wmo:md:int-wmo-test:surface-weather-observations:drifting-buoys': 2, # noqa
-        'urn:wmo:md:int-wmo-test:surface-weather-observations:wind-profile': 1, # noqa
-        'urn:wmo:md:int-wmo-test:surface-weather-observations:ship': 5, # noqa
-        'urn:wmo:md:it-meteoam:surface-weather-observations': 31, # noqa
-        'urn:wmo:md:int-wmo-test:cap': 1, # noqa
-        'urn:wmo:md:org-daycli-test:surface-climate-observations:daily': 30 # noqa
+        'mw-mw_met_centre-test:surface-weather-observations': 23, # noqa
+        'dz-meteoalgerie:surface-weather-observations': 28, # noqa
+        'cn-cma:grapes-geps-global': 10, # noqa
+        'ro-rnimh-test:synoptic-weather-observations': 49, # noqa
+        'cg-met:surface-weather-observations': 0, # noqa
+        'int-wmo-test:surface-weather-observations:drifting-buoys': 2, # noqa
+        'int-wmo-test:surface-weather-observations:wind-profile': 1, # noqa
+        'int-wmo-test:surface-weather-observations:ship': 5, # noqa
+        'it-meteoam:surface-weather-observations': 31, # noqa
+        'int-wmo-test:cap': 1, # noqa
+        'org-daycli-test:surface-climate-observations:daily': 30 # noqa
     }
 
     topic_nfiles_dict_found = {}
