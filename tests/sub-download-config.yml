@@ -1,0 +1,17 @@
+broker: mqtt://everyone:everyone@localhost:1883
+
+# list of topics to subscribe to
+subscribe_topics:
+    - 'origin/a/wis2/#'
+
+# whether to verify data
+verify_data: true
+
+# whether to validate message against schema
+validate_message: true
+
+# storage: filesystem
+storage:
+    type: fs
+    options:
+        basedir: tests/data/downloads/

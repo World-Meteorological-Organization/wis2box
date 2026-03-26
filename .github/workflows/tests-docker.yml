@@ -31,17 +31,12 @@ jobs:
         ssh-keygen -t rsa -b 4096 -f tests/data/.ssh/id_rsa -N "" -q
         ls -lh tests/data/.ssh/
         mkdir -p tests/data/.htpasswd
-    - name: setup wis2downloader
+    - name: setup pywis-pubsub
       run: |
-        # make sure current user in docker group
-        sudo usermod -aG docker $(whoami)
-        # Add env parameters to tests/test.env
-        echo "" >> tests/test.env  #no new line at end of test.env file
-        echo "DOCKER_GID=$(getent group docker | cut -d: -f3)" >> tests/test.env
-        # make sure data dir is in group docker and has 775 permissions
         mkdir -p tests/data/downloads
-        chown -R $(whoami):docker tests/data/downloads
-        chmod -R 775 tests/data/downloads
+        pywis-pubsub subscribe --config tests/sub-download-config.yml --download > /tmp/subscribe.log &
+        sleep 1
+        less /tmp/subscribe.log
     - name: setup wis2box configuration, replace localhost with IP on host 📦
       run: |
         export IP=$(hostname -I | awk '{print $1}')

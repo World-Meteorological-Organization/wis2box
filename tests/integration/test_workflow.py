@@ -50,17 +50,17 @@ def test_wis2downloader():
     DOWNLOAD_DIR = DATADIR / 'downloads'
 
     topic_nfiles_dict = {
-        'origin/a/wis2/mw-mw_met_centre-test/data/core/weather/surface-based-observations/synop': 23, # noqa
-        'origin/a/wis2/dz-meteoalgerie/data/core/weather/surface-based-observations/synop': 28, # noqa
-        'origin/a/wis2/cn-cma/data/core/weather/prediction/forecast/medium-range/probabilistic/global': 10, # noqa
-        'origin/a/wis2/ro-rnimh-test/data/core/weather/surface-based-observations/synop': 49, # noqa
-        'origin/a/wis2/cg-met/data/recommended/weather/surface-based-observations/synop': 0, # noqa
-        'origin/a/wis2/int-wmo-test/data/core/ocean/surface-based-observations/drifting-buoys': 2, # noqa
-        'origin/a/wis2/int-wmo-test/data/core/weather/surface-based-observations/wind-profile': 1, # noqa
-        'origin/a/wis2/int-wmo-test/data/core/weather/surface-based-observations/ship': 5, # noqa
-        'origin/a/wis2/it-meteoam/data/core/weather/surface-based-observations/synop': 31, # noqa
-        'origin/a/wis2/int-wmo-test/data/core/weather/advisories-warnings': 1, # noqa
-        'origin/a/wis2/org-daycli-test/data/core/climate/surface-based-observations/daily': 30 # noqa
+        'urn:wmo:md:mw-mw_met_centre-test:surface-weather-observations': 23, # noqa
+        'urn:wmo:md:dz-meteoalgerie:surface-weather-observations': 28, # noqa
+        'urn:wmo:md:cn-cma:grapes-geps-global': 10, # noqa
+        'urn:wmo:md:ro-rnimh-test:synoptic-weather-observations': 49, # noqa
+        'urn:wmo:md:cg-met:surface-weather-observations': 0, # noqa
+        'urn:wmo:md:int-wmo-test:surface-weather-observations:drifting-buoys': 2, # noqa
+        'urn:wmo:md:int-wmo-test:surface-weather-observations:wind-profile': 1, # noqa
+        'urn:wmo:md:int-wmo-test:surface-weather-observations:ship': 5, # noqa
+        'urn:wmo:md:it-meteoam:surface-weather-observations': 31, # noqa
+        'urn:wmo:md:int-wmo-test:cap': 1, # noqa
+        'urn:wmo:md:org-daycli-test:surface-climate-observations:daily': 30 # noqa
     }
 
     topic_nfiles_dict_found = {}
