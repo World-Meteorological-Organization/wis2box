@@ -131,8 +131,6 @@ services:
     <<: *logging
   web-proxy:
     <<: *logging
-  wis2downloader:
-    <<: *logging
 
 volumes:
   loki-data:

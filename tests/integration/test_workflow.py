@@ -43,8 +43,8 @@ SESSION.hooks = {
 }
 
 
-def test_wis2downloader():
-    """Test if the wis2downloader has downloaded
+def test_pywispubsub():
+    """Test if pywis-pubsub has downloaded
     the expected number of files in the download directory"""
 
     DOWNLOAD_DIR = DATADIR / 'downloads'
