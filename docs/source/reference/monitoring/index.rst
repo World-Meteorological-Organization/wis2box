@@ -38,7 +38,6 @@ The logs of the following Docker containers are sent to Loki:
 - wis2box-ui
 - wis2box-minio
 - wis2box-webapp
-- wis2downloader
 - elasticsearch
 - mosquitto
 - nginx
