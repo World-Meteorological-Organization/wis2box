@@ -52,7 +52,7 @@ def test_wis2downloader():
     topic_nfiles_dict = {
         'mw-mw_met_centre-test:surface-weather-observations': 23, # noqa
         'dz-meteoalgerie:surface-weather-observations': 28, # noqa
-        'cn-cma:grapes-geps-global': 10, # noqa
+        #'cn-cma:grapes-geps-global': 10, # pywis-pubsub does not download when cache=false # noqa
         'ro-rnimh-test:synoptic-weather-observations': 49, # noqa
         'cg-met:surface-weather-observations': 0, # noqa
         'int-wmo-test:surface-weather-observations:drifting-buoys': 2, # noqa
