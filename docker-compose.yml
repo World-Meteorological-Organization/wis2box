@@ -47,8 +47,8 @@ services:
   minio:
     container_name: wis2box-minio
     image: WIS2BOX-RELEASE
-    mem_limit: 512m
-    memswap_limit: 512m
+    mem_limit: 768m
+    memswap_limit: 768m
     restart: always
     env_file:
       - wis2box.env
