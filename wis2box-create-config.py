@@ -35,7 +35,6 @@ if platform.system() == 'Windows':
 
 if not WINDOWS:
     import grp
-    import shutil
     DOCKER_GROUP = grp.getgrnam('docker')
 
 OTHER_TLDS = ['org', 'int']
