@@ -399,54 +399,84 @@ class ElasticBackend(BaseBackend):
 
     def delete_collections_by_retention(self, days: int) -> bool:
         """
-        Delete collections by retention date
-
-        :param days: `int` of number of days
-
-        :returns: `None`
+        Delete collections by retention date in batches, oldest first.
         """
 
-        indices = self.conn.indices.get(index='*').keys()
+        indices = self.conn.indices.get(index="*").keys()
 
         before = datetime_days_ago(days)
-        # also delete future data
         after = datetime_days_ago(-1)
 
-        msg_query_by_date = {
-            'query': {
-                'bool': {
-                    'should': [
-                        {'range': {'properties.pubtime': {'lte': before}}},
-                        {'range': {'properties.pubtime': {'gte': after}}}
-                    ]
-                }
-            }
-        }
-        obs_query_by_date = {
-            'query': {
-                'bool': {
-                    'should': [
-                        {'range': {'properties.reportTime': {'lte': before}}},
-                        {'range': {'properties.reportTime': {'gte': after}}}
-                    ]
-                }
-            }
-        }
+        batch_size = 2000
 
         for index in indices:
-            if index == 'messages':
-                query_by_date = msg_query_by_date
-            elif index.startswith('urn-wmo-md'):
-                query_by_date = obs_query_by_date
-            else:
-                # don't run delete-query on other indexes
-                LOGGER.info(f'items for index={index} will not be deleted')
-                continue
-            LOGGER.info(f'deleting documents from index={index} older than {days} days ({before}) or newer than {after}')  # noqa
-            result = self.conn.delete_by_query(index=index, **query_by_date)
-            LOGGER.info(f'deleted {result["deleted"]} documents from index={index}')  # noqa
 
-        return
+            if index == "messages":
+                time_field = "properties.pubtime"
+            elif index.startswith("urn-wmo-md"):
+                time_field = "properties.reportTime"
+            else:
+                LOGGER.info(f"items for index={index} will not be deleted")
+                continue
+
+            LOGGER.info(
+                f"deleting documents from index={index} older than {days} days ({before}) or newer than {after}" # noqa
+            )
+
+            query = {
+                "query": {
+                    "bool": {
+                        "should": [
+                            {"range": {time_field: {"lte": before}}},
+                            {"range": {time_field: {"gte": after}}},
+                        ]
+                    }
+                },
+                "sort": [{time_field: {"order": "asc"}}],
+            }
+
+            resp = self.conn.search(
+                index=index,
+                body=query,
+                scroll="5m",
+                size=batch_size,
+            )
+
+            scroll_id = resp["_scroll_id"]
+            hits = resp["hits"]["hits"]
+
+            total_deleted = 0
+
+            while hits:
+
+                actions = [
+                    {
+                        "_op_type": "delete",
+                        "_index": hit["_index"],
+                        "_id": hit["_id"],
+                    }
+                    for hit in hits
+                ]
+
+                success, errors = helpers.bulk(self.conn, actions)
+                if errors:
+                    for error in errors:
+                        LOGGER.error(f"Deletion error: {error}, skipping")
+
+                total_deleted += success
+
+                resp = self.conn.scroll(scroll_id=scroll_id, scroll="5m")
+                scroll_id = resp["_scroll_id"]
+                hits = resp["hits"]["hits"]
+
+            LOGGER.info(f"deleted {total_deleted} documents from index={index}") # noqa
+
+            try:
+                self.conn.clear_scroll(scroll_id=scroll_id)
+            except Exception:
+                pass
+
+        return True
 
     def flush(self, collection: str):
         """
