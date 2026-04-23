@@ -5,7 +5,7 @@ Monitoring
 
 wis2box has built-in monitoring functions based on `Prometheus <https://prometheus.io/docs/introduction/overview/>`_, `Loki <https://grafana.com/docs/loki/latest/>`_ and `Grafana <https://grafana.com/docs/grafana/latest/>`_. 
 
-The Grafana endpoint can be visualized at http://localhost/monitoring.
+The Grafana endpoint can be visualized at http://localhost:3000/.
 
 Grafana uses two data sources to display monitoring data:
 
