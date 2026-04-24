@@ -16,6 +16,7 @@ wis2box consists of multiple software packages that provide all services require
 - `https://github.com/World-Meteorological-Organization/wis2box-webapp <https://github.com/World-Meteorological-Organization/wis2box-webapp>`_ Web -application to interactively configure wis2box and monitor published data
 - `https://github.com/World-Meteorological-Organization/wis2box-auth <https://github.com/World-Meteorological-Organization/wis2box-auth>`_ Access control functionality to datasets exposed via wis2box and to apply authentication API services used by wis2box-webapp
 - `https://github.com/World-Meteorological-Organization/wis2downloader <https://github.com/World-Meteorological-Organization/wis2downloader>`_ Subscription and download capability for access to data published by other WIS2 Nodes
+- `https://github.com/world-Meteorological-Organization/wis2box-minio <https://github.com/world-Meteorological-Organization/wis2box-minio>`_ S3-compatible object storage service used by wis2box to store ingested data and metadata, and to provide public access to published data
 
 WIS2 in a box is released using a Deployment Bundle that simplifies the setup of a WIS2 Node by providing all required services as Docker containers.
 
@@ -23,7 +24,6 @@ The release archive consists of a set of Docker Compose files and Python scripts
 
 In addition to the wis2box software packages mentioned above, wis2box  leverages the following Free and Open Source Software (FOSS):
 
-- storage using `MinIO <https://min.io/docs/minio/container/index.html>`_
 - MQTT broker using `mosquitto <https://mosquitto.org/>`_ 
 - Web proxy using `nginx <https://nginx.org/en/>`_
 - `OGC API <https://ogcapi.ogc.org/>`_ capability using `pygeoapi <https://pygeoapi.io/>`_

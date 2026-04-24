@@ -227,7 +227,7 @@ WIS2 network by enabling external access to your public services.
 
 Next: :ref:`public-services-setup`
 
-.. _`MinIO`: https://min.io/docs/minio/container/index.html
+.. _`MinIO`: https://github.com/world-Meteorological-Organization/wis2box-minio
 .. _`Grafana`: https://grafana.com/docs/grafana/latest/
 .. _`Prometheus`: https://prometheus.io/docs/introduction/overview/
 .. _`Loki`: https://grafana.com/docs/loki/latest/

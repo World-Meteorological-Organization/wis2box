@@ -6,13 +6,13 @@ Storage
 Overview
 --------
 
-The default wis2box storage capability is powered by `MinIO`_, which provides S3 compatible object storage.
+The default wis2box storage capability is powered by `wis2box-minio`_, which provides S3 compatible object storage.
 
 The default wis2box MinIO administration user interface can be accessed locally at ``http://localhost:9001``.
 
 The username/password for MinIO is configured through environment variables (see :ref:`configuration`). 
 
-.. image:: ../_static/minio-login-screen.png
+.. image:: ../_static/minio-login-screen2.png
    :width: 600px
    :alt: MinIO login screen
    :align: center
@@ -32,8 +32,7 @@ Uploading data to MinIO
 Files can uploaded to the MinIO bucket in a number of ways.  Any new file received on MinIO will trigger an MQTT notification
 which is received by wis2box.
 
-Below are basic examples on sending data to the MinIO ``wis2box-incoming`` bucket.  For more information and additional
-examples, consult the `official MinIO documentation`_.
+Below are basic examples on sending data to the MinIO ``wis2box-incoming`` bucket.
 
 
 Using the boto3 Python Client
@@ -198,7 +197,6 @@ And then setup an Amazon SNS subscription to forward messages to the WIS2BOX_URL
    :alt: Example of SNS subscription forwarding to the wis2box SNS endpoint
    :align: center
 
-.. _`MinIO`: https://min.io
-.. _`official MinIO documentation`: https://docs.min.io
+.. _`wis2box-minio`: https://github.com/world-Meteorological-Organization/wis2box-minio
 .. _`pip`: https://pip.pypa.io
 .. _`S3cmd`: https://s3tools.org/s3cmd
