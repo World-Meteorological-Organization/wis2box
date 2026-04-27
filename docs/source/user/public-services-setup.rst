@@ -45,7 +45,17 @@ The next sections describe the public services available in wis2box and how to c
 web-proxy (nginx)
 ^^^^^^^^^^^^^^^^^
 
-wis2box runs a local nginx container allowing access to the following HTTP based services:
+wis2box runs a local nginx container allowing access to the following HTTP-based services. You can expose these services securely using SSL in two ways:
+
+1. **Using Traefik with Let's Encrypt (from wis2box-1.3)**
+
+  wis2box supports running a Traefik reverse proxy that can automatically provision and renew SSL certificates from Let's Encrypt for your public services. When Traefik is enabled, it will handle all HTTPS traffic and certificate renewals automatically, so you do not need to manually manage certificates. This is the recommended approach for most users.
+
+2. **Manual SSL with nginx**
+
+  You can enable SSL by setting the ``WIS2BOX_SSL_CERT`` and ``WIS2BOX_SSL_KEY`` environment variables to the location of your SSL certificate and private key, respectively. In this case, you are responsible for providing valid certificates and ensuring they are renewed before expiration. When SSL is enabled this way, nginx will serve HTTPS using the configuration defined in ``nginx/nginx-ssl.conf``.
+
+The following HTTP-based services are available:
 
 .. csv-table::
    :header: Function, URL
@@ -58,13 +68,9 @@ wis2box runs a local nginx container allowing access to the following HTTP based
    Storage (public data) (minio:wis2box-public),`WIS2BOX_URL/data`
    Websockets (WIS2 notifications),`WIS2BOX_URL/mqtt`
 
-You can edit ``nginx/nginx.conf`` to control which services are exposed through the nginx-container include in your stack.
+You can edit ``nginx/nginx.conf`` to control which services are exposed through the nginx container included in your stack.
 
-By default the web-proxy service is exposed on port 80 on the host running wis2box.
-
-SSL can be enabled by setting the ``WIS2BOX_SSL_CERT`` and ``WIS2BOX_SSL_KEY`` environment variables to the location of your SSL certificate and private key respectively.
-
-When SSL is enabled, the web-proxy service is exposed on port 443 on the host running wis2box and uses the configuration defined in ``nginx/nginx-ssl.conf``.
+By default, the web-proxy service is exposed on port 80 on the host running wis2box. When SSL is enabled (either via Traefik or nginx), the service is exposed on port 443.
 
 .. note::
     The canonical link referenced in WIS2 notification messages by your wis2box will use the basepath ``WIS2BOX_URL/data``.
