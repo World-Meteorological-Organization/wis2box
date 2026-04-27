@@ -1,15 +1,11 @@
 services:
   web-proxy:
-    ports:
-    - 8000:80
-    volumes:
-      - ./nginx/nginx-ssl.conf:/etc/nginx/conf.d/ssl.conf
     labels:
     - "traefik.enable=true"
     - "traefik.http.routers.wis2box.rule=Host(`${WIS2BOX_HOST}`)"
     - "traefik.http.routers.wis2box.entrypoints=websecure"
     - "traefik.http.routers.wis2box.tls.certresolver=myresolver"
-    - "traefik.http.services.wis2box.loadbalancer.server.port=8080"
+    - "traefik.http.services.wis2box.loadbalancer.server.port=80"
     
   traefik:
     image: traefik:v2.11
@@ -27,6 +23,15 @@ services:
     volumes:
       - traefik-letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  minio:
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+  mosquitto:
+    ports:
+      - 1883:1883
 
 volumes:
   traefik-letsencrypt:

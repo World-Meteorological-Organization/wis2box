@@ -385,6 +385,10 @@ def make(args) -> None:
         else:
             WIS2BOX_HOST = wis2box_url.replace('https://', '').split('/')[0]
             os.environ['WIS2BOX_HOST'] = WIS2BOX_HOST
+        # Remove --file docker-compose.override.yml from DOCKER_COMPOSE_ARGS to avoid port conflicts
+        global DOCKER_COMPOSE_ARGS
+        DOCKER_COMPOSE_ARGS = DOCKER_COMPOSE_ARGS.replace('--file docker-compose.override.yml', '--file docker-compose.traefik.yml') # noqa
+        print("Replacing docker-compose.override.yml with docker-compose.traefik.yml")
 
     if not glob.glob('docker-compose.images-*.yml'):
         print("No docker-compose.images-*.yml files found, creating one")
@@ -400,8 +404,7 @@ def make(args) -> None:
     if args.ssl and not (ssl_key and ssl_cert):
         print("ERROR: SSL is enabled but WIS2BOX_SSL_KEY and WIS2BOX_SSL_CERT are not set in wis2box.env")
         exit(1)
-    if use_traefik:
-        docker_compose_args +=" --file docker-compose.traefik.yml"
+
     # if you selected a bunch of them, default to all
     containers = "" if not args.args else ' '.join(args.args)
 
