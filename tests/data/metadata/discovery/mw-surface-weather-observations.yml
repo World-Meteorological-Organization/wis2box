@@ -15,17 +15,17 @@ wis2box:
                   file-pattern: '^WIGOS_(\d-\d+-\d+-\w+)_.*\.bufr4$'
 
 mcf:
-    version: 1.0
+    version: 2.0
 
 metadata:
     identifier: urn:wmo:md:mw-mw_met_centre-test:surface-weather-observations
     hierarchylevel: dataset
+    dates:
+        creation: 2021-11-29
 
 identification:
     title: Surface weather observations from Malawi
     abstract: Surface weather observations from Malawi
-    dates:
-        creation: 2021-11-29
     keywords:
         default:
             keywords:

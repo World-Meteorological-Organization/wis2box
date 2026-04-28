@@ -14,17 +14,17 @@ wis2box:
                   file-pattern: '^.*_(\d{8})\d{2}.*\.grib2$'
 
 mcf:
-    version: 1.0
+    version: 2.0
 
 metadata:
     identifier: urn:wmo:md:cn-cma:grapes-geps-global
     hierarchylevel: dataset
+    dates:
+        creation: 2024-01-17
 
 identification:
     title: CMA GRAPES GEPS v1.3
     abstract: GRAPES GEPS is the main technical means to solve the uncertainty of CMA-GFS medium-term forecast and the difficulties of extreme weather forecast.
-    dates:
-        creation: 2024-01-17
     keywords:
         default:
             keywords:

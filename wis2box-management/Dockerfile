@@ -68,7 +68,7 @@ RUN cd /app \
     && $PIP_PLUGIN_PACKAGES \
     && pip3 install --no-cache-dir \
     https://github.com/wmo-cop/pyoscar/archive/refs/tags/0.9.0.zip \
-    https://github.com/geopython/pygeometa/archive/refs/tags/0.16.0.zip \
+    https://github.com/geopython/pygeometa/archive/refs/tags/0.21.1.zip \
     https://github.com/World-Meteorological-Organization/pywis-topics/archive/refs/tags/0.3.5.zip \
     && pip3 install --no-cache-dir capvalidator==0.1.0-dev4 cython shapely botocore boto3 \
     && pip3 install --force-reinstall numpy==2.3.5

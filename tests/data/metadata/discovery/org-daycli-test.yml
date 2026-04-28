@@ -15,17 +15,17 @@ wis2box:
                   file-pattern: '^WIGOS_(\d-\d+-\d+-\w+)_.*\.bufr4$'
 
 mcf:
-    version: 1.0
+    version: 2.0
 
 metadata:
     identifier: urn:wmo:md:org-daycli-test:surface-climate-observations:daily
     hierarchylevel: dataset
+    dates:
+        creation: 2024-03-04
 
 identification:
     title: Daily values from land stations (DAYCLI) 
     abstract: Daily values from land stations (DAYCLI)
-    dates:
-        creation: 2024-03-04
     keywords:
         default:
             keywords:

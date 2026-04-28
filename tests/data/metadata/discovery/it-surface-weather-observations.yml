@@ -14,17 +14,17 @@ wis2box:
                   file-pattern: '^WIGOS_(\d-\d+-\d+-\w+)_.*\.bufr4$'
 
 mcf:
-    version: 1.0
+    version: 2.0
 
 metadata:
     identifier: urn:wmo:md:it-meteoam:surface-weather-observations
     hierarchylevel: dataset
+    dates:
+        creation: 2021-11-29
 
 identification:
     title: Surface weather observations from Italy
     abstract: Surface weather observations from Italy
-    dates:
-        creation: 2021-11-29
     keywords:
         default:
             keywords:
