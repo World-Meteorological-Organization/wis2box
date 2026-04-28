@@ -47,7 +47,6 @@ web-proxy (nginx)
 
 wis2box runs a local nginx container allowing access to the following HTTP-based services. You can expose these services securely using SSL in two ways:
 
-
 For details on enabling SSL (using Traefik with Let's Encrypt or manual SSL with nginx), see the :ref:`ssl-setup` section below.
 
 The following HTTP-based services are available:
@@ -231,34 +230,32 @@ If you do not wish to expose the internal MQTT broker on wis2box, you can config
 
 .. _ssl-setup:
 
-
 SSL
 ^^^
 
-To ensure the security of your data, it is recommended to enable SSL for your wis2box instance. 
-There are two main approaches to enable SSL on the HTTP services of your wis2box instance:
+To ensure the security of your data, it is recommended to enable SSL for your wis2box instance.
 
-**1. External SSL Termination**
+A reverse proxy (such as nginx, Traefik, or a load balancer) may be used between the Internet and your wis2box instance to handle SSL termination, which is a common practice for securing web services.
+This way certificate management and encryption is handled outside of wis2box.
+Check with your IT department or hosting provider if they provide this type of service.
 
-Use a reverse proxy (such as nginx, Traefik, or a load balancer) outside of the wis2box-instance to terminate SSL and forward traffic to
- wis2box over HTTP. This way certificate management and encryption is handled outside of wis2box. 
-Check with your IT department or hosting provider for your options for setting up external SSL termination.
+If you prefer to handle SSL termination within the wis2box instance, you can use one of the following built-in options:
 
-**2. Internal SSL Termination (SSL handled by wis2box)**
+a. *Traefik with Let's Encrypt (from wis2box-1.3)*
 
-If you prefer wis2box to handle SSL termination directly, you have two options:
+   wis2box can run a Traefik reverse proxy that automatically provisions and renews SSL certificates from Let's Encrypt for your public services. When Traefik is enabled, it manages all HTTPS traffic and certificate renewals automatically.
+   To enable Traefik you can use the file 'docker-compose.traefik.yml' included in the wis2box repository, and use it to replace the default 'docker-compose.override.yml' file as follows:
 
-  a. **Traefik with Let's Encrypt (from wis2box-1.3):**
-     wis2box can run a Traefik reverse proxy that automatically provisions and renews SSL certificates from Let's Encrypt for your public services. When Traefik is enabled, it manages all HTTPS traffic and certificate renewals automatically.
-     To enable Traefik you can use the file 'docker-compose.traefik.yml' included in the wis2box repository, and use it replace the default 'docker-compose.override.yml' file as follows:
-     
-     .. code-block:: bash
+   .. code-block:: bash
 
-        cp docker-compose.traefik.yml docker-compose.override.yml
+      python3 wis2box-ctl.py stop
+      cp docker-compose.traefik.yml docker-compose.override.yml
+      python3 wis2box-ctl.py start
 
-  b. **Manual SSL with nginx:**
-     You can enable SSL by setting the ``WIS2BOX_SSL_CERT`` and ``WIS2BOX_SSL_KEY`` environment variables to the location of your SSL certificate and private key, respectively.
-     In this case, you are responsible for providing valid certificates and ensuring they are renewed before expiration. When SSL is enabled this way, nginx will serve HTTPS using the configuration defined in ``nginx/nginx-ssl.conf``.
+b. *Manual SSL with nginx*
+
+   You can enable SSL by setting the ``WIS2BOX_SSL_CERT`` and ``WIS2BOX_SSL_KEY`` environment variables to the location of your SSL certificate and private key, respectively.
+   In this case, you are responsible for providing valid certificates and ensuring they are renewed before expiration. When SSL is enabled this way, nginx will serve HTTPS using the configuration defined in ``nginx/nginx-ssl.conf``.
 
 Please remember to update the ``WIS2BOX_URL`` and ``WIS2BOX_API_URL`` environment variable after enabling SSL, ensuring your URL starts with ``https://``.
 
