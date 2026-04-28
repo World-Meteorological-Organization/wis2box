@@ -377,7 +377,7 @@ def make(args) -> None:
 
     # check if wis2box_api_url starts with wis2box_url, otherwise print warning (useful for debugging)
     if wis2box_api_url != f'{wis2box_url}/oapi':
-        print(f"WIS2BOX_API_URL={wis2box_api_url} instead of {WIS2BOX_URL}/oapi, was this intentional ?")
+        print(f"WIS2BOX_API_URL={wis2box_api_url} instead of {wis2box_url}/oapi, was this intentional ?")
 
     use_traefik = False
     # check if 'traefik' was added in docker-compose.override.yml
