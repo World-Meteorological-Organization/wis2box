@@ -47,13 +47,8 @@ web-proxy (nginx)
 
 wis2box runs a local nginx container allowing access to the following HTTP-based services. You can expose these services securely using SSL in two ways:
 
-1. **Using Traefik with Let's Encrypt (from wis2box-1.3)**
 
-  wis2box supports running a Traefik reverse proxy that can automatically provision and renew SSL certificates from Let's Encrypt for your public services. When Traefik is enabled, it will handle all HTTPS traffic and certificate renewals automatically, so you do not need to manually manage certificates. This is the recommended approach for most users.
-
-2. **Manual SSL with nginx**
-
-  You can enable SSL by setting the ``WIS2BOX_SSL_CERT`` and ``WIS2BOX_SSL_KEY`` environment variables to the location of your SSL certificate and private key, respectively. In this case, you are responsible for providing valid certificates and ensuring they are renewed before expiration. When SSL is enabled this way, nginx will serve HTTPS using the configuration defined in ``nginx/nginx-ssl.conf``.
+For details on enabling SSL (using Traefik with Let's Encrypt or manual SSL with nginx), see the :ref:`ssl-setup` section below.
 
 The following HTTP-based services are available:
 
@@ -186,9 +181,9 @@ The mosquitto service within wis2box also has websockets enabled and is proxied 
 The broker address for the Global Broker to subscribe to WIS2 notifications using the mosquitto service within wis2box is as follows:
 
 - `mqtt://everyone:everyone@WIS2BOX_HOST:1883` - for MQTT without SSL
-- `mqtts://everyone:everyone@WIS2BOX_HOST:8883` - for MQTT with SSL
+- `mqtts://everyone:everyone@WIS2BOX_HOST:8883` - for MQTT with SSL (only when WIS2BOX_SSL_CERT and WIS2BOX_SSL_KEY are set)
 - `ws://everyone:everyone@WIS2BOX_HOST/mqtt:80` - for MQTT over websockets without SSL
-- `wss://everyone:everyone@WIS2BOX_HOST/mqtt:443` - for MQTT over websockets with SSL
+- `wss://everyone:everyone@WIS2BOX_HOST/mqtt:443` - for MQTT over websockets with SSL (recommended when SSL is enabled using Traefik)
 
 Where ``WIS2BOX_HOST`` is the hostname or IP address of the host running wis2box.
 
@@ -233,17 +228,37 @@ If you do not wish to expose the internal MQTT broker on wis2box, you can config
 
    The ``everyone`` user is defined by default for public readonly access (``origin/#``) as per WIS2 Node requirements.
 
+
+.. _ssl-setup:
+
+
 SSL
 ^^^
 
-In order to ensure the security of your data, it is recommended to enable SSL on your wis2box instance.
+To ensure the security of your data, it is recommended to enable SSL for your wis2box instance. 
+There are two main approaches to enable SSL on the HTTP services of your wis2box instance:
 
-There are multiple ways to expose the wis2box services over SSL:
+**1. External SSL Termination**
 
-- using a reverse proxy (recommended)
-- using the built-in SSL support in the ``wis2box-ctl.py`` script
+Use a reverse proxy (such as nginx, Traefik, or a load balancer) outside of the wis2box-instance to terminate SSL and forward traffic to
+ wis2box over HTTP. This way certificate management and encryption is handled outside of wis2box. 
+Check with your IT department or hosting provider for your options for setting up external SSL termination.
 
-The recommended way to expose the wis2box services over SSL is to use a reverse proxy such as `nginx`_ or `traefik`_. Discuss with your IT team to determine which reverse proxy is best suited for your environment.
+**2. Internal SSL Termination (SSL handled by wis2box)**
+
+If you prefer wis2box to handle SSL termination directly, you have two options:
+
+  a. **Traefik with Let's Encrypt (from wis2box-1.3):**
+     wis2box can run a Traefik reverse proxy that automatically provisions and renews SSL certificates from Let's Encrypt for your public services. When Traefik is enabled, it manages all HTTPS traffic and certificate renewals automatically.
+     To enable Traefik you can use the file 'docker-compose.traefik.yml' included in the wis2box repository, and use it replace the default 'docker-compose.override.yml' file as follows:
+     
+     .. code-block:: bash
+
+        cp docker-compose.traefik.yml docker-compose.override.yml
+
+  b. **Manual SSL with nginx:**
+     You can enable SSL by setting the ``WIS2BOX_SSL_CERT`` and ``WIS2BOX_SSL_KEY`` environment variables to the location of your SSL certificate and private key, respectively.
+     In this case, you are responsible for providing valid certificates and ensuring they are renewed before expiration. When SSL is enabled this way, nginx will serve HTTPS using the configuration defined in ``nginx/nginx-ssl.conf``.
 
 Please remember to update the ``WIS2BOX_URL`` and ``WIS2BOX_API_URL`` environment variable after enabling SSL, ensuring your URL starts with ``https://``.
 
