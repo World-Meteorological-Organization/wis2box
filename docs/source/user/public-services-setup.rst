@@ -19,7 +19,7 @@ Please ensure that you follow these best practices to ensure your wis2box-instan
 * MQTT subscribers should use ``everyone/everyone`` as the username/password to subscribe to the WIS2 notifications published by your wis2box instance
 * Never share the values of ``WIS2BOX_BROKER_PASSWORD`` and ``WIS2BOX_STORAGE_PASSWORD`` as they are only for internal use
 * Store the authentication tokens used in the wis2box-webapp securely and do not share them with unauthorized users
-* Use SSL/TLS encryption to secure your services
+* Use SSL/TLS encryption to secure your services. For details on enabling SSL see the :ref:`ssl-setup` section below.
 * Consider customizing the default web configuration defined in ``nginx/nginx.conf`` to expose only the services to be shared with the public
 
 .. important::
@@ -45,11 +45,7 @@ The next sections describe the public services available in wis2box and how to c
 web-proxy (nginx)
 ^^^^^^^^^^^^^^^^^
 
-wis2box runs a local nginx container allowing access to the following HTTP-based services. You can expose these services securely using SSL in two ways:
-
-For details on enabling SSL (using Traefik with Let's Encrypt or manual SSL with nginx), see the :ref:`ssl-setup` section below.
-
-The following HTTP-based services are available:
+wis2box runs a local nginx container allowing access to the following HTTP based services:
 
 .. csv-table::
    :header: Function, URL
@@ -63,6 +59,8 @@ The following HTTP-based services are available:
    Websockets (WIS2 notifications),`WIS2BOX_URL/mqtt`
 
 You can edit ``nginx/nginx.conf`` to control which services are exposed through the nginx container included in your stack.
+
+**It is recommended to use SSL/TLS encryption to secure the exposed services.** For details on enabling SSL see the :ref:`ssl-setup` section below.
 
 By default, the web-proxy service is exposed on port 80 on the host running wis2box. When SSL is enabled (either via Traefik or nginx), the service is exposed on port 443.
 
