@@ -3,8 +3,7 @@
 Using ADL
 ==========
 
-The `Automatic Data Loader (ADL) <https://github.com/wmo-raf/adl>`_ 
-It provides a `Wagtail <https://wagtail.org/>`_-based interface and supplier-specific wagtail plugins to collect data, manage station metadata and distribute data to different channels.
+The `Automatic Data Loader (ADL) <https://github.com/wmo-raf/adl>`_ is based `Wagtail <https://wagtail.org/>`_ and provides supplier-specific wagtail plugins to collect data, manage station metadata and distribute data to different channels.
 
 Configuring ADL Dispatch Channel for wis2box
 --------------------------------------------
@@ -36,4 +35,4 @@ The Dataset ID should match the dataset identifier or the topic in the data mapp
 
 Make sure configure the parameters as described at `Parameter Mappings in ADL Dispatch Channels <https://adl-tool.readthedocs.io/en/latest/user_guide/manage_dispatch_channels.html#part-c-parameter-mappings>`_.
 
-Once you have configured the "WIS2BOX Upload" channel make sure use Grafana as described in :ref:`workflow-monitoring` to verify that data is correctly received and processed by your wis2box-instance. 
+Once you have configured the "WIS2BOX Upload" channel use Grafana as described in :ref:`workflow-monitoring` to verify that data is correctly received and processed by your wis2box-instance. 

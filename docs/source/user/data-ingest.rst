@@ -41,7 +41,6 @@ Data ingest methods
    data-ingest/CDMS-SURFACE
    data-ingest/CDMS-ClimSoft
    data-ingest/CDMS-CLIDE
-   data-ingest/tools-ADT
    data-ingest/tools-ADL
    data-ingest/campbell-mqtt
 
