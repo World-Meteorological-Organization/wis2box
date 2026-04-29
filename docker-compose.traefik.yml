@@ -8,6 +8,7 @@ services:
     - "traefik.http.services.wis2box.loadbalancer.server.port=80"
     
   traefik:
+    container_name: traefik
     image: traefik:v2.11
     restart: unless-stopped
     command:
