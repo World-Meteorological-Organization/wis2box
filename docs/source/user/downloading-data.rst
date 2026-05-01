@@ -12,7 +12,7 @@ Downloading data from WIS2
 There are different options and tools available to download data from WIS2, including:
 
  - `pywis-pubsub`_: a python module that provides provides subscription and download capability of data from WIS2
- - WIS2 Downloader: see section below
+ - `WIS2 Downloader`_: see section below
  - adapting your system to process WIS2 Notification Messages directly
 
 WIS2 Downloader
@@ -64,7 +64,7 @@ Small data items may be encoded directly in the MQTT message and can be extracte
       if 'content' in msg_dict and 'value' in msg_dict['content']:
         data = base64.b64decode(msg_dict['content']['value'])
       else:
-        ... extract URL from links and download data from URL as shown in previous example
+        # extract URL from links and download data from URL as shown in previous example
 
 Data consumers may also want to apply filters on the message-properties to avoid downloading data that is not relevant for their use case. 
 For example the python code to only download data for specific wigos-station-identifiers could look as follows:
