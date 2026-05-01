@@ -31,6 +31,7 @@ from pathlib import Path
 from pywis_pubsub.ets import WNMTestSuite
 from requests import Session, codes
 
+from time import sleep
 
 DATADIR = Path('.').parent.absolute() / 'tests/data'
 
@@ -102,7 +103,7 @@ def test_metadata_station_cache():
         for row in reader:
             wsi = row['wigos_station_identifier']
             r = SESSION.get(f'{API_URL}/collections/stations/items/{wsi}')
-
+            sleep(0.2) # avoid hitting the rate limit of 10 requests/s
             assert r.status_code == codes.ok
 
             station = r.json()
@@ -161,7 +162,6 @@ def test_metadata_discovery_publish():
 
     r = SESSION.get(f'{API_URL}/collections/discovery-metadata/items',
                     params=params).json()
-
     assert r['numberMatched'] == 9
 
     # test access of discovery metadata from notification message
@@ -184,6 +184,7 @@ def test_metadata_discovery_publish():
 
         r = SESSION.get(f'{API_URL}/collections/messages/items',
                         params=params).json()
+        sleep(0.2) # avoid hitting the rate limit of 10 requests/s
 
         assert r['numberMatched'] >= 1
 
@@ -203,12 +204,14 @@ def test_metadata_discovery_publish():
 
         id_ = 'urn:wmo:md:cg-met:surface-weather-observations'
         r = SESSION.get(f'{API_URL}/collections/discovery-metadata/items/{id_}').json()  # noqa
+        sleep(0.2) # avoid hitting the rate limit of 10 requests/s
 
         assert 'has_auth' in r['wis2box']
         assert r['wis2box']['has_auth']
 
         # test object storage publication
         r = SESSION.get(f'{URL}/data/metadata/{ID}.json').json()
+        sleep(0.2) # avoid hitting the rate limit of 10 requests/s
         assert 'wis2box' not in r
         assert 'wmo:topicHierarchy' not in r['properties']
 
@@ -325,6 +328,7 @@ def test_message_api():
     for key, value in counts.items():
         url = f'{API_URL}/collections/messages/items?sortby=-datetime&q={key}&limit=1'  # noqa
         r = SESSION.get(url).json()
+        sleep(0.2) # avoid hitting the rate limit of 10 requests/s
         assert r['numberMatched'] == value
 
     url = f'{API_URL}/collections/messages/items?sortby=-datetime'
