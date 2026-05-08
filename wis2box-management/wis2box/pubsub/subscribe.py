@@ -118,6 +118,9 @@ class WIS2BoxSubscriber:
             'notify': True,
             'metadata_id': metadata_id
         }
+        if 'gts' in message:
+            defs['gts_ttaaii'] = message['gts']['ttaaii']
+            defs['gts_cccc'] = message['gts']['cccc']
         plugin = MessageData(defs=defs)
         try:
             input_bytes = base64.b64decode(message['data'].encode('utf-8'))
