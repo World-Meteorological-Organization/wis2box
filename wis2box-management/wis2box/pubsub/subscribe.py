@@ -119,7 +119,7 @@ class WIS2BoxSubscriber:
             'metadata_id': metadata_id
         }
         if 'gts' in message:
-            LOGGER.info(f'Adding GTS headers to MessageData plugin: {message["gts"]}')
+            LOGGER.info(f'Adding GTS headers to MessageData plugin: {message["gts"]}') # noqa
             defs['gts_ttaaii'] = message['gts']['ttaaii']
             defs['gts_cccc'] = message['gts']['cccc']
         plugin = MessageData(defs=defs)
