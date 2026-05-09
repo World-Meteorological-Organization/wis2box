@@ -1,0 +1,69 @@
+wis2box:
+    country: can
+    centre_id: ca-eccc-msc-test
+    data_mappings:
+        plugins:
+
+mcf:
+    version: 1.0
+
+metadata:
+    identifier: urn:wmo:md:ca-eccc-msc-test:daily-water-flow
+    hierarchylevel: dataset
+
+identification:
+    title: Annual Maximum and Minimum Daily Water Level or Flow
+    abstract: The annual maximum and minimum daily data are the maximum and minimum daily mean values for a given year.
+    dates:
+        creation: 1850-01-01
+    keywords:
+        default:
+            keywords:
+                - Historical
+                - Archive
+                - Hydrology
+                - Hydrometric
+                - Streamflow
+                - Discharge
+                - Water level
+                - Water quantiy
+                - Sediment concentration
+                - Water
+                - National (CA)
+                - Observation
+                - Measurement
+        wmo:
+            keywords:
+                - hydrology
+            keywords_type: theme
+            vocabulary:
+                name: Earth system disciplines as defined by the WMO Unified Data Policy, Resolution 1 (Cg-Ext(2021), Annex 1.
+                url:  https://codes.wmo.int/wis/topic-hierarchy/earth-system-discipline
+    extents:
+        spatial:
+            - bbox: [20.2201924985,43.6884447292,29.62654341,48.2208812526]
+              crs: 4326
+        temporal:
+            - begin: 2023-01-17
+              end: null
+              resolution: PT24H
+    url: 
+        - https://api.weather.gc.ca/collections/hydrometric-annual-statistics/items
+
+    wmo_data_policy: core
+
+contact:
+    host:
+        organization: Government of Canada; Environment and Climate Change Canada; Meteorological Service of Canada
+        url: https://www.canada.ca/en/environment-climate-change.html
+        country: Canada
+        email: you@example.org
+        hoursofservice: 0700h - 1500h UTC
+        contactinstructions: email
+
+distribution:
+    items:
+        url: https://api.weather.gc.ca/collections/hydrometric-annual-statistics/items
+        type: application/geo+json
+        rel: items
+        description: hydrometric-annual-statistics
