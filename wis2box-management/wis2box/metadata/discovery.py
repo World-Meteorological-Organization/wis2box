@@ -77,7 +77,7 @@ class DiscoveryMetadata(BaseMetadata):
             md['identification']['wmo_data_policy'] = mqtt_topic.split('/')[5]
 
         LOGGER.debug('Adding revision date')
-        md['identification']['dates']['revision'] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')  # noqa
+        md['metadata']['dates']['revision'] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')  # noqa
 
         LOGGER.debug('Checking temporal extents')
         if md['identification']['extents']['temporal'][0].get('begin', 'BEGIN_DATE') is None:  # noqa

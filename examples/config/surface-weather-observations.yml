@@ -5,22 +5,22 @@ wis2box:
     centre_id: centre_id
 
 mcf:
-    version: 1.0
+    version: 2.0
 
 metadata:
     identifier: urn:wmo:md:centre_id:surface-weather-observations
     language: en
     charset: utf8
     hierarchylevel: dataset
+    dates:
+        creation: 2021-11-29
+        publication: 2021-11-29
 
 identification:
     language: en
     charset: utf8
     title: Surface weather observations from centre_id
     abstract: Surface weather observations from centre_id
-    dates:
-        creation: 2021-11-29
-        publication: 2021-11-29
     keywords:
         default:
             keywords:
@@ -36,7 +36,7 @@ identification:
                 url: https://codes.wmo.int/topic-hierarchy/earth-system-discipline
     extents:
         spatial:
-            - bbox: [-180, -90, 190, 90]
+            - bbox: [-180, -90, 180, 90]
               crs: 4326
         temporal:
             - begin: 2021-11-29

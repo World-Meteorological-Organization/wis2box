@@ -13,17 +13,17 @@ wis2box:
                 file-pattern: '^A_[A-Z0-9]{6}.*_._[A-Z]{4}_(\d{4}\d{2}\d{2}).*\.bin$'
 
 mcf:
-    version: 1.0
+    version: 2.0
 
 metadata:
     identifier: urn:wmo:md:int-wmo-test:surface-weather-observations:drifting-buoys
     hierarchylevel: dataset
+    dates:
+        creation: 2024-02-16
 
 identification:
     title: Example surface observations from GOOS drifting buoy networks
     abstract: Surface observations from GOOS drifting buoy networks downloaded from the WIS.
-    dates:
-        creation: 2024-02-16
     keywords:
         default:
             keywords:

@@ -5,17 +5,17 @@ wis2box:
         plugins:
 
 mcf:
-    version: 2.0
+    version: 1.0
 
 metadata:
     identifier: urn:wmo:md:ca-eccc-msc-test:daily-water-flow
     hierarchylevel: dataset
-    dates:
-        creation: 1850-01-01
 
 identification:
     title: Annual Maximum and Minimum Daily Water Level or Flow
     abstract: The annual maximum and minimum daily data are the maximum and minimum daily mean values for a given year.
+    dates:
+        creation: 1850-01-01
     keywords:
         default:
             keywords:
@@ -26,7 +26,7 @@ identification:
                 - Streamflow
                 - Discharge
                 - Water level
-                - Water quantity
+                - Water quantiy
                 - Sediment concentration
                 - Water
                 - National (CA)

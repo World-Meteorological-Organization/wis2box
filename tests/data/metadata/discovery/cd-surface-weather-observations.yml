@@ -16,17 +16,17 @@ wis2box:
                   file-pattern: '^.*\.bufr4$'
 
 mcf:
-    version: 1.0
+    version: 2.0
 
 metadata:
     identifier: urn:wmo:md:cg-met:surface-weather-observations
     hierarchylevel: dataset
+    dates:
+        creation: 2023-03-26
 
 identification:
     title: Surface weather observations from Republic of Congo
     abstract: Surface weather observations from Republic of Congo
-    dates:
-        creation: 2023-03-26
     keywords:
         default:
             keywords:

@@ -12,17 +12,17 @@ wis2box:
                   file-pattern: '^.*\.xml$'
 
 mcf:
-    version: 1.0
+    version: 2.0
 
 metadata:
     identifier: urn:wmo:md:int-wmo-test:cap
     hierarchylevel: dataset
+    dates:
+        creation: 2023-03-26
 
 identification:
     title: CAP Alerts test dataset
     abstract: CAP Alerts test dataset
-    dates:
-        creation: 2023-03-26
     keywords:
         default:
             keywords:

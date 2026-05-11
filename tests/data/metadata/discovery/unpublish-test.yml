@@ -12,17 +12,17 @@ wis2box:
                   file-pattern: '^.*_(\d{8})\d{2}.*\.grib2$'
 
 mcf:
-    version: 1.0
+    version: 2.0
 
 metadata:
     identifier: urn:wmo:md:unpublish-test:deleteme
     hierarchylevel: dataset
+    dates:
+        creation: 2025-08-06
 
 identification:
     title: deleteme test dataset
     abstract: This dataset is used to test the unpublish functionality of WIS2Box.
-    dates:
-        creation: 2025-08-06
     keywords:
         default:
             keywords:
