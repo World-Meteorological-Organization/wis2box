@@ -30,7 +30,7 @@ services:
 
   wis2box-api:
     container_name: wis2box-api
-    image: WIS2BOX-RELEASE
+    image: mlimper/wis2box-api:test-synop2bufr-main
     restart: always
     env_file:
       - wis2box.env
