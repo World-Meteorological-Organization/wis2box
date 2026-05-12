@@ -1,0 +1,38 @@
+services:
+  web-proxy:
+    labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.wis2box.rule=Host(`${WIS2BOX_HOST}`)"
+    - "traefik.http.routers.wis2box.entrypoints=websecure"
+    - "traefik.http.routers.wis2box.tls.certresolver=myresolver"
+    - "traefik.http.services.wis2box.loadbalancer.server.port=80"
+    
+  traefik:
+    container_name: traefik
+    image: traefik:v2.11
+    restart: unless-stopped
+    command:
+      - --api.insecure=true
+      - --certificatesresolvers.myresolver.acme.tlschallenge=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --providers.docker=true
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - traefik-letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  minio:
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+  mosquitto:
+    ports:
+      - 1883:1883
+
+volumes:
+  traefik-letsencrypt:

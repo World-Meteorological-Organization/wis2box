@@ -19,7 +19,7 @@ Please ensure that you follow these best practices to ensure your wis2box-instan
 * MQTT subscribers should use ``everyone/everyone`` as the username/password to subscribe to the WIS2 notifications published by your wis2box instance
 * Never share the values of ``WIS2BOX_BROKER_PASSWORD`` and ``WIS2BOX_STORAGE_PASSWORD`` as they are only for internal use
 * Store the authentication tokens used in the wis2box-webapp securely and do not share them with unauthorized users
-* Use SSL/TLS encryption to secure your services
+* Use SSL/TLS encryption to secure your services. For details on enabling SSL see the :ref:`ssl-setup` section below.
 * Consider customizing the default web configuration defined in ``nginx/nginx.conf`` to expose only the services to be shared with the public
 
 .. important::
@@ -58,13 +58,11 @@ wis2box runs a local nginx container allowing access to the following HTTP based
    Storage (public data) (minio:wis2box-public),`WIS2BOX_URL/data`
    Websockets (WIS2 notifications),`WIS2BOX_URL/mqtt`
 
-You can edit ``nginx/nginx.conf`` to control which services are exposed through the nginx-container include in your stack.
+You can edit ``nginx/nginx.conf`` to control which services are exposed through the nginx container included in your stack.
 
-By default the web-proxy service is exposed on port 80 on the host running wis2box.
+**It is recommended to use SSL/TLS encryption to secure the exposed services.** For details on enabling SSL see the :ref:`ssl-setup` section below.
 
-SSL can be enabled by setting the ``WIS2BOX_SSL_CERT`` and ``WIS2BOX_SSL_KEY`` environment variables to the location of your SSL certificate and private key respectively.
-
-When SSL is enabled, the web-proxy service is exposed on port 443 on the host running wis2box and uses the configuration defined in ``nginx/nginx-ssl.conf``.
+By default, the web-proxy service is exposed on port 80 on the host running wis2box. When SSL is enabled (either via Traefik or nginx), the service is exposed on port 443.
 
 .. note::
     The canonical link referenced in WIS2 notification messages by your wis2box will use the basepath ``WIS2BOX_URL/data``.
@@ -180,9 +178,9 @@ The mosquitto service within wis2box also has websockets enabled and is proxied 
 The broker address for the Global Broker to subscribe to WIS2 notifications using the mosquitto service within wis2box is as follows:
 
 - `mqtt://everyone:everyone@WIS2BOX_HOST:1883` - for MQTT without SSL
-- `mqtts://everyone:everyone@WIS2BOX_HOST:8883` - for MQTT with SSL
+- `mqtts://everyone:everyone@WIS2BOX_HOST:8883` - for MQTT with SSL (only when ``WIS2BOX_SSL_CERT`` and ``WIS2BOX_SSL_KEY`` are set)
 - `ws://everyone:everyone@WIS2BOX_HOST/mqtt:80` - for MQTT over websockets without SSL
-- `wss://everyone:everyone@WIS2BOX_HOST/mqtt:443` - for MQTT over websockets with SSL
+- `wss://everyone:everyone@WIS2BOX_HOST/mqtt:443` - for MQTT over websockets with SSL (recommended when SSL is enabled using Traefik)
 
 Where ``WIS2BOX_HOST`` is the hostname or IP address of the host running wis2box.
 
@@ -227,17 +225,35 @@ If you do not wish to expose the internal MQTT broker on wis2box, you can config
 
    The ``everyone`` user is defined by default for public readonly access (``origin/#``) as per WIS2 Node requirements.
 
+
+.. _ssl-setup:
+
 SSL
 ^^^
 
-In order to ensure the security of your data, it is recommended to enable SSL on your wis2box instance.
+To ensure the security of your data, it is recommended to enable SSL for your wis2box instance.
 
-There are multiple ways to expose the wis2box services over SSL:
+A reverse proxy (such as nginx, Traefik, or a load balancer) may be used between the Internet and your wis2box instance to handle SSL termination, which is a common practice for securing web services.
+This way certificate management and encryption is handled outside of wis2box.
+Check with your IT department or hosting provider if they provide this type of service.
 
-- using a reverse proxy (recommended)
-- using the built-in SSL support in the ``wis2box-ctl.py`` script
+If you prefer to handle SSL termination within the wis2box instance, you can use one of the following built-in options:
 
-The recommended way to expose the wis2box services over SSL is to use a reverse proxy such as `nginx`_ or `traefik`_. Discuss with your IT team to determine which reverse proxy is best suited for your environment.
+a. *Traefik with Let's Encrypt (from wis2box-1.3)*
+
+   wis2box can run a Traefik reverse proxy that automatically provisions and renews SSL certificates from Let's Encrypt for your public services. When Traefik is enabled, it manages all HTTPS traffic and certificate renewals automatically.
+   To enable Traefik you can use the file 'docker-compose.traefik.yml' included in the wis2box repository, and use it to replace the default 'docker-compose.override.yml' file as follows:
+
+   .. code-block:: bash
+
+      python3 wis2box-ctl.py stop
+      cp docker-compose.traefik.yml docker-compose.override.yml
+      python3 wis2box-ctl.py start
+
+b. *Manual SSL with nginx*
+
+   You can enable SSL by setting the ``WIS2BOX_SSL_CERT`` and ``WIS2BOX_SSL_KEY`` environment variables to the location of your SSL certificate and private key, respectively.
+   In this case, you are responsible for providing valid certificates and ensuring they are renewed before expiration. When SSL is enabled this way, nginx will serve HTTPS using the configuration defined in ``nginx/nginx-ssl.conf``.
 
 Please remember to update the ``WIS2BOX_URL`` and ``WIS2BOX_API_URL`` environment variable after enabling SSL, ensuring your URL starts with ``https://``.
 

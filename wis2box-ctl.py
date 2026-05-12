@@ -362,12 +362,39 @@ def make(args) -> None:
     # check if WIS2BOX_SSL_KEY and WIS2BOX_SSL_CERT are set
     ssl_key = None
     ssl_cert = None
+    wis2box_url = None
+    wis2box_api_url = None
     with open('wis2box.env') as f:
         for line in f:
+            if line.startswith('WIS2BOX_URL='):
+                wis2box_url = line.split('=', 1)[1].strip().strip('"')
+            if line.startswith('WIS2BOX_API_URL='):
+                wis2box_api_url = line.split('=', 1)[1].strip().strip('"')
             if 'WIS2BOX_SSL_KEY' in line:
                 ssl_key = line.split('=')[1].strip()
             if 'WIS2BOX_SSL_CERT' in line:
                 ssl_cert = line.split('=')[1].strip()
+
+    # check if wis2box_api_url starts with wis2box_url, otherwise print warning (useful for debugging)
+    if wis2box_api_url != f'{wis2box_url}/oapi':
+        print(f"WIS2BOX_API_URL={wis2box_api_url} instead of {wis2box_url}/oapi, was this intentional ?")
+
+    use_traefik = False
+    # check if 'traefik' was added in docker-compose.override.yml
+    with open('docker-compose.override.yml') as f:
+        for line in f:
+            if 'traefik' in line:
+                use_traefik = True
+                break
+
+    if use_traefik:
+        # Only allow Traefik if WIS2BOX_URL starts with https://
+        if not wis2box_url.lower().startswith('https://'):
+            print("ERROR: Please set WIS2BOX_URL to an https:// URL in wis2box.env when using Traefik")
+            exit(1)
+        else:
+            WIS2BOX_HOST = wis2box_url.replace('https://', '').split('/')[0]
+            os.environ['WIS2BOX_HOST'] = WIS2BOX_HOST
 
     if not glob.glob('docker-compose.images-*.yml'):
         print("No docker-compose.images-*.yml files found, creating one")
@@ -383,6 +410,7 @@ def make(args) -> None:
     if args.ssl and not (ssl_key and ssl_cert):
         print("ERROR: SSL is enabled but WIS2BOX_SSL_KEY and WIS2BOX_SSL_CERT are not set in wis2box.env")
         exit(1)
+
     # if you selected a bunch of them, default to all
     containers = "" if not args.args else ' '.join(args.args)
 
