@@ -178,7 +178,7 @@ The mosquitto service within wis2box also has websockets enabled and is proxied 
 The broker address for the Global Broker to subscribe to WIS2 notifications using the mosquitto service within wis2box is as follows:
 
 - `mqtt://everyone:everyone@WIS2BOX_HOST:1883` - for MQTT without SSL
-- `mqtts://everyone:everyone@WIS2BOX_HOST:8883` - for MQTT with SSL (only when WIS2BOX_SSL_CERT and WIS2BOX_SSL_KEY are set)
+- `mqtts://everyone:everyone@WIS2BOX_HOST:8883` - for MQTT with SSL (only when ``WIS2BOX_SSL_CERT`` and ``WIS2BOX_SSL_KEY`` are set)
 - `ws://everyone:everyone@WIS2BOX_HOST/mqtt:80` - for MQTT over websockets without SSL
 - `wss://everyone:everyone@WIS2BOX_HOST/mqtt:443` - for MQTT over websockets with SSL (recommended when SSL is enabled using Traefik)
 
