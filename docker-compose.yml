@@ -9,6 +9,7 @@ services:
       - wis2box-ui
       - wis2box-auth
     volumes:
+      - ./nginx/robots.txt:/usr/share/nginx/html/robots.txt:ro
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ${WIS2BOX_HOST_DATADIR}/.htpasswd:/etc/nginx/.htpasswd:ro
 

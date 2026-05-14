@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /oapi/collections/discovery-metadata/items
+Disallow: /oapi/
+Disallow: /data/
+Disallow: /wis2box-webapp/
