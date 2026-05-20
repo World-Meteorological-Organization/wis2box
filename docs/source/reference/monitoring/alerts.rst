@@ -3,8 +3,8 @@
 Alerts
 ======
 
-Grafana Alerting Configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Grafana alerting configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Grafana provides a built-in alerting system that allows users to monitor data and receive notifications when defined conditions are met.
 
 In wis2box, alerting is configured using Grafana’s alerting interface. Alerts are defined as alert rules, and notifications are delivered via contact points such as email.
@@ -21,8 +21,7 @@ Configure SMTP for email notifications
 
 To enable email notifications, Grafana must be configured with an SMTP server.
 
-In wis2box deployments, SMTP settings are defined using environment variables
-in the Docker Compose configuration.
+In wis2box deployments, SMTP settings are defined using environment variables in the Docker Compose configuration.
 
 docker-compose.monitoring.yml:
 
