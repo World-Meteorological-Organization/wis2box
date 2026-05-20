@@ -44,24 +44,24 @@ SESSION.hooks = {
 }
 
 
-def test_wis2downloader():
-    """Test if the wis2downloader has downloaded
+def test_pywispubsub():
+    """Test if pywis-pubsub has downloaded
     the expected number of files in the download directory"""
 
     DOWNLOAD_DIR = DATADIR / 'downloads'
 
     topic_nfiles_dict = {
-        'origin/a/wis2/mw-mw_met_centre-test/data/core/weather/surface-based-observations/synop': 23, # noqa
-        'origin/a/wis2/dz-meteoalgerie/data/core/weather/surface-based-observations/synop': 28, # noqa
-        'origin/a/wis2/cn-cma/data/core/weather/prediction/forecast/medium-range/probabilistic/global': 10, # noqa
-        'origin/a/wis2/ro-rnimh-test/data/core/weather/surface-based-observations/synop': 49, # noqa
-        'origin/a/wis2/cg-met/data/recommended/weather/surface-based-observations/synop': 0, # noqa
-        'origin/a/wis2/int-wmo-test/data/core/ocean/surface-based-observations/drifting-buoys': 2, # noqa
-        'origin/a/wis2/int-wmo-test/data/core/weather/surface-based-observations/wind-profile': 1, # noqa
-        'origin/a/wis2/int-wmo-test/data/core/weather/surface-based-observations/ship': 5, # noqa
-        'origin/a/wis2/it-meteoam/data/core/weather/surface-based-observations/synop': 31, # noqa
-        'origin/a/wis2/int-wmo-test/data/core/weather/advisories-warnings': 1, # noqa
-        'origin/a/wis2/org-daycli-test/data/core/climate/surface-based-observations/daily': 30 # noqa
+        'mw-mw_met_centre-test:surface-weather-observations': 23, # noqa
+        'dz-meteoalgerie:surface-weather-observations': 28, # noqa
+        #'cn-cma:grapes-geps-global': 10, # pywis-pubsub does not download when cache=false # noqa
+        'ro-rnimh-test:synoptic-weather-observations': 49, # noqa
+        'cg-met:surface-weather-observations': 0, # noqa
+        'int-wmo-test:surface-weather-observations:drifting-buoys': 2, # noqa
+        'int-wmo-test:surface-weather-observations:wind-profile': 1, # noqa
+        'int-wmo-test:surface-weather-observations:ship': 5, # noqa
+        'it-meteoam:surface-weather-observations': 31, # noqa
+        'int-wmo-test:cap': 1, # noqa
+        'org-daycli-test:surface-climate-observations:daily': 30 # noqa
     }
 
     topic_nfiles_dict_found = {}

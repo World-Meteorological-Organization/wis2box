@@ -35,7 +35,6 @@ if platform.system() == 'Windows':
 
 if not WINDOWS:
     import grp
-    import shutil
     DOCKER_GROUP = grp.getgrnam('docker')
 
 OTHER_TLDS = ['org', 'int']
@@ -428,19 +427,6 @@ def create_wis2box_env(host_datadir: str) -> None:
         fh.write('MINIO_NOTIFY_MQTT_TOPIC_WIS2BOX=wis2box/storage\n')
         fh.write('MINIO_NOTIFY_MQTT_QOS_WIS2BOX=1\n')
         fh.write('\n')
-        # downloader settings
-        fh.write('# downloader settings\n')
-        fh.write('DOWNLOAD_BROKER_HOST=globalbroker.meteo.fr\n')
-        fh.write('DOWNLOAD_BROKER_PORT=443\n')
-        fh.write('DOWNLOAD_BROKER_USERNAME=everyone\n')
-        fh.write('DOWNLOAD_BROKER_PASSWORD=everyone\n')
-        fh.write('# download transport mechanism (tcp or websockets)\n')
-        fh.write('DOWNLOAD_BROKER_TRANSPORT=websockets\n')
-        fh.write('# maximum MB in download directory\n')
-        fh.write('DOWNLOAD_MIN_FREE_SPACE_GB=1\n')
-        if not WINDOWS:
-            fh.write(f'DOCKER_GID={DOCKER_GROUP.gr_gid}\n')
-        fh.write('\n')
 
     print('*' * 80)
     print('The file wis2box.env has been created in the current directory.')
@@ -503,7 +489,7 @@ def create_host_datadir() -> str:
         print("and check your permissions.")
         exit()
 
-    # failing to create mappings and downloads directories is not critical
+    # failing to create these directories is not critical
     try:
         # add mappings directory
         mappings_dir = host_datadir / 'mappings'
@@ -513,11 +499,6 @@ def create_host_datadir() -> str:
         htpasswd_dir = host_datadir / '.htpasswd'
         htpasswd_dir.mkdir()
 
-        # add downloads directory
-        download_dir = host_datadir / 'downloads'
-        download_dir.mkdir(mode=0o775)
-        if not WINDOWS:
-            shutil.chown(download_dir, group='docker')
     except Exception as e:
         print(f'ERROR: {e}')
 

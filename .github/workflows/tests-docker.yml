@@ -31,17 +31,6 @@ jobs:
         ssh-keygen -t rsa -b 4096 -f tests/data/.ssh/id_rsa -N "" -q
         ls -lh tests/data/.ssh/
         mkdir -p tests/data/.htpasswd
-    - name: setup wis2downloader
-      run: |
-        # make sure current user in docker group
-        sudo usermod -aG docker $(whoami)
-        # Add env parameters to tests/test.env
-        echo "" >> tests/test.env  #no new line at end of test.env file
-        echo "DOCKER_GID=$(getent group docker | cut -d: -f3)" >> tests/test.env
-        # make sure data dir is in group docker and has 775 permissions
-        mkdir -p tests/data/downloads
-        chown -R $(whoami):docker tests/data/downloads
-        chmod -R 775 tests/data/downloads
     - name: setup wis2box configuration, replace localhost with IP on host 📦
       run: |
         export IP=$(hostname -I | awk '{print $1}')
@@ -71,17 +60,18 @@ jobs:
         echo "wis2box-management did not start successfully"
         docker logs wis2box-management
         exit 1
+    - name: setup pywis-pubsub
+      run: |
+        mkdir -p tests/data/downloads
+        pywis-pubsub subscribe --config tests/sub-download-config.yml --download > /tmp/subscribe.log &
+        sleep 1
+        less /tmp/subscribe.log
     - name: show environment and check collections exist ⚙️
       run: |
         python3 wis2box-ctl.py execute wis2box environment show
         curl --fail http://localhost/oapi/collections/stations
         curl --fail http://localhost/oapi/collections/discovery-metadata
         curl --fail http://localhost/oapi/collections/messages
-    - name: downloader subscribe to topics
-      run: |
-        python3 wis2box-ctl.py execute wis2box auth add-token -p wis2downloader github123 -y
-        echo '{"topic": "origin/a/wis2/+/data/core/#"}' > test.json
-        curl -X POST http://localhost/wis2downloader/subscriptions -H "Content-Type: application/json" -H "Authorization: Bearer github123" -d @test.json
     - name: add Brazil wrongly encoded station data and check for error message
       id: test-bad-station-csv
       env:
@@ -263,6 +253,7 @@ jobs:
       run: |
         sleep 30
         docker logs wis2box-management
+        ls -lh tests/data/downloads
         pytest -s tests/integration
     - name: run flake8 ⚙️
       run: |
@@ -270,5 +261,6 @@ jobs:
     - name: failed tests 🚩
       if: ${{ failure() }}
       run: |
+        less /tmp/subscribe.log
         docker logs -n1000 wis2box-management
         docker logs -n1000 wis2box-api
