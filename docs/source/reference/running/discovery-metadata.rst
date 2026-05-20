@@ -50,7 +50,7 @@ See :ref:`extending-wis2box` for more information on adding your own data proces
 pipeline.
 
 Geometry and dateline crossing
------------------------------
+------------------------------
 
 For datasets whose geometries cross the international dateline, an MCF file can be updated to support additional geometries as a MultiPolygon (i.e. splitting the dataset geometry into two bounding box polygons, by the dateline).
 
