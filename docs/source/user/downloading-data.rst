@@ -6,7 +6,7 @@ Downloading data from WIS2
 .. note::
   
   From wis2box-1.3 the `wis2downloader`_ is no longer included as part of the wis2box-stack.
-  The download-functionality previously maintained in the wis2box-stack will be further developed as part of the `WIS2 Downloader` that runs as a standalone docker compose stack
+  The download functionality previously maintained in wis2box will be further developed as part of the `WIS2 Downloader` that runs as a standalone Docker Compose application
   and needs to be installed on an instance separate from the wis2box-stack.
 
 There are different options and tools available to download data from WIS2, including:
@@ -18,20 +18,20 @@ There are different options and tools available to download data from WIS2, incl
 WIS2 Downloader
 ---------------
 
-WIS2 Downloader provides a scalable system for downloading data from WIS2 Global Brokers and includes a front-end to query the WIS2 Discovery Catalogues to setup subscriptions and manage downloads. 
+WIS2 Downloader provides a scalable system for downloading data from WIS2 Global Brokers and includes a user interface to query the WIS2 Discovery Catalogues to setup subscriptions and manage downloads. 
 
-WIS2 Downloader is a standalone docker compose stack that can be installed on an instance separate from the wis2box-instances and enables downloading data from WIS2 Global Services.
+WIS2 Downloader is a standalone docker compose stack that can be installed on an instance separate from the wis2box instances and enables downloading data from WIS2 Global Services.
 
 For more information see the `WIS2 Downloader documentation`_.
 
 Adapting your system to process WIS2 Notification Messages
 -----------------------------------------------------------
 
-To download data from WIS2 it is required to setup a MQTT-subscriber-loop that subscribes to the topic(s) of interest and parse the message content.
+To download data from WIS2 it is required to setup a MQTT subscriber loop that subscribes to the topic(s) of interest and parse the message content.
 
 In WIS2 the message content is encoded as per the `WMO WIS2 Notification Message Encoding`_ standard.
 
-A basic example of a MQTT-subscriber-loop in python to extract the URL from the MQTT message and pass it to a client-specific function to download the data could look as follows:
+A basic example of a MQTT-subscriber-loop in python to extract the URL from the MQTT message and pass it to a client specific function to download the data could look as follows:
 
 .. code-block::
 
@@ -83,7 +83,7 @@ For example the python code to only download data for specific wigos-station-ide
     
     ...
 
-For more information on the WIS2 Notification Message format see the `WMO WIS2 Notification Message Encoding`_ documentation.
+For more information on the WIS2 Notification Message Standard see the `WMO WIS2 Notification Message Encoding`_ documentation.
 
 .. _`pywis-pubsub`: https://github.com/World-Meteorological-Organization/pywis-pubsub
 .. _`WMO WIS2 Notification Message Encoding`: https://wmo-im.github.io/wis2-notification-message/standard/wis2-notification-message-STABLE.html
