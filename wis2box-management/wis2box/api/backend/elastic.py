@@ -257,7 +257,7 @@ class ElasticBackend(BaseBackend):
         :returns: `list` of collection names
         """
 
-        return [index for index in self.conn.indices.get_alias(index="*")]
+        return [index for index in self.conn.indices.get_alias(index='*')]
 
     def add_collection(self, collection_id: str) -> dict:
         """
@@ -375,8 +375,8 @@ class ElasticBackend(BaseBackend):
         success, errors = helpers.bulk(self.conn, gendata(items), raise_on_error=False) # noqa
         if errors:
             for error in errors:
-                LOGGER.error(f"Indexing error: {error}")
-            raise RuntimeError(f"Upsert failed with {len(errors)} errors")
+                LOGGER.error(f'Indexing error: {error}')
+            raise RuntimeError(f'Upsert failed with {len(errors)} errors')
 
     def delete_collection_item(self, collection_id: str, item_id: str) -> str:
         """
@@ -402,7 +402,7 @@ class ElasticBackend(BaseBackend):
         Delete collections by retention date in batches, oldest first.
         """
 
-        indices = self.conn.indices.get(index="*").keys()
+        indices = self.conn.indices.get(index='*').keys()
 
         before = datetime_days_ago(days)
         after = datetime_days_ago(-1)
@@ -411,39 +411,39 @@ class ElasticBackend(BaseBackend):
 
         for index in indices:
 
-            if index == "messages":
-                time_field = "properties.pubtime"
-            elif index.startswith("urn-wmo-md"):
-                time_field = "properties.reportTime"
+            if index == 'messages':
+                time_field = 'properties.pubtime'
+            elif index.startswith('urn-wmo-md'):
+                time_field = 'properties.reportTime'
             else:
-                LOGGER.info(f"items for index={index} will not be deleted")
+                LOGGER.info(f'items for index={index} will not be deleted')
                 continue
 
             LOGGER.info(
-                f"deleting documents from index={index} older than {days} days ({before}) or newer than {after}" # noqa
+                f'deleting documents from index={index} older than {days} days ({before}) or newer than {after}' # noqa
             )
 
             query = {
-                "query": {
-                    "bool": {
-                        "should": [
-                            {"range": {time_field: {"lte": before}}},
-                            {"range": {time_field: {"gte": after}}},
+                'query': {
+                    'bool': {
+                        'should': [
+                            {'range': {time_field: {'lte': before}}},
+                            {'range': {time_field: {'gte': after}}},
                         ]
                     }
                 },
-                "sort": [{time_field: {"order": "asc"}}],
+                'sort': [{time_field: {'order': 'asc'}}],
             }
 
             resp = self.conn.search(
                 index=index,
                 body=query,
-                scroll="5m",
+                scroll='5m',
                 size=batch_size,
             )
 
-            scroll_id = resp["_scroll_id"]
-            hits = resp["hits"]["hits"]
+            scroll_id = resp['_scroll_id']
+            hits = resp['hits']['hits']
 
             total_deleted = 0
 
@@ -451,9 +451,9 @@ class ElasticBackend(BaseBackend):
 
                 actions = [
                     {
-                        "_op_type": "delete",
-                        "_index": hit["_index"],
-                        "_id": hit["_id"],
+                        '_op_type': 'delete',
+                        '_index': hit['_index'],
+                        '_id': hit['_id'],
                     }
                     for hit in hits
                 ]
@@ -461,15 +461,15 @@ class ElasticBackend(BaseBackend):
                 success, errors = helpers.bulk(self.conn, actions)
                 if errors:
                     for error in errors:
-                        LOGGER.error(f"Deletion error: {error}, skipping")
+                        LOGGER.error(f'Deletion error: {error}, skipping')
 
                 total_deleted += success
 
-                resp = self.conn.scroll(scroll_id=scroll_id, scroll="5m")
-                scroll_id = resp["_scroll_id"]
-                hits = resp["hits"]["hits"]
+                resp = self.conn.scroll(scroll_id=scroll_id, scroll='5m')
+                scroll_id = resp['_scroll_id']
+                hits = resp['hits']['hits']
 
-            LOGGER.info(f"deleted {total_deleted} documents from index={index}") # noqa
+            LOGGER.info(f'deleted {total_deleted} documents from index={index}') # noqa
 
             try:
                 self.conn.clear_scroll(scroll_id=scroll_id)
