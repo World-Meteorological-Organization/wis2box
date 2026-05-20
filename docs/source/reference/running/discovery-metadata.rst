@@ -10,11 +10,6 @@ catalogue API.
 
 wis2box supports managing discovery metadata using the WMO Core Metadata Profile (WCMP2) standard.
 
-.. note::
-
-   WCMP2 is currently in development as part of WMO activities.
-
-
 Creating a discovery metadata record in wis2box is as easy as completing a YAML configuration file. wis2box
 leverages the `pygeometa`_ project's `metadata control file (MCF)`_ format. Below is an example MCF file.
 
@@ -24,7 +19,8 @@ leverages the `pygeometa`_ project's `metadata control file (MCF)`_ format. Belo
 
 .. note::
 
-   There are no conventions to the MCF filename. The filename does not get used/exposed or published.
+   There are no strict rules for the MCF filename, although a file extension convention of ``mcf.yml`` is recommended.
+   The filename does not get used/exposed or published.
    It is up to the user to determine the best filename, keeping in mind your wis2box system may manage
    and publish numerous datasets (and MCF files) over time.
 
@@ -53,8 +49,31 @@ Each plugin is based on the file extension to be detected and processed, with th
 See :ref:`extending-wis2box` for more information on adding your own data processing
 pipeline.
 
+Geometry and dateline crossing
+------------------------------
+
+For datasets whose geometries cross the international dateline, an MCF file can be updated to support additional geometries as a MultiPolygon (i.e. splitting the dataset geometry into two bounding box polygons, by the dateline).
+
+Below is an example of updating an MCF file with two geometries, using the country of New Zealand:
+
+.. code:: yaml
+
+   extents:  # split of [164, -53.8, -174.1, -27.8]
+       spatial:
+           - bbox: [164.1, -53.8, 180, -27.8]
+             crs: 4326
+           - bbox: [-180, -53.8, -174.1, -27.8]
+             crs: 4326
+
+.. note::
+
+   Dateline crossing functionality is only currently supported when publishing discovery metadata via MCF files and the wis2box command line.  Functionality is `planned`_ for managing dateline crossing datasets in the dataset editor as part of a future release.
+
+
 
 Summary
 -------
 
 At this point, you have created discovery metadata for your given dataset(s).
+
+.. _planned: https://github.com/World-Meteorological-Organization/wis2box/issues/1091
