@@ -4,7 +4,7 @@ What is WIS2 in a box?
 
 WIS2 in a box (wis2box) is a Reference Implementation of a WIS2 Node, designed to help accelerate international data and metadata exchange on WIS 2.0.
 
-wis2box was designed to be to be cost-effective and low barrier to operate, to enable any WMO Member to publish data on WIS2, regardless of their technical capacity and resources.
+wis2box was designed to be to be cost-effective and low barrier to operate, to enable any WMO Member to publish data on WIS2, regardless of technical capacity and resources.
 
 wis2box is Free and Open Source and released under the `Apache License <https://docs.wis2box.wis.wmo.int/en/latest/community/license.html>`_.
 
