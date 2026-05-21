@@ -82,6 +82,7 @@ of information on wis2box for easy reference.
    reference/monitoring/index
    reference/services
    reference/auth
+   reference/data-access/index
    reference/development
    reference/extending-wis2box
 
