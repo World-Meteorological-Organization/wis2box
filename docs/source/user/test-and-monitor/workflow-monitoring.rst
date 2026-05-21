@@ -18,10 +18,10 @@ The `Station data publishing status` panel (on the left side) shows an overview 
 
 The `wis2box ERRORs` panel (on the bottom) prints all ERROR messages reported by the wis2box-management container.
 
-.. image:: ../_static/grafana-homepage1.png
+.. image:: ../../_static/grafana-homepage1.png
     :width: 800
     :alt: wis2box workflow monitoring in Grafana
-.. image:: ../_static/grafana-homepage2.png
+.. image:: ../../_static/grafana-homepage2.png
     :width: 800
     :alt: wis2box workflow monitoring in Grafana
 
