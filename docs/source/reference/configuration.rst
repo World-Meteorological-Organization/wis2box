@@ -3,7 +3,7 @@
 Configuration
 =============
 
-Once you have installed wis2box, it is time to setup the configuration. wis2box setup is based on
+Once you have installed wis2box, it is time to set up the configuration. The wis2box setup is based on
 a simple configuration that can be adjusted depending the user's needs and deployment environment.
 
 Environment variables
@@ -254,7 +254,7 @@ A full configuration example can be found below:
 Docker Compose
 --------------
 
-The Docker Compose setup is driven from the resulting ``wis2box.env`` file created. For advanced cases and/or power users,
+The Docker Compose set up is driven from the resulting ``wis2box.env`` file created. For advanced cases and/or power users,
 updates can also be made to ``docker-compose.yml`` or ``docker-compose.override.yml`` (for changes to ports).
 
 .. _`Env`: https://en.wikipedia.org/wiki/Env

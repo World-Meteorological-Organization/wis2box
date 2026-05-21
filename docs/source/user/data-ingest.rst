@@ -26,7 +26,7 @@ The *wis2box-storage* service is based on `MinIO`_ , the following buckets are p
 
   See the :ref:`synop2bufr-plugin` for more information.
 
-**For production use, it is recommended to setup an automated workflow and to regularly review the data publication workflow in the Grafana-service.**
+**For production use, it is recommended to set up an automated workflow and to regularly review the data publication workflow in the Grafana-service.**
 
 Data ingest methods
 -------------------
@@ -56,7 +56,7 @@ Testing and monitoring
 Next steps
 ----------
 
-After you have successfully setup your data ingest process into the wis2box, you are ready to share your data with the global
+After you have successfully set up your data ingest process into the wis2box, you are ready to share your data with the global
 WIS2 network by enabling external access to your public services.
 
 Next: :ref:`public-services-setup`
