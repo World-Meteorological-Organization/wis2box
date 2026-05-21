@@ -61,5 +61,5 @@ WIS2 network by enabling external access to your public services.
 
 Next: :ref:`public-services-setup`
 
-.. _`MinIO`: https://hub.docker.com/r/minio/minio
+.. _`MinIO`: https://github.com/world-Meteorological-Organization/wis2box-minio
 .. _`csv2bufr-templates`: https://github.com/World-Meteorological-Organization/csv2bufr-templates
