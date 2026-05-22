@@ -11,12 +11,12 @@ Ensure that Docker, Docker Compose and Python are installed on the host, and tha
 Download
 --------
 
-Download ``wis2box-setup-1.2.0.zip`` from the `wis2box release page`_ page and unzip using the following commands:
+Download ``wis2box-setup-1.3.0.zip`` from the `wis2box release page`_ page and unzip using the following commands:
 
 .. code-block:: bash
 
-   wget https://github.com/World-Meteorological-Organization/wis2box-release/releases/download/1.2.0/wis2box-setup-1.2.0.zip
-   unzip wis2box-setup-1.2.0.zip
+   wget https://github.com/World-Meteorological-Organization/wis2box-release/releases/download/1.3.0/wis2box-setup-1.3.0.zip
+   unzip wis2box-setup-1.3.0.zip
    cd wis2box
 
 
@@ -66,10 +66,10 @@ When running this command for the first time, you will see the following output:
 .. code-block:: bash
 
    No docker-compose.images-*.yml files found, creating one
-   Current version=Undefined, latest version=1.2.0
+   Current version=Undefined, latest version=1.3.0
    Would you like to update ? (y/n/exit)
 
-Select ``y`` and the the script will create the file ``docker-compose.images-1.2.0.yml`` file, download the required Docker images and start the services.
+Select ``y`` and the the script will create the file ``docker-compose.images-1.3.0.yml`` file, download the required Docker images and start the services.
 
 Downloading the images may take some time depending on your internet connection speed. This step is only required the first time you start wis2box.
 
@@ -178,6 +178,6 @@ Next steps
 The next step is to :ref:`configure datasets<setup-datasets>`.
 
 .. _`MQTT Explorer`: https://mqtt-explorer.com
-.. _`wis2box release page`: https://github.com/World-Meteorological-Organization/wis2box-release/releases/tag/1.2.0
+.. _`wis2box release page`: https://github.com/World-Meteorological-Organization/wis2box-release/releases/tag/1.3.0
 .. _`nginx`: https://www.nginx.com
 .. _`mosquitto`: https://mosquitto.org
