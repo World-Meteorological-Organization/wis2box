@@ -3,19 +3,19 @@
 Using CR1000X over MQTT
 =======================
 
-`CR1000X data loggers <https://www.campbellsci.com/cr1000x>`_ can be used to send a data-extract over MQTT to the wis2box broker and from there into the `wis2box-incoming` bucket.
+`CR1000X data loggers <https://www.campbellsci.com/cr1000x>`_ can be used to send a data extract over MQTT to the wis2box broker and from there into the `wis2box-incoming` bucket.
 
 .. note::
 
-   This data ingestion work-flow was originally developed for selected countries in Africa as part of the WIS2 pilot in 2021.
+   This data ingestion workflow was originally developed for selected countries in Africa as part of the WIS2 pilot in 2021.
 
 The following steps are required to enable the ingestion of data from CR1000X data loggers over MQTT into wis2box:
 
-- The wis2box data-plugin must use csv2bufr with the `"CampbellAfrica-v1-template" <https://github.com/World-Meteorological-Organization/csv2bufr-templates/blob/main/templates/CampbellAfrica-v1-template.json>`_ (a.k.a. "WIS2-pilot-template-2021").
-- The data-loggers need to be configured to send data over MQTT to the broker endpoint in the wis2box instance.
-- An additional Docker service, ``wis2box-data-subscriber``, needs to be started to parse the messages and upload the CSV files into the ``wis2box-incoming`` bucket.
+- the wis2box data plugin must use csv2bufr with the `"CampbellAfrica-v1-template" <https://github.com/World-Meteorological-Organization/csv2bufr-templates/blob/main/templates/CampbellAfrica-v1-template.json>`_ (a.k.a. "WIS2-pilot-template-2021")
+- the data loggers need to be configured to send data over MQTT to the broker endpoint in the wis2box instance
+- an additional Docker service, ``wis2box-data-subscriber``, needs to be started to parse the messages and upload the CSV files into the ``wis2box-incoming`` bucket
 
-You need to add an additional environment variable in your wis2box.env file to define the centre ID for which the data is being ingested, for example:
+You need to add an additional environment variable in ``wis2box.env`` to define the centre ID for which the data is being ingested, for example:
 
 .. code-block:: none
 
@@ -23,13 +23,13 @@ You need to add an additional environment variable in your wis2box.env file to d
 
 .. note::
 
-   The data-subscriber service will upload data into the wis2box-incoming bucket in the folder:
+   The data-subscriber service will upload data into the ``wis2box-incoming`` bucket in the folder:
 
    ``<centre-id>/data/core/weather/surface-based-observations/synop/``
 
-   where <centre-id> is the value defined in the CENTRE_ID environment variable in your wis2box.env file.
+   where <centre-id> is the value defined in the ``CENTRE_ID`` environment variable in ``wis2box.env``.
 
-To start the data-subscriber service, run the following docker compose command:
+To start the data-subscriber service, run the following Docker Compose command:
 
 .. code-block:: none
 
