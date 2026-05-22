@@ -35,9 +35,9 @@ See below a Python example to upload data using the MinIO library for Python:
 
 .. note::
     
-    In the example the file ``mydata.bin`` in ingested from the directory ``/home/wis2box-user/local-data/`` on the host running wis2box.
+    In the above example, the file ``mydata.bin`` in ingested from the directory ``/home/wis2box-user/local-data/`` on the host running wis2box.
     If you are running the script on the same host as wis2box, you can use the endpoint ``http://localhost:9000`` as in the example. 
-    Otherwise, replace localhost with the IP address of the host running wis2box. 
+    Otherwise, replace ``localhost`` with the IP address of the host running wis2box. 
 
 .. note::
 
