@@ -5,7 +5,7 @@ Using MiniO SFTP
 
 Data can uploaded into MinIO over SFTP.
 
-You can connect to the SFTP service using the MinIO storage username and password as defined by WIS2BOX_STORAGE_USERNAME and WIS2BOX_STORAGE_PASSWORD in your wis2box.env file. By default the SFTP service is enabled on port 8022. 
+You can connect to the SFTP service using the MinIO storage username and password as defined by ``WIS2BOX_STORAGE_USERNAME`` and ``WIS2BOX_STORAGE_PASSWORD`` in ``wis2box.env``. The SFTP service is enabled on port 8022 by default.
 
 Using a client such as WinSCP, a user can connect to the SFTP service:
 
@@ -13,7 +13,7 @@ Using a client such as WinSCP, a user can connect to the SFTP service:
     :width: 400
     :alt: Screenshot of WinSCP showing directory structure of MinIO over SFTP
 
-The root-directory of the SFTP service will contain 2 folders for the buckets configured in MinIO: **wis2box-incoming** and **wis2box-public**:
+The root directory of the SFTP service will contain 2 folders for the buckets configured in MinIO: **wis2box-incoming** and **wis2box-public**:
 
 .. image:: ../../_static/winscp_minio_sftp.png
     :width: 600
@@ -21,7 +21,7 @@ The root-directory of the SFTP service will contain 2 folders for the buckets co
 
 To utilize this functionality, data needs to be uploaded to the ``wis2box-incoming`` bucket, in a directory that matches the dataset metadata identifier or the topic in the data mappings.
 
-For example using the command line from the host running wis2box:
+For example, using the command line from the host running wis2box:
 
 .. code-block:: bash
 
