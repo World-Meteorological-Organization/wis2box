@@ -22,7 +22,7 @@ The *wis2box-storage* service is based on `MinIO`_ , the following buckets are p
 
 .. note::
 
-  If you use "FM-12 to BUFR" (synop2bufr) plugin in your data mappings, your filename must contain a year and month, and the year and month should match the 1st and 2nd group in your regex.
+  If you use "FM-12 to BUFR" (synop2bufr) plugin in your data mappings, your filename must contain a year and month, and the year and month should match the 1st and 2nd group in your regular expression (regex).
 
   See the :ref:`synop2bufr-plugin` for more information.
 
