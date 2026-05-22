@@ -27,7 +27,7 @@ The `wis2box ERRORs` panel (on the bottom) prints all ERROR messages reported by
 
 The 'EXPLORE'-option available in the left hand side allows you to see the full logs of all containers running on the wis2box-instance.
 
-To access the logs please select 'wis2box-loki' as the data-source and 'container_name' as the label.
+To access the logs, select 'wis2box-loki' as the data-source and 'container_name' as the label.
 
 For more details on the monitoring stack in wis2box, see the :ref:`grafana` section in the reference guide.
 
