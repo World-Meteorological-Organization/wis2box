@@ -48,6 +48,6 @@ Implicit metadata_id workflow
 Event driven ingest, processing and publishing
 ----------------------------------------------
 
-Once all datasets are setup, event driven workflow
+Once all datasets are set up, event driven workflow
 will immediately start to listen on files in the ``wis2box-incoming`` storage bucket as they are
 placed in the appropriate directory that can be matched to a metadata_id.

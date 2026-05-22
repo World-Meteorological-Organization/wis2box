@@ -146,7 +146,7 @@ The wis2box-webapp provides access to the following interfaces:
 - **Station editor**: to create/edit/delete stations and associate stations with topics
 - **Monitoring**: to monitor the WIS2 notifications published by your wis2box instance
 
-See the section :ref:`setup` for more information on how to use the webapp to setup your wis2box instance.
+See the section :ref:`setup` for more information on how to use the webapp to set up your wis2box instance.
 
 Mosquitto (MQTT)
 ^^^^^^^^^^^^^^^^
@@ -179,8 +179,8 @@ The broker address for the Global Broker to subscribe to WIS2 notifications usin
 
 - `mqtt://everyone:everyone@WIS2BOX_HOST:1883` - for MQTT without SSL
 - `mqtts://everyone:everyone@WIS2BOX_HOST:8883` - for MQTT with SSL (only when ``WIS2BOX_SSL_CERT`` and ``WIS2BOX_SSL_KEY`` are set)
-- `ws://everyone:everyone@WIS2BOX_HOST/mqtt:80` - for MQTT over websockets without SSL
-- `wss://everyone:everyone@WIS2BOX_HOST/mqtt:443` - for MQTT over websockets with SSL (recommended when SSL is enabled using Traefik)
+- `ws://everyone:everyone@WIS2BOX_HOST:80/mqtt` - for MQTT over websockets without SSL
+- `wss://everyone:everyone@WIS2BOX_HOST:443/mqtt` - for MQTT over websockets with SSL (recommended when SSL is enabled using Traefik)
 
 Where ``WIS2BOX_HOST`` is the hostname or IP address of the host running wis2box.
 

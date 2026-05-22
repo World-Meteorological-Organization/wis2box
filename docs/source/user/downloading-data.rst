@@ -18,7 +18,7 @@ There are different options and tools available to download data from WIS2, incl
 WIS2 Downloader
 ---------------
 
-WIS2 Downloader provides a scalable system for downloading data from WIS2 Global Brokers and includes a user interface to query the WIS2 Discovery Catalogues to setup subscriptions and manage downloads. 
+WIS2 Downloader provides a scalable system for downloading data from WIS2 Global Brokers and includes a user interface to query the WIS2 Discovery Catalogues to set up subscriptions and manage downloads. 
 
 WIS2 Downloader is a standalone docker compose stack that can be installed on an instance separate from the wis2box instances and enables downloading data from WIS2 Global Services.
 
@@ -27,7 +27,7 @@ For more information see the `WIS2 Downloader documentation`_.
 Adapting your system to process WIS2 Notification Messages
 -----------------------------------------------------------
 
-To download data from WIS2 it is required to setup a MQTT subscriber loop that subscribes to the topic(s) of interest and parse the message content.
+To download data from WIS2 it is required to set up a MQTT subscriber loop that subscribes to the topic(s) of interest and parse the message content.
 
 In WIS2 the message content is encoded as per the `WMO WIS2 Notification Message Encoding`_ standard.
 

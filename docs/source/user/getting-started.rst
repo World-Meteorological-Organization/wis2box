@@ -112,7 +112,7 @@ wis2box requires the following prior to installation:
    Docker Engine, 20.10.14 or higher
    Docker Compose, 2.0 or higher
 
-The following commands be used to setup the required software on Ubuntu (22.04 LTS) systems:
+The following commands can be used to set up the required software on Ubuntu (22.04 LTS) systems:
 
 .. note::
 
