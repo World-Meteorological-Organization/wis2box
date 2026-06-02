@@ -24,6 +24,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Union
 
 import click
+from shapely.geometry import shape
 
 from wis2box import cli_helpers
 from wis2box.api import (setup_collection, remove_collection,
@@ -89,12 +90,7 @@ def gcm(mcf: Union[dict, str]) -> dict:
 
     LOGGER.debug('Creating collection configuration')
 
-    bbox = [
-        generated['geometry']['coordinates'][0][0][0],
-        generated['geometry']['coordinates'][0][0][1],
-        generated['geometry']['coordinates'][0][2][0],
-        generated['geometry']['coordinates'][0][2][1]
-    ]
+    bbox = shape(generated['geometry']).bounds
 
     return {
         'id': generated['id'],
