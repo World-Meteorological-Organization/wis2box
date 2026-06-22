@@ -5,7 +5,7 @@ Using SURFACE
 
 The National Meteorological Service of Belize (NMS) developed the System for Unified Real-time Monitoring and Forecasting of Atmospheric and Climatic Events (SURFACE) in 2019 with Brazilian company Elligence Soluções em Tecnologia (Elligence Technological Solutions) known as Elligence, through the Japan Caribbean Climate Change Partnership Project(JCCCP).  
 
-The application is Free and Open Source available on the `SURFACE GitHub repository <https://github.com/NMS-Belize/surface>`_
+The application is Free and Open Source available on the `SURFACE GitHub repository <https://github.com/NMS-Belize/surface-cdms>`_
 
 SURFACE can be configured to send data into wis2box as outlined below. For more information please refer to the SURFACE documentation.
 
