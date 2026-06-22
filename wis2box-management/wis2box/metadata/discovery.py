@@ -257,7 +257,7 @@ def gcm() -> dict:
         'keywords': ['wmo', 'wis 2.0'],
         'links': ['https://example.org'],
         'bbox': [-180, -90, 180, 90],
-        'id_field': 'identifier',
+        'id_field': 'id',
         'time_field': 'created',
         'title_field': 'title'
     }
