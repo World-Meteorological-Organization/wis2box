@@ -237,7 +237,7 @@ class MetricsCollector:
         broker_port = int(os.environ.get('WIS2BOX_BROKER_PORT', '1883'))
 
         r = random.Random()
-        client_id = f"mqtt_metrics_collector_{r.randint(1,1000):04d}"
+        client_id = f"mqtt_metrics_collector_{r.randint(1, 1000):04d}"
         try:
             logger.info(f"setup connection: host={broker_host}, user={broker_username}") # noqa
             client = mqtt.Client(client_id=client_id, protocol=mqtt.MQTTv5)

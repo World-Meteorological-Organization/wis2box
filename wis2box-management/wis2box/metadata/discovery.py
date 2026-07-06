@@ -221,7 +221,7 @@ def publish_broker_message(record: dict, storage_path: str,
     datetime_ = datetime.strptime(record['properties']['created'], '%Y-%m-%dT%H:%M:%SZ') # noqa
     identifier = f"{centre_id.lower()}/metadata/{record['id']}"
     wis_message = WISNotificationMessage(identifier=identifier,
-                                         metadata_id=None,
+                                         metadata_id=record['id'],
                                          filepath=storage_path,
                                          datetime_=datetime_,
                                          geometry=record['geometry'],
