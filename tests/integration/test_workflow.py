@@ -339,7 +339,7 @@ def test_message_api():
     assert r['numberMatched'] == sum(counts.values()) + 4
 
     # we want to find a particular message with data ID for core data
-    target_data_id = 'urn:wmo:md:mw-mw_met_centre-test:surface-weather-observations--mw-mw_met_centre-test:surface-weather-observations/WIGOS_0-454-2-AWSLOBI_20211111T125500'  # noqa
+    target_data_id = 'urn:wmo:md:mw-mw_met_centre-test:surface-weather-observations/WIGOS_0-454-2-AWSLOBI_20211111T125500'  # noqa
 
     msg = None
     for feature in r['features']:
@@ -381,7 +381,7 @@ def test_message_api():
     url = f'{API_URL}/collections/messages/items?sortby=-datetime&q=cg-met:surface'  # noqa
     r = SESSION.get(url).json()
 
-    target_data_id = "urn:wmo:md:cg-met:surface-weather-observations--cg-met:surface-weather-observations/WIGOS_0-20000-0-64406_20230803T090000" # noqa
+    target_data_id = "urn:wmo:md:cg-met:surface-weather-observations/WIGOS_0-20000-0-64406_20230803T090000" # noqa
 
     msg = None
     for feature in r['features']:

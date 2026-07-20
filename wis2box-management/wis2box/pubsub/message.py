@@ -157,7 +157,7 @@ class WISNotificationMessage(PubSubMessage):
         super().__init__('wis2-notification-message', identifier,
                          filepath, datetime_, geometry)
 
-        data_id = f'{metadata_id}--{self.identifier}'
+        data_id = metadata_id
 
         if '/metadata' in filepath:
             mimetype = 'application/geo+json'
