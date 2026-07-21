@@ -179,7 +179,7 @@ def test_metadata_discovery_publish():
 
     for centre_id in centre_ids:
         params = {
-            'q': f'"urn:wmo:md:{centre_id}" +metadata'
+            'q': f'{centre_id}" +metadata'
         }
 
         r = SESSION.get(f'{API_URL}/collections/messages/items',
