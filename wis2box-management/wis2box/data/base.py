@@ -112,6 +112,8 @@ class BaseAbstractData:
         :param filename, file path
         :returns: `bool` of processing result
         """
+        if not self.validate_filename_pattern(str(filename)):
+            return False
         if self.buckets == ():
             return True
         else:
