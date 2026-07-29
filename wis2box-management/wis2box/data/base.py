@@ -112,6 +112,9 @@ class BaseAbstractData:
         :param filename, file path
         :returns: `bool` of processing result
         """
+        if not self.validate_filename_pattern(str(filename).split('/')[-1]):
+            LOGGER.warning(f'{str(filename).split('/')[-1]} does not match file_filter {self.file_filter}, skip') # noqa
+            return False
         if self.buckets == ():
             return True
         else:
