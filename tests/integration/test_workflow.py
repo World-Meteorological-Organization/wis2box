@@ -188,8 +188,11 @@ def test_metadata_discovery_publish():
 
         assert r['numberMatched'] >= 1
 
+        import json
         feature = r['features'][0]
-        assert feature['properties']['data_id'].startswith(centre_id)
+        print("FEATURE", json.dumps(feature, indent=4))
+        assert feature['properties']['data_id'].startswith(
+            feature['properties']['metadata_id'])
 
         link = feature['links'][0]
 
@@ -303,7 +306,7 @@ def test_message_api():
     links = r['features'][1]['links']
 
     # check message with q=grapes-geps-global has properties cache=false
-    url = f'{API_URL}/collections/messages/items?q=cn-cma:grapes-geps-global&limit=1'  # noqa
+    url = f'{API_URL}/collections/messages/items?q="urn:wmo:md:cn-cma:grapes-geps-global"&limit=1'  # noqa
     r = SESSION.get(url).json()
     props = r['features'][0]['properties']
     assert 'cache' in props
@@ -338,7 +341,7 @@ def test_message_api():
     assert r['numberMatched'] == sum(counts.values()) + 4
 
     # we want to find a particular message with data ID for core data
-    target_data_id = 'mw-mw_met_centre-test:surface-weather-observations/WIGOS_0-454-2-AWSLOBI_20211111T125500'  # noqa
+    target_data_id = 'urn:wmo:md:mw-mw_met_centre-test:surface-weather-observations/WIGOS_0-454-2-AWSLOBI_20211111T125500'  # noqa
 
     msg = None
     for feature in r['features']:
@@ -359,7 +362,7 @@ def test_message_api():
     assert props['wigos_station_identifier'] == '0-454-2-AWSLOBI'
     assert props['integrity']['method'] == 'sha512'
     assert not props['data_id'].startswith(('origin/a/wis2', 'wis2'))
-    assert props['data_id'].startswith('mw')
+    assert props['data_id'].startswith('urn:wmo:md:mw')
     assert props['content']['size'] == 247
     assert props['content']['encoding'] == 'base64'
     assert props['content']['value'] is not None
@@ -377,10 +380,10 @@ def test_message_api():
     assert b'BUFR' in r.content
 
     # we want to find a particular message with data ID for recommended data
-    url = f'{API_URL}/collections/messages/items?sortby=-datetime&q=cg-met:surface'  # noqa
+    url = f'{API_URL}/collections/messages/items?sortby=-datetime&q="urn:wmo:md:cg-met:surface-weather-observations"'  # noqa
     r = SESSION.get(url).json()
 
-    target_data_id = "cg-met:surface-weather-observations/WIGOS_0-20000-0-64406_20230803T090000" # noqa
+    target_data_id = "urn:wmo:md:cg-met:surface-weather-observations/WIGOS_0-20000-0-64406_20230803T090000" # noqa
 
     msg = None
     for feature in r['features']:
@@ -401,7 +404,7 @@ def test_message_api():
     assert props['wigos_station_identifier'] == '0-20000-0-64406'
     assert props['integrity']['method'] == 'sha512'
     assert not props['data_id'].startswith(('origin/a/wis2', 'wis2'))
-    assert props['data_id'].startswith('cg')
+    assert props['data_id'].startswith('urn:wmo:md:cg')
     assert 'content' not in props
     assert 'gts' in props
     assert props['gts']['ttaaii'] == 'SICG20'

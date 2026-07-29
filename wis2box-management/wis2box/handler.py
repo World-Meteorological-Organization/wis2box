@@ -77,7 +77,7 @@ class Handler:
         }
         if plugin is not None:
             cl = plugin.__class__
-            message['plugin'] = f'{cl.__module__ }.{cl.__name__}'
+            message['plugin'] = f'{cl.__module__}.{cl.__name__}'
         # handler uses local broker to publish success/failure messages
         defs = {
             'codepath': PLUGINS['pubsub']['mqtt']['plugin'],
