@@ -2,6 +2,6 @@ flake8
 paho-mqtt>=2
 pytest
 pywcmp>=0.13.1
-pywis-pubsub>=0.12.0
+pywis-pubsub>=0.13.0
 requests
 jsonschema>=4.26.0
