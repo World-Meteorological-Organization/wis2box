@@ -30,7 +30,9 @@ COPY requirements.txt /usr/src/app
 RUN apk update && \
     apk upgrade --no-cache && \
 	rm -fr /var/cache/apk/* && \
-	pip3 install --no-cache-dir -r requirements.txt
+	pip3 install --no-cache-dir -r requirements.txt && \
+	# Remove stale pip-vendored CycloneDX SBOM entries that can cause false Trivy hits.
+	rm -f /usr/local/lib/python*/site-packages/pip/_vendor/bom.cdx.json
 
 COPY *.py /usr/src/app/
 
