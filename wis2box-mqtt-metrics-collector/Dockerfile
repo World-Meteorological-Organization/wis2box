@@ -30,7 +30,9 @@ COPY requirements.txt /usr/src/app
 RUN apk update && \
     apk upgrade --no-cache && \
 	rm -fr /var/cache/apk/* && \
-	pip3 install --no-cache-dir -r requirements.txt
+	pip3 install --no-cache-dir -r requirements.txt && \
+	pip3 install --no-cache-dir --upgrade pip setuptools wheel && \
+	pip3 freeze --exclude-editable | cut -d= -f1 | xargs -r pip3 install --no-cache-dir --upgrade
 
 COPY *.py /usr/src/app/
 
