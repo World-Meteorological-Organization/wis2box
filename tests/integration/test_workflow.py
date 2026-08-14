@@ -28,7 +28,7 @@ import os
 
 from pathlib import Path
 
-from pywis_pubsub.ets import WNMTestSuite
+from pywis_pubsub.wnm.ets import WNMTestSuite
 from requests import Session, codes
 
 from time import sleep
