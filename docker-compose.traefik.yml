@@ -16,11 +16,13 @@ services:
       - --certificatesresolvers.myresolver.acme.tlschallenge=true
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
+      - --entrypoints.mqtts.address=:8883
       - --providers.docker=true
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
     ports:
       - 80:80
       - 443:443
+      - 8883:8883
     volumes:
       - traefik-letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -31,8 +33,14 @@ services:
       - "9001:9001"
 
   mosquitto:
-    ports:
-      - 1883:1883
+    labels:
+      - "traefik.enable=true"
+      - "traefik.tcp.routers.mqtts.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.mqtts.entrypoints=mqtts"
+      - "traefik.tcp.routers.mqtts.tls=true"
+      - "traefik.tcp.routers.mqtts.tls.certresolver=myresolver"
+      - "traefik.tcp.routers.mqtts.service=mosquitto-mqtt"
+      - "traefik.tcp.services.mosquitto-mqtt.loadbalancer.server.port=1883"
 
 volumes:
   traefik-letsencrypt:
