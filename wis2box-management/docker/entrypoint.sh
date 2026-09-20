@@ -49,6 +49,9 @@ wis2box environment create
 wis2box environment show
 wis2box api setup
 
+# republish metadata
+wis2box metadata discovery republish
+
 # test the wis2box is not misconfigured
 wis2box environment test
 
