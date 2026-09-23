@@ -26,8 +26,8 @@ echo "START /entrypoint.sh"
 
 set -e
 
-# wait for http://minio:9000/minio/health/live to be available
-while ! curl -s http://minio:9000/minio/health/live; do
+# wait for the configured storage source to be available
+while ! curl -s "${WIS2BOX_STORAGE_SOURCE}/minio/health/live"; do
     echo "Waiting for minio to be available..."
     sleep 1
 done
