@@ -39,12 +39,8 @@ class UniversalData(BaseAbstractData):
     def transform(self, input_data: Union[Path, bytes],
                   filename: str = '') -> bool:
 
-        LOGGER.debug('Processing universal data')
-
-        if isinstance(input_data, Path):
-            LOGGER.debug('input_data is a Path')
-            filename = input_data.name
-
+        filename = Path(filename)
+        LOGGER.debug('Procesing data')
         input_bytes = self.as_bytes(input_data)
 
         LOGGER.debug('Deriving datetime')
