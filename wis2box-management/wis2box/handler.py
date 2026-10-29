@@ -110,7 +110,7 @@ class Handler:
                 if self.input_bytes is not None:
                     plugin.transform(
                         input_data=self.input_bytes,
-                        filename=Path(self.filepath).name
+                        filename=self.filepath.split('/')[-1]
                     )
                 else:
                     plugin.transform(self.filepath)
