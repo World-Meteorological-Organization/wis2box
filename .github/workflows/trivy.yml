@@ -20,9 +20,6 @@ jobs:
       - name: Run Trivy vulnerability scanner on ${{ matrix.image }}
         if: always()
         uses: aquasecurity/trivy-action@v0.36.0
-        env:
-          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
-          TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
         with:
           image-ref: ${{ matrix.image }}:test
           format: 'table'
