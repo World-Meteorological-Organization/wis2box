@@ -97,10 +97,20 @@ class Handler:
                 LOGGER.debug(msg)
                 continue
             try:
-                if self.input_bytes:
+                if self.input_bytes is not None:
+                    is_empty = len(self.input_bytes) == 0
+                else:
+                    input_path = Path(self.filepath)
+                    is_empty = (input_path.is_file() and
+                                input_path.stat().st_size == 0)
+                if is_empty:
+                    msg = 'file is empty (0 bytes)'
+                    raise ValueError(msg)
+
+                if self.input_bytes is not None:
                     plugin.transform(
                         input_data=self.input_bytes,
-                        filename=self.filepath.split('/')[-1]
+                        filename=Path(self.filepath).name
                     )
                 else:
                     plugin.transform(self.filepath)

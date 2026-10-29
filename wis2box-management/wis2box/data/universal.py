@@ -45,12 +45,6 @@ class UniversalData(BaseAbstractData):
             LOGGER.debug('input_data is a Path')
             filename = input_data.name
 
-        file_size = self.get_size(input_data)
-        if file_size == 0:
-            msg = f'{filename} is empty (0 bytes)'
-            LOGGER.error(msg)
-            raise ValueError(msg)
-
         input_bytes = self.as_bytes(input_data)
 
         LOGGER.debug('Deriving datetime')
