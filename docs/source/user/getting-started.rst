@@ -136,8 +136,8 @@ For Ubuntu 24.04 LTS, you will need to use a virtual environment to install the 
 .. code-block:: bash
 
     sudo apt install python3.12-venv
-    python3 -m venv wis2box
-    source wis2box/bin/activate
+    python3 -m venv wis2box-venv
+    source wis2box-venv/bin/activate
     pip3 install pip --upgrade
     pip3 install pyopenssl --upgrade
     pip3 install urllib3==1.26.0
