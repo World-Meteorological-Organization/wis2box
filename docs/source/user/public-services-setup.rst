@@ -271,6 +271,17 @@ After restarting wis2box, repeat the commands for adding your dataset and publis
   python3 wis2box-ctl.py login
   wis2box dataset publish /data/wis2box/metadata/discovery/metadata-synop.yml
 
+IP allowlist using Traefik
+--------------------------
+
+When using the Traefik example included in the wis2box release, all incoming IPv4 and IPv6 addresses are allowed by default. 
+The allowlists are configured in ``traefik/allowlist.yml`` (included in the wis2box-release as of wis2box-1.4)
+
+To restrict access, edit the ``sourceRange`` lists in that file and replace the default ``0.0.0.0/0`` and ``::/0`` ranges with the client IP addresses or CIDR ranges to allow. 
+Addresses not in the lists are denied. 
+The HTTP and TCP middleware are configured separately: the HTTP list controls HTTPS, including MQTT over WebSockets at ``/mqtt``, and the TCP list controls MQTTS on port 8883. 
+Traefik watches the file and applies changes automatically, enabling you to update the allowlist without restarting Traefik.
+
 Built-in SSL support
 --------------------
 
