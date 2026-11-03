@@ -242,22 +242,33 @@ class BaseAbstractData:
 
                 LOGGER.debug('Publishing data')
                 data_bytes = self.as_bytes(the_data)
-                storage_path = f'{STORAGE_SOURCE}/{STORAGE_PUBLIC}/{rfp}/{identifier}.{format_}'  # noqa
+                storage_prefix = (
+                    f'{STORAGE_SOURCE}/{STORAGE_PUBLIC}/{rfp}/{identifier}'
+                )
+                current_storage_path = f'{storage_prefix}.{format_}'
+                current_version = 1 if exists(current_storage_path) else 0
+                new_storage_path = (
+                    f'{storage_prefix}_v{current_version + 1}.{format_}'
+                )
+                while exists(new_storage_path):
+                    current_storage_path = new_storage_path
+                    current_version += 1
+                    new_storage_path = (
+                        f'{storage_prefix}_v{current_version + 1}.{format_}'
+                    )
 
                 is_update = False
                 is_new = True
-                # check if storage_path already exists
-                if exists(storage_path):
-                    # if data exists, check if it is the same
-                    if data_bytes == get_data(storage_path):
+                if current_version > 0:
+                    if data_bytes == get_data(current_storage_path):
                         LOGGER.error(f'Data already published for {identifier}-{format_}; not publishing')  # noqa
                         is_new = False
                     else:
-                        LOGGER.warning(f'Data already published for {identifier}-{format_}; updating')  # noqa
+                        LOGGER.warning(f'Data already published for {identifier}-{format_}; creating version {current_version + 1}')  # noqa
                         is_update = True
                 if is_new:
-                    LOGGER.info(f'Writing data to {storage_path}')
-                    put_data(data_bytes, storage_path)
+                    LOGGER.info(f'Writing data to {new_storage_path}')
+                    put_data(data_bytes, new_storage_path)
 
                 if self.enable_notification and is_new:
                     LOGGER.debug('Sending notification to broker')
@@ -265,7 +276,7 @@ class BaseAbstractData:
                         datetime_ = item['_meta']['properties']['datetime']
                     except KeyError:
                         datetime_ = item['_meta'].get('data_date')
-                    self.notify(identifier, storage_path,
+                    self.notify(identifier, new_storage_path,
                                 datetime_,
                                 item['_meta'].get('geometry'), wsi, is_update)
                 else:
