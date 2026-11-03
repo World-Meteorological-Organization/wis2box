@@ -264,13 +264,6 @@ Please note that after changing the ``WIS2BOX_URL`` and ``WIS2BOX_API_URL`` envi
   python3 wis2box-ctl.py stop
   python3 wis2box-ctl.py start
 
-After restarting wis2box, repeat the commands for adding your dataset and publishing your metadata, to ensure that URLs are updated accordingly:
-
-.. code-block:: bash
-
-  python3 wis2box-ctl.py login
-  wis2box dataset publish /data/wis2box/metadata/discovery/metadata-synop.yml
-
 IP allowlist using Traefik
 --------------------------
 
@@ -281,39 +274,6 @@ To restrict access, edit the ``sourceRange`` lists in that file and replace the 
 Addresses not in the lists are denied. 
 The HTTP and TCP middleware are configured separately: the HTTP list controls HTTPS, including MQTT over WebSockets at ``/mqtt``, and the TCP list controls MQTTS on port 8883. 
 Traefik watches the file and applies changes automatically, enabling you to update the allowlist without restarting Traefik.
-
-Built-in SSL support
---------------------
-
-You can also enable HTTPS and MQTTS directly in the nginx and mosquitto containers running in wis2box.
-In this case, the certificate and private key must be available on the host running wis2box
-
-The location of your SSL certificate and private key are defined by the environment variables ``WIS2BOX_SSL_CERT`` and ``WIS2BOX_SSL_KEY`` respectively.
-
-.. code-block:: bash
-
-  WIS2BOX_SSL_CERT=/etc/letsencrypt/live/example.wis2box.io/fullchain.pem
-  WIS2BOX_SSL_KEY=/etc/letsencrypt/live/example.wis2box.io/privkey.pem
-
-Please remember to update the ``WIS2BOX_URL`` and ``WIS2BOX_API_URL`` environment variable after enabling SSL, ensuring your URL starts with ``https://``.
-
-You will need to restart your wis2box instance after enabling SSL:
-
-.. code-block:: bash
-
-  python3 wis2box-ctl.py stop
-  python3 wis2box-ctl.py start
-
-Your wis2box instance will now apply TLS encryption to the HTTP and MQTT services, exposing them on HTTPS (port 443) and MQTTS (port 8883). 
-When setting up the network routing of your wis2box instance, only ports 443 and 8883 need to be exposed to the public internet.
-
-After restarting wis2box, repeat the commands for adding your dataset and publishing your metadata, to ensure that URLs are updated accordingly:
-
-.. code-block:: bash
-
-  python3 wis2box-ctl.py login
-  wis2box data add-collection ${WIS2BOX_HOST_DATADIR}/surface-weather-observations.yml
-  wis2box metadata discovery publish ${WIS2BOX_HOST_DATADIR}/surface-weather-observations.yml
 
 .. _`Mosquitto`: https://mosquitto.org/
 .. _`pygeoapi`: https://pygeoapi.io/
