@@ -29,7 +29,10 @@ ENV TZ="Etc/UTC" \
     DEBIAN_PACKAGES="bash vim curl git libffi-dev python3-cryptography libssl-dev libudunits2-0 apache2-utils python3 python3-pip curl python3-paho-mqtt python3-dateparser python3-tz python3-setuptools unzip python3-venv"
 
 # install dependencies
-RUN apt-get update -y && apt-get install -y ${DEBIAN_PACKAGES} \
+RUN apt-get update -y \
+    # upgrade apt packages to fix CVE-2026-109518
+    && apt-get install -y --only-upgrade apt libapt-pkg6.0t64 \
+    && apt-get install -y ${DEBIAN_PACKAGES} \
     # cleanup
     && apt autoremove -y  \
     && apt-get -q clean \
