@@ -140,7 +140,10 @@ class BaseAbstractData:
                datetime_: str,
                geometry: dict = None,
                wigos_station_identifier: str = None,
-               is_update: bool = False) -> bool:
+               is_update: bool = False,
+               external_resource: bool = False,
+               length: int = None,
+               checksum_value: str = None) -> bool:
         """
         Send notification of data to broker
 
@@ -165,7 +168,8 @@ class BaseAbstractData:
             f"{metadata_id.replace('urn:wmo:md:', '')}/{identifier}",
             metadata_id, storage_path, datetime_, geometry,
             wigos_station_identifier, self.gts,
-            operation)
+            operation, external_resource=external_resource,
+            length=length, checksum_value=checksum_value)
 
         # load plugin for public broker
         defs = {

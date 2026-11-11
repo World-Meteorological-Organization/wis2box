@@ -36,6 +36,7 @@ from wis2box.handler import Handler
 from wis2box.metadata.discovery import DiscoveryMetadata
 from wis2box.storage import put_data, list_content, delete_data
 from wis2box.util import walk_path
+from wis2box.data.publish_url import publish_url
 
 LOGGER = logging.getLogger(__name__)
 
@@ -252,6 +253,7 @@ def add_collection_items(ctx, topic_hierarchy, path, recursive, verbosity):
 
 data.add_command(clean)
 data.add_command(ingest)
+data.add_command(publish_url)
 data.add_command(add_collection)
 data.add_command(delete_collection)
 data.add_command(add_collection_items)

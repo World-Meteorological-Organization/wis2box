@@ -26,6 +26,7 @@ import json
 import hashlib
 import logging
 from pathlib import Path
+from urllib.parse import urlsplit
 import uuid
 
 from owslib.ogcapi.records import Records
@@ -78,7 +79,9 @@ class PubSubMessage:
     """
 
     def __init__(self, type_: str, identifier: str, filepath: str,
-                 datetime_: datetime, geometry: dict = None) -> None:
+                 datetime_: datetime, geometry: dict = None,
+                 external_length: int = None,
+                 external_checksum: str = None) -> None:
         """
         Initializer
 
@@ -102,15 +105,18 @@ class PubSubMessage:
             '%Y-%m-%dT%H:%M:%SZ'
         )
         self.checksum_type = SecureHashAlgorithms.SHA512.value
-        # needs to get bytes to calc checksum and get length
-        if isinstance(self.filepath, Path):
-            with self.filepath.open('rb') as fh:
-                self.filebytes = fh.read()
+        if external_length is not None and external_checksum is not None:
+            self.length = external_length
+            self.checksum_value = external_checksum
         else:
-            self.filebytes = get_data(filepath)
-        self.length = len(self.filebytes)
-        self.checksum_value = self._generate_checksum(
-            self.filebytes, self.checksum_type)
+            if isinstance(self.filepath, Path):
+                with self.filepath.open('rb') as fh:
+                    self.filebytes = fh.read()
+            else:
+                self.filebytes = get_data(filepath)
+            self.length = len(self.filebytes)
+            self.checksum_value = self._generate_checksum(
+                self.filebytes, self.checksum_type)
         self.message = {}
 
     def prepare(self):
@@ -152,26 +158,37 @@ class WISNotificationMessage(PubSubMessage):
     def __init__(self, identifier: str, metadata_id: str, filepath: str,
                  datetime_: str, geometry=None,
                  wigos_station_identifier=None, gts: dict = None,
-                 operation: str = 'create') -> None:
+                 operation: str = 'create',
+                 external_resource: bool = False,
+                 length: int = None,
+                 checksum_value: str = None) -> None:
+
+        if external_resource and (length is None or checksum_value is None):
+            raise ValueError('External resources require length and checksum')
 
         super().__init__('wis2-notification-message', identifier,
-                         filepath, datetime_, geometry)
+                         filepath, datetime_, geometry,
+                         external_length=length if external_resource else None,
+                         external_checksum=checksum_value if external_resource else None)
 
         data_id = f'{self.identifier}'
 
         if '/metadata' in filepath:
             mimetype = 'application/geo+json'
         else:
-            suffix = self.filepath.split('.')[-1]
+            suffix = urlsplit(self.filepath).path.split('.')[-1]
             mimetype = DATA_OBJECT_MIMETYPES.get(suffix.lower(),
                 'application/octet-stream')  # noqa
 
         LOGGER.debug(f'media type: {mimetype}')
 
         # replace storage source with wis2box URL
-        public_file_url = self.filepath.replace(
-            f'{STORAGE_SOURCE}/{STORAGE_PUBLIC}', f'{URL}/data'
-        )
+        if external_resource:
+            public_file_url = self.filepath
+        else:
+            public_file_url = self.filepath.replace(
+                f'{STORAGE_SOURCE}/{STORAGE_PUBLIC}', f'{URL}/data'
+            )
 
         if self.datetime is None:
             LOGGER.warning('Missing data datetime')
@@ -222,7 +239,7 @@ class WISNotificationMessage(PubSubMessage):
             self.message['properties']['gts'] = gts
 
         # only bother encoding small files inline
-        if self.length < 3070:
+        if self.filebytes is not None and self.length < 3070:
             content_value = base64.b64encode(self.filebytes)
             # check length again after encoding
             if len(content_value) < 4096:
