@@ -155,6 +155,12 @@ class DiscoveryMetadata(BaseMetadata):
         # check if any plugin-names contains 2geojson
         has_2geojson = any('2geojson' in plugin for plugin in plugins)
         if has_2geojson:
+            try:
+                from wis2box.data import gcm as data_gcm  # avoid circular import  # noqa
+                meta = data_gcm(record)
+                setup_collection(meta=meta)
+            except Exception as err:
+                LOGGER.error(f'ERROR adding data-collection for: {identifier}: {err}') # noqa
             # default view is descending by reportTime
             oafeat_link = {
                 'href': f'{API_URL}/collections/{identifier}/items?sortby=-reportTime', # noqa

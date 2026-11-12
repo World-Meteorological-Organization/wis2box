@@ -29,12 +29,11 @@ from time import sleep
 import click
 
 from wis2box import cli_helpers
-import wis2box.data as data_
 
 from wis2box.api import (setup_collection, upsert_collection_item,
                          delete_collection_item, remove_collection)
 
-from wis2box.data_mappings import get_data_mappings, get_plugins
+from wis2box.data_mappings import get_data_mappings
 from wis2box.data.message import MessageData
 
 from wis2box.env import (DATADIR, DOCKER_BROKER,
@@ -193,7 +192,6 @@ class WIS2BoxSubscriber:
         elif topic == 'wis2box/data_mappings/refresh':
             LOGGER.info('Refreshing data mappings')
             self.data_mappings = get_data_mappings()
-            LOGGER.info(f'Data mappings: {self.data_mappings}')
         elif topic == 'wis2box/dataset/publication':
             LOGGER.debug('Publishing dataset')
             metadata = message
@@ -202,12 +200,6 @@ class WIS2BoxSubscriber:
             except Exception as err:
                 LOGGER.error(f'Failed to publish discovery metadata: {err}')
                 return
-            has_2geojson = any('2geojson' in plugin for plugin in get_plugins(metadata)) # noqa
-            if has_2geojson:
-                try:
-                    data_.add_collection_data(metadata)
-                except Exception as err:
-                    click.echo(f'ERROR adding data-collection for: {metadata["id"]}: {err}') # noqa
             self.data_mappings = get_data_mappings()
         elif topic.startswith('wis2box/dataset/unpublication'):
             LOGGER.debug('Unpublishing dataset')
