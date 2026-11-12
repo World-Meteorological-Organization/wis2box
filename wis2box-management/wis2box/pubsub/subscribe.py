@@ -29,7 +29,6 @@ from time import sleep
 import click
 
 from wis2box import cli_helpers
-import wis2box.data as data_
 
 from wis2box.api import (setup_collection, upsert_collection_item,
                          delete_collection_item, remove_collection)
