@@ -27,7 +27,7 @@ import io
 import json
 import logging
 from pathlib import Path
-from typing import Iterator, Tuple, Union
+from typing import Iterator, Union
 
 from elasticsearch import Elasticsearch
 from owslib.ogcapi.features import Features
@@ -209,24 +209,20 @@ def get_stations_csv(wsi: str = '') -> str:
     return csv_string
 
 
-def load_datasets() -> Iterator[Tuple[dict, str]]:
+def load_datasets() -> Iterator[dict]:
     """
     Load datasets from oapi
 
-    :returns: `list`, of link relations and topics for all datasets
+    :returns: iterator of discovery metadata features
     """
 
     oar = Records(DOCKER_API_URL)
 
     try:
         dm = oar.collection_items('discovery-metadata')
-        for topic in dm['features']:
-            for link in topic['links']:
-                if link['rel'] == 'canonical' and 'wmo:topicHierarchy' in topic['properties']: # noqa
-                    yield link, topic['properties']['wmo:topicHierarchy']
+        yield from dm['features']
     except RuntimeError:
         LOGGER.warning('discovery-metadata collection has not been created')
-        yield {}, None
 
 
 def check_station_datasets(wigos_station_identifier: str) -> Iterator[dict]:
@@ -240,44 +236,44 @@ def check_station_datasets(wigos_station_identifier: str) -> Iterator[dict]:
 
     oaf = Features(DOCKER_API_URL)
 
-    for topic, topic2 in load_datasets():
-        if not topic:
-            continue
+    for dataset in load_datasets():
+        for link in dataset.get('links', []):
+            if link['rel'] != 'canonical':
+                continue
 
-        try:
-            obs = oaf.collection_items(
-                topic['title'],
-                wigos_station_identifier=wigos_station_identifier
-            )
-        except RuntimeError as err:
-            LOGGER.warning(f'Warning from topic {topic["title"]}: {err}')
-            continue
+            try:
+                obs = oaf.collection_items(
+                    link['title'],
+                    wigos_station_identifier=wigos_station_identifier
+                )
+            except RuntimeError as err:
+                LOGGER.warning(f'Warning from dataset {dataset["id"]}: {err}')
+                continue
 
-        if obs['numberMatched'] > 0:
-            topic['type'] = 'application/json'
-            topic['topic'] = topic2.replace('origin/a/wis2/', '')
-            yield topic
+            if obs['numberMatched'] > 0:
+                link['type'] = 'application/json'
+                link['dataset'] = dataset['id']
+                yield link
 
 
-def add_topic_hierarchy(new_topic: str, territory_name: str = None,
-                        wsi: str = None) -> None:
+def add_dataset(new_dataset: str, territory_name: str = 'any',
+                wsi: str = 'any') -> None:
     """
-    Adds topic hierarchy to topic
+    Associates stations with a discovery metadata dataset identifier
 
-    :param topic: `str` of topic
-    :param territory_name: `str` of territory_name, defaults to None
-    :param wsi: `str` of WIGOS Station Identifier, defaults to None
+    :param new_dataset: `str` of discovery metadata identifier
+    :param territory_name: `str` of territory_name, defaults to any
+    :param wsi: `str` of WIGOS Station Identifier, defaults to any
 
     :returns: `None`
     """
 
-    valid_topics = [topic for link, topic in load_datasets()]
-    if new_topic not in valid_topics:
-        msg = (f'ERROR: Invalid topic: {new_topic}\n'
-               'Valid topics:\n'
-               '\n'.join(valid_topics))
+    valid_datasets = [dataset['id'] for dataset in load_datasets()]
+    if new_dataset not in valid_datasets:
+        msg = (f'Invalid dataset: {new_dataset}\nValid datasets:\n'
+               + '\n'.join(valid_datasets))
         LOGGER.error(msg)
-        return
+        raise RuntimeError(msg)
 
     stations = load_stations()
     for feature in stations.values():
@@ -286,13 +282,9 @@ def add_topic_hierarchy(new_topic: str, territory_name: str = None,
         if territory_name != 'any' and feature['properties']['territory_name'] != territory_name:  # noqa
             continue
 
-        topics = feature['properties'].get('topics', [])
-        # remove topics not in valid_topics
-        topics = [x for x in topics if x in valid_topics]
-        # add new_topic if not already in topics
-        if new_topic not in topics:
-            topics.append(new_topic)
-            feature['properties']['topics'] = topics
+        datasets = feature['properties'].setdefault('datasets', [])
+        if new_dataset not in datasets:
+            datasets.append(new_dataset)
         # update the feature
         LOGGER.info(f'Updating station {feature["properties"]["wigos_station_identifier"]}')  # noqa
         try:
@@ -302,12 +294,12 @@ def add_topic_hierarchy(new_topic: str, territory_name: str = None,
         upsert_collection_item('stations', feature)
 
 
-def publish_from_csv(path: Path, new_topic: str = None) -> None:
+def publish_from_csv(path: Path, new_dataset: str = None) -> None:
     """
     Publishes station collection to API config and backend from csv
 
     :param path: `Path` to station list CSV (default is `None`)
-    :param topic: `str` of topic hierarchy (default is `None`)
+    :param new_dataset: `str` of dataset identifier (default is `None`)
 
     :returns: `None`
     """
@@ -317,16 +309,14 @@ def publish_from_csv(path: Path, new_topic: str = None) -> None:
         LOGGER.error(msg)
         raise RuntimeError(msg)
 
-    valid_topics = [topic for link, topic in load_datasets()]
+    valid_datasets = [dataset['id'] for dataset in load_datasets()]
     stations = load_stations()
 
-    if new_topic is not None:
-        if new_topic not in valid_topics:
-            LOGGER.error(f'Invalid topic: {new_topic}')
-            msg = 'Invalid topic, valid topics are:\n'
-            msg += '\n'.join(valid_topics)
-            click.echo(msg)
-            return
+    if new_dataset is not None and new_dataset not in valid_datasets:
+        msg = (f'Invalid dataset: {new_dataset}\nValid datasets:\n'
+               + '\n'.join(valid_datasets))
+        LOGGER.error(msg)
+        raise RuntimeError(msg)
 
     oscar_baseurl = 'https://oscar.wmo.int/surface/#/search/station/stationReportDetails'  # noqa
 
@@ -351,15 +341,14 @@ def publish_from_csv(path: Path, new_topic: str = None) -> None:
 
             topics = []
             topic2 = ''
-            # check if station already exists, if so, get topics
+            datasets = []
             if wigos_station_identifier in stations:
                 feature = stations[wigos_station_identifier]
                 topics = feature['properties'].get('topics', [])
-            # add new_topic if not already in topics
-            if new_topic is not None:
-                topic2 = new_topic
-                if new_topic not in topics:
-                    topics.append(new_topic)
+                topic2 = feature['properties'].get('topic', '')
+                datasets = list(feature['properties'].get('datasets', []))
+            if new_dataset is not None and new_dataset not in datasets:
+                datasets.append(new_dataset)
             try:
                 barometer_height = float(row['barometer_height'])
             except ValueError:
@@ -392,6 +381,7 @@ def publish_from_csv(path: Path, new_topic: str = None) -> None:
                    'territory_name': row['territory_name'],
                    'wmo_region': row['wmo_region'],
                    'url': f"{oscar_baseurl}/{wigos_station_identifier}",
+                   'datasets': datasets,
                    'topic': topic2,
                    'topics': topics,
                    'status': 'operational'  # assume operational by default
@@ -543,29 +533,28 @@ def setup(ctx, verbosity):
 @click.command()
 @click.pass_context
 @cli_helpers.OPTION_PATH
-@cli_helpers.OPTION_TOPIC_HIERARCHY
+@click.option('--dataset', help='Discovery metadata dataset identifier')
 @cli_helpers.OPTION_VERBOSITY
-def publish_collection(ctx, path, topic_hierarchy, verbosity):
+def publish_collection(ctx, path, dataset, verbosity):
     """Publish from station_list.csv"""
     click.echo(f'Publishing stations from {path}')
-    if topic_hierarchy is not None:
-        click.echo(f'associate stations to topic={topic_hierarchy}')
-    publish_from_csv(path, topic_hierarchy)
+    if dataset is not None:
+        click.echo(f'associate stations to dataset={dataset}')
+    publish_from_csv(path, dataset)
 
     click.echo('Done')
 
 
-# add command to add topic hierarchy to stations
 @click.command()
 @click.pass_context
-@click.argument('topic')
+@click.argument('dataset')
 @click.option('--territory-name', '-t', default="any", help='Territory Name')
 @click.option('--wsi', '-w', default="any", help='WIGOS Station Identifier')
 @cli_helpers.OPTION_VERBOSITY
-def add_topic(ctx, topic, territory_name, wsi, verbosity):
-    """Adds topic to station metadata"""
+def add_dataset_command(ctx, dataset, territory_name, wsi, verbosity):
+    """Adds dataset to station metadata"""
 
-    add_topic_hierarchy(topic, territory_name, wsi)
+    add_dataset(dataset, territory_name, wsi)
     click.echo('Done')
 
 
@@ -584,5 +573,5 @@ def get_csv(ctx, verbosity):
 station.add_command(get)
 station.add_command(publish_collection)
 station.add_command(setup)
-station.add_command(add_topic)
+station.add_command(add_dataset_command, name='add-dataset')
 station.add_command(get_csv)
