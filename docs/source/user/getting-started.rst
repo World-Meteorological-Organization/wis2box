@@ -126,6 +126,7 @@ The following commands can be used to set up the required software on Ubuntu (22
     sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt-get -y update
     sudo apt-get install -y docker-ce docker-compose-plugin unzip python3-pip
+    # skip next lines on Ubuntu 24.04 LTS or abobe
     sudo pip3 install pip --upgrade
     sudo pip3 install pyopenssl --upgrade
     sudo pip3 install urllib3==1.26.0
@@ -134,8 +135,9 @@ For Ubuntu 24.04 LTS, you will need to use a virtual environment to install the 
 
 .. code-block:: bash
 
-    python3 -m venv wis2box
-    source wis2box/bin/activate
+    sudo apt install python3.12-venv
+    python3 -m venv wis2box-venv
+    source wis2box-venv/bin/activate
     pip3 install pip --upgrade
     pip3 install pyopenssl --upgrade
     pip3 install urllib3==1.26.0
