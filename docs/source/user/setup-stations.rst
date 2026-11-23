@@ -82,7 +82,7 @@ A station list CSV can be used to bulk load stations, by defining the stations i
 .. code-block:: bash
 
    python3 wis2box-ctl.py login
-   wis2box metadata station publish-collection --path /data/wis2box/mystations.csv --topic-hierarchy origin/a/wis2/mw-mw_met_centre-test/data/core/weather/surface-based-observations/synop
+   wis2box metadata station publish-collection --path /data/wis2box/mystations.csv --metadata-id urn:wmo:md:mw-mw_met_centre-test:surface-weather-observations
 
 .. note::
 
@@ -90,7 +90,7 @@ A station list CSV can be used to bulk load stations, by defining the stations i
 
    The directory defined by ``WIS2BOX_HOST_DATADIR`` is mounted as ``/data/wis2box`` in the wis2box-management container.
 
-   The ``topic-hierarchy`` argument refers to the WIS2 topic hierarchy to associate the stations with.
+   The ``metadata-id`` argument is the identifier of a dataset already published in the ``discovery-metadata`` collection. It is stored in each station's ``datasets`` property. Existing ``topic`` and ``topics`` properties are retained for backwards compatibility.
 
 After doing a bulk insert, review the stations in wis2box-webapp to ensure the stations were imported correctly.
 

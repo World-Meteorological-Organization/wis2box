@@ -18,11 +18,15 @@ Station metadata API publishing
 -------------------------------
 
 The first step is to publish our station metadata to the API. The command below
-will generate local station collection GeoJSON for API publication.
+will generate local station collection GeoJSON for API publication and optionally associate the stations with a dataset. Publish the dataset first, then use its identifier from the ``discovery-metadata`` collection.
 
 .. code-block:: bash
 
-   wis2box metadata station publish-collection --path /data/wis2box/metadata/station/station_list.csv --topic-hierarchy <topic-hierarchy>
+   wis2box metadata station publish-collection --path /data/wis2box/metadata/station/station_list.csv --metadata-id <dataset-id>
+
+The ``--metadata-id`` (or ``-mdi``) option adds ``<dataset-id>`` to each imported station's ``datasets`` property. 
+It must match the ``identifier`` value from an existing discovery metadata record.
+To associate stations after importing them, use ``wis2box metadata station add-dataset <dataset-id>``; optional ``--wsi`` and ``--territory-name`` filters limit which stations are updated. Existing ``topic`` and ``topics`` properties are retained for backwards compatibility.
 
 
 .. note:: This command also runs automatically at startup and thereafter every 10 minutes

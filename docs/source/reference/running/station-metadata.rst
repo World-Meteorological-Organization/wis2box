@@ -35,8 +35,13 @@ specifying one line per station as follows:
 
 .. literalinclude:: ../../../../examples/config/station_list.csv
 
-Then login in to the wis2box-container and run the command ``wis2box metadata station publish-collection --path /data/wis2box/metadata/station/station_list.csv`` --topic-hierarchy <topic-hierarchy>
-to insert all stations in the station list into the backend.
+First publish the discovery metadata for the dataset. Then login to the wis2box-management container and run the following command to insert all stations in the station list and associate them with that dataset:
+
+.. code-block:: bash
+
+   wis2box metadata station publish-collection --path /data/wis2box/metadata/station/station_list.csv --metadata-id <metadata-id>
+
+The ``metadata-id`` must match the identifier of a feature in the ``discovery-metadata`` collection (the dataset's ``metadata.identifier`` value).
 
 Within the wis2box-container you can fetch the required station metadata from OSCAR/Surface using the following command:
 
@@ -53,27 +58,29 @@ file as follows:
 
    wis2box metadata station get WSI >> ~/wis2box-data/metadata/station/station_list.csv
 
-After using the command-line to cache the station metadata, you will need to associate the stations with one or more topics to visualize the stations in the wis2box-ui.
+After using the command-line to cache station metadata, associate the stations with one or more datasets to make them available for those datasets in the wis2box-ui. Publish each dataset before associating stations with it.
 
-To associate all stations in your station metadata to one topic, you can use the following command:
-
-.. code-block:: bash
-
-   wis2box metadata station add-topic <topic-id>
-
-To add a topic to a single station, you can use the following command:
+To associate all stations in your station metadata with a dataset, use:
 
 .. code-block:: bash
 
-   python3 wis2box-ctl.py login
-   wis2box metadata station add-topic --wsi <station-id> <topic-id>
+   wis2box metadata station add-dataset <dataset-id>
 
-To add a topic to all stations from a specific territory, for example Italy, you can use the following command:
+To associate one station with a dataset, use:
 
 .. code-block:: bash
 
    python3 wis2box-ctl.py login
-   wis2box metadata station add-topic --territory-name Italy <topic-id>
+   wis2box metadata station add-dataset --wsi <station-id> <dataset-id>
+
+To associate all stations from a territory with a dataset, use the territory's code (for example, ``ITA`` for Italy):
+
+.. code-block:: bash
+
+   python3 wis2box-ctl.py login
+   wis2box metadata station add-dataset --territory-name ITA <dataset-id>
+
+The ``--metadata-id`` (or ``-mdi``) option on ``publish-collection`` associates each imported station with the dataset by adding its identifier to the station's ``datasets`` property. The ``add-dataset`` command accepts a dataset identifier as its positional argument. Existing ``topic`` and ``topics`` properties are retained for backwards compatibility.
 
 Summary
 -------

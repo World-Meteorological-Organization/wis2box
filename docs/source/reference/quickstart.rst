@@ -62,14 +62,14 @@ Load initial stations:
 
 .. code-block:: bash
 
-    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/malawi.csv --topic-hierarchy origin/a/wis2/mw-mw_met_centre-test/data/core/weather/surface-based-observations/synop
-    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/italy.csv --topic-hierarchy origin/a/wis2/it-meteoam/data/core/weather/surface-based-observations/synop
-    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/algeria.csv --topic-hierarchy origin/a/wis2/dz-meteoalgerie/data/core/weather/surface-based-observations/synop
-    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/romania.csv --topic-hierarchy origin/a/wis2/ro-rnimh-test/data/core/weather/surface-based-observations/synop
-    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/congo.csv --topic-hierarchy origin/a/wis2/cg-met/data/recommended/weather/surface-based-observations/synop
-    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/wmo-test-ship.csv --topic-hierarchy origin/a/wis2/int-wmo-test/data/core/weather/surface-based-observations/ship
-    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/wmo-test-drifting-buoys.csv --topic-hierarchy origin/a/wis2/int-wmo-test/data/core/ocean/surface-based-observations/drifting-buoys
-    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/wmo-test-wind-profile.csv --topic-hierarchy origin/a/wis2/int-wmo-test/data/core/weather/surface-based-observations/wind-profile
+    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/malawi.csv --metadata-id urn:wmo:md:mw-mw_met_centre-test:surface-weather-observations
+    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/italy.csv --metadata-id urn:wmo:md:it-meteoam:surface-weather-observations
+    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/algeria.csv --metadata-id urn:wmo:md:dz-meteoalgerie:surface-weather-observations
+    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/romania.csv --metadata-id urn:wmo:md:ro-rnimh-test:synoptic-weather-observations
+    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/congo.csv --metadata-id urn:wmo:md:cg-met:surface-weather-observations
+    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/wmo-test-ship.csv --metadata-id urn:wmo:md:int-wmo-test:surface-weather-observations:ship
+    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/wmo-test-drifting-buoys.csv --metadata-id urn:wmo:md:int-wmo-test:surface-weather-observations:drifting-buoys
+    wis2box metadata station publish-collection --path /data/wis2box/metadata/station/wmo-test-wind-profile.csv --metadata-id urn:wmo:md:int-wmo-test:surface-weather-observations:wind-profile
 
 Ingest data using the data ingest command to push data to the ``wis2box-incoming`` bucket:
 
