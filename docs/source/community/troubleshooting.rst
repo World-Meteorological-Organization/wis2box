@@ -97,7 +97,7 @@ After fixing the issue, restart all services:
 No station on map in wis2box-ui
 -------------------------------
 
-The stations displayed in the wis2box-ui per dataset are defined by the topic associated with the station. If the topic for this dataset has no stations associated to it, you will get the following popup:
+The stations displayed in the wis2box-ui for a dataset are determined by the dataset identifiers associated with each station. If no stations are associated with the dataset, you will get the following popup:
 
 .. image:: ../_static/troubleshooting_no_station_pop_up.png
    :alt: No Station popup
@@ -118,7 +118,7 @@ ERROR - Failed to publish, wsi: ..., tsi: XXXXX
 
 Data arrived for a station that is not present in the station metadata cache. 
 
-Use the ``station editor`` in ``wis2box-webapp`` to add the missing station and associate it with the correct topic hierarchy.
+Use the ``station editor`` in ``wis2box-webapp`` to add the missing station. To associate it with a dataset from the command line, use ``wis2box metadata station add-dataset <dataset-id>`` after publishing that dataset.
 
 .. image:: ../_static/wis2box-webapp-stations.png
    :alt: Station

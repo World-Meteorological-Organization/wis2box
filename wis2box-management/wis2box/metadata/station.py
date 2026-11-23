@@ -533,14 +533,14 @@ def setup(ctx, verbosity):
 @click.command()
 @click.pass_context
 @cli_helpers.OPTION_PATH
-@click.option('--dataset', help='Discovery metadata dataset identifier')
+@cli_helpers.OPTION_METADATA_ID
 @cli_helpers.OPTION_VERBOSITY
-def publish_collection(ctx, path, dataset, verbosity):
+def publish_collection(ctx, path, metadata_id, verbosity):
     """Publish from station_list.csv"""
     click.echo(f'Publishing stations from {path}')
-    if dataset is not None:
-        click.echo(f'associate stations to dataset={dataset}')
-    publish_from_csv(path, dataset)
+    if metadata_id is not None:
+        click.echo(f'associate stations to dataset={metadata_id}')
+    publish_from_csv(path, metadata_id)
 
     click.echo('Done')
 
