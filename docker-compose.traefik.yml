@@ -5,11 +5,12 @@ services:
     - "traefik.http.routers.wis2box.rule=Host(`${WIS2BOX_HOST}`)"
     - "traefik.http.routers.wis2box.entrypoints=websecure"
     - "traefik.http.routers.wis2box.tls.certresolver=myresolver"
+    - "traefik.http.routers.wis2box.middlewares=wis2box-ipallowlist@file"
     - "traefik.http.services.wis2box.loadbalancer.server.port=80"
     
   traefik:
     container_name: traefik
-    image: traefik:v2.11
+    image: traefik:v3.7
     restart: unless-stopped
     command:
       - --api.insecure=true
@@ -18,6 +19,8 @@ services:
       - --entrypoints.websecure.address=:443
       - --entrypoints.mqtts.address=:8883
       - --providers.docker=true
+      - --providers.file.filename=/etc/traefik/dynamic/allowlist.yml
+      - --providers.file.watch=true
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
     ports:
       - 80:80
@@ -25,6 +28,7 @@ services:
       - 8883:8883
     volumes:
       - traefik-letsencrypt:/letsencrypt
+      - ./traefik:/etc/traefik/dynamic:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   minio:
@@ -39,6 +43,7 @@ services:
       - "traefik.tcp.routers.mqtts.entrypoints=mqtts"
       - "traefik.tcp.routers.mqtts.tls=true"
       - "traefik.tcp.routers.mqtts.tls.certresolver=myresolver"
+      - "traefik.tcp.routers.mqtts.middlewares=mqtts-ipallowlist@file"
       - "traefik.tcp.routers.mqtts.service=mosquitto-mqtt"
       - "traefik.tcp.services.mosquitto-mqtt.loadbalancer.server.port=1883"
 

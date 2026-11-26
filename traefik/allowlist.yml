@@ -1,0 +1,15 @@
+http:
+  middlewares:
+    wis2box-ipallowlist:
+      ipAllowList:
+        sourceRange:
+          - 0.0.0.0/0
+          - ::/0
+
+tcp:
+  middlewares:
+    mqtts-ipallowlist:
+      ipAllowList:
+        sourceRange:
+          - 0.0.0.0/0
+          - ::/0
